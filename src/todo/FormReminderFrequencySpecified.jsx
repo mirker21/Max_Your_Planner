@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { generateUUID } from "three/src/math/MathUtils";
 
 export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) {
     const [date, setDate] = useState('');
@@ -27,21 +28,7 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
 
     function handleAddTime() {
         if (time !== '') {
-            let meridian = 'AM';
-            let [hour, minute] = time.split(':');
-
-            if (hour <= 11) {
-                if (hour[0] === '0') {
-                    hour = hour.slice(1,);
-                }
-            } else {
-                if (hour > 12) {
-                    hour = hour - 12;
-                }
-                meridian = 'PM';
-            }
-
-            let newTime = hour + ':' + minute + ' ' + meridian;
+            let newTime = time;
             const newTimes = [...times, newTime];
             setTimes([...newTimes]);
             setTime('');
@@ -59,6 +46,7 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
     function handleAddDateTimes() {
         if (date !== '' && (times.length > 0 || allDay === true)) {
             const newDateTime = {
+                id: generateUUID(),
                 date: date,
                 times: times.length > 0 ? [...times] : 'All-Day'
             };
@@ -71,9 +59,52 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
         }
     }
 
-    function removeDateTime(event) {
+    function handleEditDateTime(event) {
+        let newDatesTimes = [...datesTimes];
+        let foundIndex = newDatesTimes.findIndex(dateTime => event.target.id.includes(dateTime.id))
+        let foundEntry = newDatesTimes[foundIndex];
 
+        if (event.target.className === 'date-input') {
+            if (newDatesTimes.every(dateTime => dateTime.date !== event.target.value)) {
+                foundEntry['date'] = event.target.value;
+                newDatesTimes[foundIndex] = foundEntry;
+                setDatesTimes([...newDatesTimes]);
+            }
+        } else if (event.target.className === 'time-input') {
+            if (foundEntry.times.every(time => time !== event.target.value)) {
+                let foundTimeIndex = event.target.id.replace(foundEntry.id, '');
+                foundEntry.times[foundTimeIndex] = event.target.value;
+                newDatesTimes[foundIndex] = foundEntry;
+                setDatesTimes([...newDatesTimes]);
+            }
+        }
     }
+
+    function removeDateTime(event) {
+        let newDatesTimes = [...datesTimes];
+        let foundIndex = newDatesTimes.findIndex(dateTime => event.target.id.includes(dateTime.id))
+        let foundEntry = newDatesTimes[foundIndex];
+        console.log(typeof foundIndex)
+
+        if (event.target.className === 'remove-date-button') {
+            newDatesTimes.splice(foundIndex, 1);
+            console.log(newDatesTimes)
+            setDatesTimes([...newDatesTimes]);
+        } else if (event.target.className === 'remove-time-button') {
+            let foundTimeIndex = event.target.id.replace(foundEntry.id, '');
+            console.log(foundTimeIndex)
+            foundEntry.times = foundEntry.times.splice(foundTimeIndex, 1);
+            if (foundEntry.times.length === 0) {
+                newDatesTimes.splice(foundIndex, 1);
+            } else {
+                newDatesTimes[foundIndex] = foundEntry;
+            }
+            setDatesTimes([...newDatesTimes]);
+        }
+    }
+
+    // prevent duplicates of dates and times
+    // allow revision of dates and times?
 
     return (
         <section>
@@ -87,7 +118,7 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
             </section>
 
             {
-                date !== ''
+                date !== '' && (datesTimes?.length === 0 || !datesTimes?.every(dateTime => dateTime.date === date))
                 &&
                 <>
                     <section className="subsection">
@@ -97,7 +128,7 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
                         </div>
 
                         {
-                            time !== ''
+                            time !== '' && (times.length === 0 || !times?.every(oneTime => oneTime === time))
                             &&
                             <button type="button" onClick={handleAddTime}>Add Time</button>
                         }
@@ -120,12 +151,30 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
 
                             <li>
                                 {
-                                    times.map((time, index) => (
-                                        <ul className="list-item" key={time + index} id={time + index}>
-                                            <button type="button" onClick={removeTime}>×</button>
-                                            <p>{time}</p>
-                                        </ul>
-                                    ))
+                                    times.map((time, index) => {
+                                        let meridian = 'AM';
+                                        let [hour, minute] = time.split(':');
+
+                                        if (hour <= 11) {
+                                            if (hour[0] === '0') {
+                                                hour = hour.slice(1,);
+                                            }
+                                        } else {
+                                            if (hour > 12) {
+                                                hour = hour - 12;
+                                            }
+                                            meridian = 'PM';
+                                        }
+
+                                        let displayedTime = hour + ':' + minute + ' ' + meridian;
+
+                                        return (    
+                                            <ul className="list-item" key={time + index} id={time + index}>
+                                                <button type="button" onClick={removeTime}>×</button>
+                                                <p>{displayedTime}</p>
+                                            </ul>
+                                        )
+                                    })
                                 }
                             </li>
                         </div>
@@ -149,6 +198,7 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
                     
                 </>
             }
+
             {
                 datesTimes.length > 0
                 &&
@@ -162,31 +212,79 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
                             let timeId = '';
                             if (dateTime.times === 'All-Day') {
                                 timeId = 'All-Day';
-                            } else {
-                                timeId = times.join('');
-                            } 
+                            }
 
                             return (
-                                <div className="result">
-                                    <div>
-                                        <button type="button" onClick={removeDateTime}>×</button>
-                                        <h4>{dateTime.date}</h4>
-                                    </div>
+                                <div 
+                                    key={dateTime.id + 'main'} 
+                                    className="result single-date-times-container" 
+                                    id={dateTime.id  + 'main'}
+                                >
+                                    <div className="result-date-container">
+                                        <button 
+                                            type="button" 
+                                            className="remove-date-button" 
+                                            id={dateTime.id + dateTime.date} 
+                                            onClick={removeDateTime}
+                                        >
+                                            ×
+                                        </button>
 
+                                        <input 
+                                            type="date" 
+                                            className="date-input" 
+                                            id={dateTime.id + dateTime.date + index} 
+                                            value={dateTime.date} 
+                                            onChange={handleEditDateTime} 
+                                        />
+                                    </div>
+                                
                                     <li>
                                         {
                                             dateTime.times === 'All-Day'
                                             ?
-                                            <ul className="list-item" key={date + timeId + index} id={date + timeId + index}>
-                                                <button type="button" onClick={removeDateTime}>×</button>
+                                            <ul 
+                                                className="list-item" 
+                                                key={dateTime.id + timeId} 
+                                                id={dateTime.id + timeId}
+                                            >
+                                                <button 
+                                                    type="button" 
+                                                    className="remove-time-button" 
+                                                    id={dateTime.id + timeId} 
+                                                    onClick={removeDateTime}
+                                                >
+                                                    ×
+                                                </button>
+
                                                 <p>{dateTime.times}</p>
                                             </ul>
                                             :
                                             dateTime.times?.map((time, timeIndex) => {
+                                                timeId = time;
+
                                                 return (
-                                                    <ul className="list-item" key={date + timeId + timeIndex} id={date + timeId + timeIndex}>
-                                                        <button type="button" onClick={removeDateTime}>×</button>
-                                                        <p>{time}</p>
+                                                    <ul 
+                                                        className="list-item" 
+                                                        key={dateTime.id + timeId} 
+                                                        id={dateTime.id + timeId}
+                                                    >
+                                                        <button 
+                                                            type="button" 
+                                                            className="remove-time-button" 
+                                                            id={dateTime.id + timeId} 
+                                                            onClick={removeDateTime}
+                                                        >
+                                                            ×
+                                                        </button>
+
+                                                        <input 
+                                                            className="time-input" 
+                                                            type="time" 
+                                                            id={dateTime.id + timeIndex} 
+                                                            value={time} 
+                                                            onChange={handleEditDateTime} 
+                                                        />
                                                     </ul>
                                                 )
                                             })

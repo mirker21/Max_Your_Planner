@@ -75,6 +75,7 @@ export default function Todo() {
                     <FormReminderFrequencySwitch 
                         isDatePattern={isDatePattern} 
                         setIsDatePattern={setIsDatePattern}
+                        setDatesTimes={setDatesTimes}
                         handleChange={handleChange}
                     />
 
