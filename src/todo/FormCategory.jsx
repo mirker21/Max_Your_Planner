@@ -1,4 +1,10 @@
-export default function FormCategory({category, setCategory, handleChange}) {
+export default function FormCategory({previousCategories, category, setCategory}) {
+    function handleChange(event) {
+        if (event.target.id === 'category-create' || event.target.id === 'category-select') {
+            setCategory(event.target.value);
+        }
+    }
+
     return (
         <div>                
             <h2>Category</h2>
@@ -7,11 +13,11 @@ export default function FormCategory({category, setCategory, handleChange}) {
                 <section className="subsection">
                     <div>
                         <select id="category-select" name="category-select" onChange={handleChange}>
-                            {/* {
-                                categories?.map((category, index) => {
+                            {
+                                previousCategories?.map((category, index) => {
                                     <option key={category} value={category}>{category}</option>
                                 })
-                            } */}
+                            }
                         </select>
                         
 

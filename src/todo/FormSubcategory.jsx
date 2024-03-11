@@ -1,4 +1,10 @@
-export default function FormSubcategory({subcategory, setSubcategory, handleChange}) {
+export default function FormSubcategory({previousSubcategories, subcategory, setSubcategory}) {
+    function handleChange(event) {
+        if (event.target.id === 'subcategory-create' || event.target.id === 'subcategory-select') {
+            setSubcategory(event.target.value);
+        }
+    }
+
     return (
         <div>
             <h2>Subcategory</h2>
@@ -7,13 +13,13 @@ export default function FormSubcategory({subcategory, setSubcategory, handleChan
                 <section className="subsection">
                     <div>
                         <select id="subcategory-select" name="subcategory-select" onChange={handleChange}>
-                            {/* {
-                                subcategories?.map((subcategory, index) => {
+                            {
+                                previousSubcategories?.map((subcategory, index) => {
                                     return (
                                         <option key={subcategory} value={subcategory}>{subcategory}</option>
                                     )
                                 })
-                            } */}
+                            }
                         </select>
 
                         <label htmlFor="subcategory-select">Choose from Previous Categories</label>

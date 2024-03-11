@@ -23,29 +23,19 @@ export default function Todo() {
         console.log('lol')
     }
 
-    function handleChange(event) {
-        if (event.target.id === 'category-create' || event.target.id === 'category-select') {
-            setCategory(event.target.value);
-        } else if (event.target.id === 'subcategory-create' || event.target.id === 'subcategory-select') {
-            setSubcategory(event.target.value);
-        }
+    function handleSubmitTodoEntry(event) {
+        event.preventDefault();
+        console.log('submitted!')
     }
     // function add item to list
 
-    const categories = [...new Set(todos.map(todo => {
+    const previousCategories = [...new Set(todos.map(todo => {
         return todo.category;
     }))]
 
-    const subcategories = [...new Set(todos.map(todo => {
+    const previousSubcategories = [...new Set(todos.map(todo => {
         return todo.subcategory;
     }))]
-
-    let patternDisplay = {
-        default: true,
-        days: 'all',
-        months: 'all',
-        years: 'all'
-    }
 
     return (
         <div>
@@ -58,17 +48,17 @@ export default function Todo() {
                     
                 </Suspense>
             </Canvas> */}
-            <form>
+            <form onSubmit={handleSubmitTodoEntry}>
                 <FormCategory 
+                    previousCategories={previousCategories}
                     category={category} 
                     setCategory={setCategory}
-                    handleChange={handleChange} 
                 />
 
                 <FormSubcategory 
-                    category={subcategory} 
-                    setCategory={setSubcategory}
-                    handleChange={handleChange} 
+                    previousSubcategories={previousSubcategories}
+                    subcategory={subcategory} 
+                    setSubcategory={setSubcategory}
                 />
 
                 <div>
@@ -76,7 +66,6 @@ export default function Todo() {
                         isDatePattern={isDatePattern} 
                         setIsDatePattern={setIsDatePattern}
                         setDatesTimes={setDatesTimes}
-                        handleChange={handleChange}
                     />
 
                     {
@@ -84,7 +73,6 @@ export default function Todo() {
                         ?
                         <FormReminderFrequencyPattern
                             currentYear={currentYear}
-                            patternDisplay={patternDisplay}
                         />
                         :
                         <FormReminderFrequencySpecified

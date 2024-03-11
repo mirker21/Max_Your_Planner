@@ -209,6 +209,12 @@ hr {
   margin: 25px 0px;
 }
 
+.item-name {
+  width: 75%;
+  word-break: break-all;
+  text-align: right;
+}
+
 #year-equation-label {
   display: flex;
   align-items: center;
@@ -257,6 +263,11 @@ hr {
 
 .single-date-times-container div:first-of-type button {
   margin: 0px;
+}
+
+label {
+  width: 85%;
+  text-align: right;
 }
 
 li {

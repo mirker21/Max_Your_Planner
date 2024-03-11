@@ -1,3 +1,5 @@
+import { generateUUID } from "three/src/math/MathUtils";
+
 export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
     function handleChange(event) {
@@ -6,7 +8,11 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
     function addTodo() {
         if (todo !== '') {
-            const newChecklist = [...checklist, todo];
+            const newTodo = {
+                todo: todo,
+                id: generateUUID()
+            }
+            const newChecklist = [...checklist, newTodo];
             setChecklist([...newChecklist])
             setTodo('')
         }
@@ -14,16 +20,17 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
     function removeTodo(event) {
         let newChecklist = [...checklist];
-        newChecklist = newChecklist.filter((item, index) => {
-            item + index !== event.target.parentNode.id;
+        newChecklist = newChecklist.filter(todo => {
+            return todo.id !== event.target.id;
         })
+        console.log(newChecklist)
         setChecklist([...newChecklist])
     }
 
     return ( 
         <div>
             <section>
-                <h3>Item Name</h3>
+                <h3>Todo Items</h3>
 
                 <section className="subsection">
                     <div>
@@ -49,10 +56,10 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
                         <li>
                             {
-                                checklist.map((item, index) => (
-                                    <ul className="list-item" key={item + index} id={item + index}>
-                                        <button type="button" onClick={removeTodo}>×</button>
-                                        <p>{item}</p>
+                                checklist.map(todo => (
+                                    <ul className="list-item" key={todo.todo + todo.id} id={todo.todo + todo.id}>
+                                        <button type="button" onClick={removeTodo} id={todo.id}>×</button>
+                                        <p className="item-name">{todo.todo}</p>
                                     </ul>
                                 ))
                             }
