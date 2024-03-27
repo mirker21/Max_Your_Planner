@@ -26,6 +26,63 @@ button[type='button'] {
   margin-top: 20px;
 }
 
+#container {
+  height: 100vh;
+  width: 100vw;
+}
+
+#three-canvas {
+  position: relative;
+  width: 200px;
+  height: 1000px;
+}
+
+#interface {
+  position: absolute;
+  z-index: 1000;
+  top: 0px;
+  left: 20px;
+  width: auto;
+  align-items: flex-start;
+}
+
+.interface-button {
+  width: auto;
+  height: 42px;
+  background-color: rgba(255, 255, 255, 0.603);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1000px;
+  padding: 0px 10px;
+  color: #000000;
+}
+
+.interface-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: #000000;
+  transition: 200ms;
+}
+
+.interface-button span {
+  width: 0px;
+  overflow: hidden;
+  margin: 0px;
+  transition: 200ms;
+}
+
+.interface-button:hover svg {
+  stroke: #00890b;
+} 
+
+.interface-button:hover span {
+  width: auto;
+  white-space: nowrap;
+  margin: 0px 15px;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -60,9 +117,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -70,6 +125,7 @@ button:focus-visible {
 
 form {
   width: 500px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -284,9 +340,6 @@ span {
   :root {
     color: #213547;
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
   }
   button {
     background-color: #f9f9f9;

@@ -12,15 +12,14 @@ export default function FormReminderFrequencyPatternTimes({
                 setTimes([])
             }
             setTime(event.target.value);
-            setAllDay(false)
         } else if (event.target.id === 'pattern-specific-time-input') {
             setTime(event.target.value);
-            setAllDay(false);
         } else if (event.target.id === 'pattern-all-day-checked') {
             if (allDay == true) {
                 setAllDay(false);
             } else {
                 setTime('')
+                setTimes([]);
                 setAllDay(true);
             }
         }
@@ -32,6 +31,7 @@ export default function FormReminderFrequencyPatternTimes({
             const newTimes = [...times, newTime];
             setTimes([...newTimes]);
             setTime('');
+            setAllDay(false)
         }
     }
 

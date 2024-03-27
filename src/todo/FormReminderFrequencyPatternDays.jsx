@@ -1,6 +1,4 @@
 export default function FormReminderFrequencyPatternDays({
-    times,
-    allDay,
     days,
     setDays,
     dayEquation,
@@ -85,8 +83,6 @@ export default function FormReminderFrequencyPatternDays({
     return (
         <>
             {
-                // times.length > 0 || allDay === true
-                // &&
                 <>
                     <hr />
 

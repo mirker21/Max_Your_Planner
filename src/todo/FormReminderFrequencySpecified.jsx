@@ -103,9 +103,6 @@ export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) 
         }
     }
 
-    // prevent duplicates of dates and times
-    // allow revision of dates and times?
-
     return (
         <section>
             <h3>Date And Time</h3>

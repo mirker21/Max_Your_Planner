@@ -1,5 +1,5 @@
-import { Canvas } from "@react-three/fiber"
-import { useState } from "react";
+
+import { useState, useRef } from "react";
 
 import FormCategory from "./todo/FormCategory";
 import FormSubcategory from "./todo/FormSubcategory";
@@ -7,6 +7,9 @@ import FormReminderFrequencySpecified from "./todo/FormReminderFrequencySpecifie
 import FormReminderFrequencyPattern from "./todo/FormReminderFrequencyPattern";
 import FormItemName from "./todo/FormItemName";
 import FormReminderFrequencySwitch from "./todo/FormReminderFrequencySwitch";
+import { generateUUID } from "three/src/math/MathUtils";
+import ProjectCanvas from "./ProjectCanvas";
+import Interface from "./components/Interface";
 
 export default function Todo() {
     const [todos, setTodos] = useState([]);
@@ -19,13 +22,23 @@ export default function Todo() {
     const [isDatePattern, setIsDatePattern] = useState(false);
     const [reminderFrequency, setReminderFrequency] = useState({})
 
-    function submitEditedTodo(id) {
-        console.log('lol')
-    }
+    const [isSoundOn, setIsSoundOn] = useState(false);
+    const [isMusicOn, setIsMusicOn] = useState(false);
+    const [currentWindow, setCurrentWindow] = useState('Greet')
 
     function handleSubmitTodoEntry(event) {
         event.preventDefault();
-        console.log('submitted!')
+        const newTodos = [...todos];
+        const newTodo = {
+            id: generateUUID(),
+            category: category,
+            subcategory: subcategory,
+            reminderFrequency: [...datesTimes],
+            checklist: [...checklist]
+        };
+        newTodos.push(newTodo);
+        setTodos([...newTodos]);
+        console.log('submitted!', newTodos)
     }
     // function add item to list
 
@@ -37,17 +50,18 @@ export default function Todo() {
         return todo.subcategory;
     }))]
 
+    let addTodoButtonDisplay = false;
+
+    if (datesTimes.length > 0 && category !== '' && subcategory !== '') {
+        addTodoButtonDisplay = true;
+    }
+
     return (
-        <div>
-            {/* <Canvas id="three-canvas">
-                <PerspectiveCamera makeDefault position={[0, 25, 5]} />
-                <OrbitControls />
-                <ambientLight intensity={2} color="#FFFED0" />
-                <directionalLight position={[0, 0, 10]} intensity={2} color="#FFFED0" />
-                <Suspense fallback={null}>
-                    
-                </Suspense>
-            </Canvas> */}
+        <div id="container">
+            <ProjectCanvas todos={todos} />
+            <Interface
+
+            />
             <form onSubmit={handleSubmitTodoEntry}>
                 <FormCategory 
                     previousCategories={previousCategories}
@@ -73,6 +87,7 @@ export default function Todo() {
                         ?
                         <FormReminderFrequencyPattern
                             currentYear={currentYear}
+                            setDatesTimes={setDatesTimes}
                         />
                         :
                         <FormReminderFrequencySpecified
@@ -88,8 +103,12 @@ export default function Todo() {
                     todo={todo}
                     setTodo={setTodo}
                 />
-
-                <button type="submit">Add Entry To Collection</button>
+                
+                {
+                    addTodoButtonDisplay === true
+                    &&
+                    <button type="submit">Add Entry To Collection</button>
+                }
             </form>
         </div>
         // form with categories and inventories

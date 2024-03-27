@@ -1,7 +1,4 @@
 export default function FormReminderFrequencyPatternMonths({
-    days,
-    dayEquation,
-    isEveryDayOfWeekEachMonth,
     months,
     setMonths,
     monthEquation,
@@ -65,16 +62,6 @@ export default function FormReminderFrequencyPatternMonths({
     return (
         <>
             {
-                // (
-                //     days.length > 0 
-                //     || 
-                //     (
-                //         (dayEquation.first !== '' || dayEquation.second !== '') 
-                //         || 
-                //         isEveryDayOfWeekEachMonth === true
-                //     )
-                // )
-                // &&
                 <>
                     <hr />
 

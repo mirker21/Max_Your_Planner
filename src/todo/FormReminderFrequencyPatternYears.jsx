@@ -1,7 +1,4 @@
 export default function FormReminderFrequencyPatternYears({
-    months,
-    monthEquation,
-    isEveryMonthOfYear,
     year,
     setYear,
     years,
@@ -133,16 +130,6 @@ export default function FormReminderFrequencyPatternYears({
     return (
         <>
             {
-                // (
-                //     months.length > 0 
-                //     || 
-                //     (
-                //         (monthEquation.first !== '' || monthEquation.second !== '') 
-                //         || 
-                //         isEveryMonthOfYear === true
-                //     )
-                // )
-                // &&
                 <>
                     <hr />
 

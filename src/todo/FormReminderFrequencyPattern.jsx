@@ -4,7 +4,7 @@ import FormReminderFrequencyPatternDays from "./FormReminderFrequencyPatternDays
 import FormReminderFrequencyPatternMonths from "./FormReminderFrequencyPatternMonths";
 import FormReminderFrequencyPatternYears from "./FormReminderFrequencyPatternYears";
 
-export default function ReminderFrequencyPattern({currentYear}) {
+export default function ReminderFrequencyPattern({currentYear, setDatesTimes}) {
     const [days, setDays] = useState([]);
     const [dayEquation, setDayEquation] = useState(
         {
@@ -42,7 +42,32 @@ export default function ReminderFrequencyPattern({currentYear}) {
 
     const [time, setTime] = useState('');
     const [times, setTimes] = useState([]);
-    const [allDay, setAllDay] = useState(false);
+    const [allDay, setAllDay] = useState(true);
+
+    function handleConfirmPattern() {
+        setDatesTimes([
+            {
+                times: times.length > 0 ? [...times] : 'All-Day',
+                day: {
+                    days: [...days],
+                    dayEquation: dayEquation,
+                    isEveryDayOfWeekEachMonth: isEveryDayOfWeekEachMonth,
+                    everyNthDayOfWeekEachMonth: everyNthDayOfWeekEachMonth,
+                },
+                month: {
+                    months: [...months],
+                    monthEquation: monthEquation,
+                    isEveryMonthOfYear: isEveryMonthOfYear
+                },
+                year: {
+                    years: [...years],
+                    yearEquation: yearEquation,
+                    isEveryYear: isEveryYear,
+                    yearRange: yearRange
+                }
+            }
+        ])
+    }
 
     let numberSuffix = '';
     if (everyNthDayOfWeekEachMonth === '') {
@@ -84,15 +109,45 @@ export default function ReminderFrequencyPattern({currentYear}) {
     }
 
     let patternDisplayTimes = '';
+    let timesFilled = false;
+
+    if (times.length > 0) {
+        timesFilled = true;
+        let adjustedTimes = times.map(time => {
+            let meridian = 'AM';
+            let [hour, minute] = time.split(':');
+
+            if (hour <= 11) {
+                if (hour[0] === '0') {
+                    hour = hour.slice(1,);
+                }
+            } else {
+                if (hour > 12) {
+                    hour = hour - 12;
+                }
+                meridian = 'PM';
+            }
+
+            let displayedTime = hour + ':' + minute + ' ' + meridian;
+            return displayedTime;
+        })
+        patternDisplayTimes += adjustedTimes.join(', ')
+    } else if (allDay === true) {
+        timesFilled = true;
+        patternDisplayTimes += 'All-Day'
+    }
 
     let patternDisplayDays = '';
+    let daysFilled = false;
 
     if (isEveryDayOfWeekEachMonth === true) {
+        daysFilled = true;
         patternDisplayDays += 
         `Pattern: ${isEveryDayOfWeekEachMonth === true && 'Every '}` 
         + 
         `${days.length > 0 ? days.join(', ') : ' Day'}`
     } else if (everyNthDayOfWeekEachMonth.length > 0) {
+        daysFilled = true;
         patternDisplayDays += 
         `Pattern: ${everyNthDayOfWeekEachMonth.length > 0 && 'Every '}` 
         + 
@@ -100,6 +155,7 @@ export default function ReminderFrequencyPattern({currentYear}) {
         +
         ` ${days.join(', ')} each month`
     } else if (dayEquation.first.length > 0 || dayEquation.second.length > 0) {
+        daysFilled = true;
         patternDisplayDays += `Pattern: Every 
         ${dayEquation.first === '1' ? '' : dayEquation.first}
         n  +    
@@ -110,13 +166,16 @@ export default function ReminderFrequencyPattern({currentYear}) {
     }
 
     let patternDisplayMonths = '';
+    let monthsFilled = false;
 
     if (isEveryMonthOfYear === true) {
+        monthsFilled = true;
         patternDisplayMonths += 
         `Pattern: ${isEveryMonthOfYear === true && 'Every '}` 
         + 
         `${months.length > 0 ? ' ' + months.join(', ') : 'Month'}`
     } else if (monthEquation.first.length > 0 || monthEquation.second.length > 0) {
+        monthsFilled = true;
         patternDisplayMonths += `Pattern: Every
         ${monthEquation.first === '1' ? '' : monthEquation.first}n
         +    
@@ -127,23 +186,28 @@ export default function ReminderFrequencyPattern({currentYear}) {
     }
 
     let patternDisplayYears = '';
+    let yearsFilled = false;
 
     if (isEveryYear === true) {
+        yearsFilled = true;
         patternDisplayYears += 
         `Pattern: ${isEveryYear === true && 'Every '}` 
         + 
         `${days.length > 1 ? days.join(', ') : 'Year'}`
     } else if (years.length > 0) {
+        yearsFilled = true;
         patternDisplayYears += `Pattern: 
         ${years.join(', ')}
         `
     } else if (yearRange.start.length > 0 || yearRange.end.length > 0) {
+        yearsFilled = true;
         patternDisplayYears += `Range:  
         ${yearRange.start === '1' ? '' : yearRange.start}
         -    
         ${yearRange.end === '' ? '0' : yearRange.end}
         ` 
     } else if (yearEquation.first.length > 0 || yearEquation.second.length > 0) {
+        yearsFilled = true;
         patternDisplayYears += `Pattern: Every 
         ${yearEquation.first === '1' ? '' : yearEquation.first}
         n  +    
@@ -155,7 +219,8 @@ export default function ReminderFrequencyPattern({currentYear}) {
 
     let patternDisplay = {
         default: 
-        isEveryDayOfWeekEachMonth === true 
+        allDay === true
+        && isEveryDayOfWeekEachMonth === true 
         && isEveryMonthOfYear === true 
         && isEveryYear === true ? true : false,
         times: patternDisplayTimes,
@@ -176,8 +241,6 @@ export default function ReminderFrequencyPattern({currentYear}) {
             />
 
             <FormReminderFrequencyPatternDays
-                times={times}
-                allDay={allDay}
                 days={days}
                 setDays={setDays}
                 dayEquation={dayEquation}
@@ -190,9 +253,6 @@ export default function ReminderFrequencyPattern({currentYear}) {
             />
 
             <FormReminderFrequencyPatternMonths
-                days={days}
-                dayEquation={dayEquation}
-                isEveryDayOfWeekEachMonth={isEveryDayOfWeekEachMonth}
                 months={months}
                 setMonths={setMonths}
                 monthEquation={monthEquation}
@@ -202,9 +262,6 @@ export default function ReminderFrequencyPattern({currentYear}) {
             />
             
             <FormReminderFrequencyPatternYears
-                months={months}
-                monthEquation={monthEquation}
-                isEveryMonthOfYear={isEveryMonthOfYear}
                 year={year}
                 setYear={setYear}
                 years={years}
@@ -221,7 +278,6 @@ export default function ReminderFrequencyPattern({currentYear}) {
             <hr />
 
             <div id="pattern-reminder">
-                
                 <h4>Pattern: {patternDisplay.default === true ? 'Default' : 'Custom'}</h4>
                 <li>
                     <ul>Times: {patternDisplay.times}</ul>
@@ -230,6 +286,12 @@ export default function ReminderFrequencyPattern({currentYear}) {
                     <ul>Years: {patternDisplay.years}</ul>
                 </li>
             </div>
+
+            {
+                timesFilled && daysFilled && monthsFilled && yearsFilled
+                &&
+                <button type="button" onClick={handleConfirmPattern}>Confirm Pattern Updates</button>
+            }
         </section>
     )
 }
