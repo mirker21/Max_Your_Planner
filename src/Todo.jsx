@@ -11,6 +11,12 @@ import { generateUUID } from "three/src/math/MathUtils";
 import ProjectCanvas from "./ProjectCanvas";
 import Interface from "./components/Interface";
 
+const birdsAudio = new Audio('./audio/148909__kvgarlic__creekandchickadee.wav')
+const musicAudio = new Audio('./audio/Dewdrop Fantasy.mp3')
+
+birdsAudio.loop = true;
+musicAudio.loop = true;
+
 export default function Todo() {
     const [todos, setTodos] = useState([]);
     const [category, setCategory] = useState('');
@@ -24,7 +30,7 @@ export default function Todo() {
 
     const [isSoundOn, setIsSoundOn] = useState(false);
     const [isMusicOn, setIsMusicOn] = useState(false);
-    const [currentWindow, setCurrentWindow] = useState('Greet')
+    const [currentPanel, setCurrentPanel] = useState('')
 
     function handleSubmitTodoEntry(event) {
         event.preventDefault();
@@ -58,63 +64,29 @@ export default function Todo() {
 
     return (
         <div id="container">
-            <ProjectCanvas todos={todos} />
+            <ProjectCanvas todos={todos} setTodos={setTodos} currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} />
             <Interface
-
+                isSoundOn={isSoundOn}
+                setIsSoundOn={setIsSoundOn}
+                isMusicOn={isMusicOn}
+                setIsMusicOn={setIsMusicOn}
+                birdsAudio={birdsAudio}
+                musicAudio={musicAudio}
+                currentPanel={currentPanel} 
+                setCurrentPanel={setCurrentPanel}
             />
-            <form onSubmit={handleSubmitTodoEntry}>
-                <FormCategory 
-                    previousCategories={previousCategories}
-                    category={category} 
-                    setCategory={setCategory}
-                />
-
-                <FormSubcategory 
-                    previousSubcategories={previousSubcategories}
-                    subcategory={subcategory} 
-                    setSubcategory={setSubcategory}
-                />
-
-                <div>
-                    <FormReminderFrequencySwitch 
-                        isDatePattern={isDatePattern} 
-                        setIsDatePattern={setIsDatePattern}
-                        setDatesTimes={setDatesTimes}
-                    />
-
-                    {
-                        isDatePattern === true
-                        ?
-                        <FormReminderFrequencyPattern
-                            currentYear={currentYear}
-                            setDatesTimes={setDatesTimes}
-                        />
-                        :
-                        <FormReminderFrequencySpecified
-                            datesTimes={datesTimes}
-                            setDatesTimes={setDatesTimes}
-                        />
-                    }
-                </div>
-
-                <FormItemName 
-                    checklist={checklist} 
-                    setChecklist={setChecklist}
-                    todo={todo}
-                    setTodo={setTodo}
-                />
-                
-                {
-                    addTodoButtonDisplay === true
-                    &&
-                    <button type="submit">Add Entry To Collection</button>
-                }
-            </form>
+            <span>
+                "Dewdrop Fantasy" Kevin MacLeod (incompetech.com)
+                Licensed under Creative Commons: By Attribution 4.0 License
+                http://creativecommons.org/licenses/by/4.0/
+            </span>
+            <a href="https://freesound.org/people/kvgarlic/sounds/148909/">CreekandChickadee.wav</a> by <a href="https://freesound.org/people/kvgarlic/">kvgarlic</a> | License: <a href="http://creativecommons.org/publicdomain/zero/1.0/">Creative Commons 0</a>
+            
+            {/* // form with categories and inventories
+            // 3d model, unlock hat if you clear your list for the day
+            // html speech bubble
+            // take break screen?
+            // praise message and quote */}
         </div>
-        // form with categories and inventories
-        // 3d model, unlock hat if you clear your list for the day
-        // html speech bubble
-        // take break screen?
-        // praise message and quote
     )
 }

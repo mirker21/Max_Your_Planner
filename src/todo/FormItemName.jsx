@@ -29,8 +29,9 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
     return ( 
         <div>
+            <h2>Todo Item Names</h2>
             <section>
-                <h3>Todo Items</h3>
+                <h3>Add Items</h3>
 
                 <section className="subsection">
                     <div>
@@ -54,16 +55,16 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
 
                         <h3>Items Added</h3>
 
-                        <li>
+                        <ul className="items-added-container">
                             {
                                 checklist.map(todo => (
-                                    <ul className="list-item" key={todo.todo + todo.id} id={todo.todo + todo.id}>
+                                    <li className="list-item" key={todo.todo + todo.id} id={todo.todo + todo.id}>
                                         <button type="button" onClick={removeTodo} id={todo.id}>×</button>
                                         <p className="item-name">{todo.todo}</p>
-                                    </ul>
+                                    </li>
                                 ))
                             }
-                        </li>
+                        </ul>
                     </div>
                 }
             </section>

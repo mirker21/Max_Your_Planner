@@ -4,7 +4,7 @@ import FormReminderFrequencyPatternDays from "./FormReminderFrequencyPatternDays
 import FormReminderFrequencyPatternMonths from "./FormReminderFrequencyPatternMonths";
 import FormReminderFrequencyPatternYears from "./FormReminderFrequencyPatternYears";
 
-export default function ReminderFrequencyPattern({currentYear, setDatesTimes}) {
+export default function FormReminderFrequencyPattern({currentYear, setDatesTimes}) {
     const [days, setDays] = useState([]);
     const [dayEquation, setDayEquation] = useState(
         {
@@ -193,7 +193,7 @@ export default function ReminderFrequencyPattern({currentYear, setDatesTimes}) {
         patternDisplayYears += 
         `Pattern: ${isEveryYear === true && 'Every '}` 
         + 
-        `${days.length > 1 ? days.join(', ') : 'Year'}`
+        `${years.length > 1 ? years.join(', ') : 'Year'}`
     } else if (years.length > 0) {
         yearsFilled = true;
         patternDisplayYears += `Pattern: 
@@ -279,18 +279,18 @@ export default function ReminderFrequencyPattern({currentYear, setDatesTimes}) {
 
             <div id="pattern-reminder">
                 <h4>Pattern: {patternDisplay.default === true ? 'Default' : 'Custom'}</h4>
-                <li>
-                    <ul>Times: {patternDisplay.times}</ul>
-                    <ul>Days: {patternDisplay.days}</ul>
-                    <ul>Months: {patternDisplay.months}</ul>
-                    <ul>Years: {patternDisplay.years}</ul>
-                </li>
+                <ul>
+                    <li>Times: {patternDisplay.times}</li>
+                    <li>Days: {patternDisplay.days}</li>
+                    <li>Months: {patternDisplay.months}</li>
+                    <li>Years: {patternDisplay.years}</li>
+                </ul>
             </div>
 
             {
                 timesFilled && daysFilled && monthsFilled && yearsFilled
                 &&
-                <button type="button" onClick={handleConfirmPattern}>Confirm Pattern Updates</button>
+                <button type="button" id="confirm-pattern-button" onClick={handleConfirmPattern}>Confirm Pattern Updates</button>
             }
         </section>
     )

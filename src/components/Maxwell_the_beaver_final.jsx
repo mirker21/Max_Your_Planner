@@ -14,9 +14,7 @@ export default function Maxwell(props) {
   const { nodes, materials, animations } = useGLTF('./models/maxwell_the_beaver_final-transformed.glb')
   const { actions, mixer } = useAnimations(animations, group)
 
-  console.log(nodes, animations, actions)
-  console.log(nodes.Pencil)
-  console.log(nodes.Paper)
+  console.log('MAXWELL!')
 
   useEffect(() => {
     if (currentAnimation === 'Greet') {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
-export default function ReminderFrequencySpecified({datesTimes, setDatesTimes}) {
+export default function FormReminderFrequencySpecified({datesTimes, setDatesTimes}) {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [times, setTimes] = useState([]);

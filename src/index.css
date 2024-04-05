@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  width: 100vw;
+}
+
 input[type='number'] {
   width: 100px;
 }
@@ -35,6 +39,22 @@ button[type='button'] {
   position: relative;
   width: 200px;
   height: 1000px;
+}
+
+.main-panel, .left-panel, .right-panel {
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.dialog-container {
+  width: auto;
+  background-color:rgba(255, 255, 255, 0.603);
+  color: black;
+  padding: 5px 25px;
+  border-radius: 20px;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 #interface {
@@ -113,7 +133,8 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: rgba(255, 255, 255, 0.663);
+  color: #000000;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -124,14 +145,16 @@ button:focus-visible {
 }
 
 form {
-  width: 500px;
-  height: auto;
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
   margin: 20px 0px;
-  background-color: #2e2e2e;
+  background-color: #e9ffee;
   padding: 20px;
 }
 
@@ -139,13 +162,43 @@ form div:first-of-type h2 {
   margin-top: 5px;
 }
 
+h2, h3 {
+  color: black;
+}
+
+label {
+  color: white;
+}
+
+input, select {
+  background-color: white;
+  accent-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 3px;
+}
+
+input:focus, select:focus {
+  outline: 4px auto #018a08;
+}
+
 .result {
   display: flex;
   flex-direction: column;
 }
 
-li {
+ul {
   width: 80%;
+  padding-left: 0px;
+}
+
+li {
+  margin: 20px 30px;
+  margin-top: 0px;
+}
+
+li:last-of-type {
+  margin-bottom: 0px;
 }
 
 .list-item {
@@ -156,10 +209,12 @@ li {
   align-items: center;
   justify-content: space-between;
   padding-left: 0px;
-  background-color: #6a6a6a;
+  background-color: #487e56;
   padding: 15px;
   border-radius: 5px;
   box-sizing: border-box;
+  margin: 0px;
+  margin-bottom: 15px;
 }
 
 .list-item button {
@@ -173,6 +228,7 @@ li {
 #date-times-result {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 #reminder-frequency-option-container {
@@ -183,19 +239,68 @@ li {
 }
 
 .reminder-frequency-option {
-  display: flex;
+  display: flex; 
 }
 
-.reminder-frequency-option label {
+.reminder-frequency-option label p {
   margin-left: 20px;
+  color: black;
 }
+
+input[type='checkbox'] {
+  padding: 5px;
+}
+
+input[type='checkbox']:not(:checked) {
+  accent-color: #487e56;
+  background-color: #487e56;
+}
+
+#month-each-year-checked + label {
+  color: white;
+}
+
+#day-of-week-each-month-checked + label {
+  color: white;
+}
+
+#pattern-all-day-checked + label {
+  color: white;
+}
+
+#confirm-pattern-button {
+  background-color: #89d29c;
+}
+
+span {
+  color: black;
+}
+
+div {
+  color: white;
+}
+
+form p {
+  color: white;
+}
+
+input[type='checkbox']:checked {
+  accent-color: #018a08;
+  outline: 1px solid #e9ffee;
+}
+
+input[type='checkbox']:not([id="every-year-checked"]) + label {
+  color: black;
+}
+
+
 
 section {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid #535bf2;
+  border: 2px solid #018a08;
   border-radius: 5px;
   box-sizing: border-box;
   padding: 20px 20px;
@@ -203,7 +308,7 @@ section {
 }
 
 .subsection {
-  background-color: #494ea1;
+  background-color: #487e56;
   border: none;
 }
 
@@ -263,12 +368,14 @@ h3 {
 hr {
   width: 100%;
   margin: 25px 0px;
+  border: 1px solid #00890b;
 }
 
 .item-name {
   width: 75%;
   word-break: break-all;
   text-align: right;
+  padding-right: 10px;
 }
 
 #year-equation-label {
@@ -279,7 +386,8 @@ hr {
 #pattern-reminder {
   width: 75%;
   height: auto;
-  background-color: #1a1a1a;
+  background-color: #89d29c;
+  color: black;
   border-radius: 20px;;
   display: flex;
   flex-direction: column;
@@ -344,4 +452,8 @@ span {
   button {
     background-color: #f9f9f9;
   }
+}
+
+label[for="every-year-checked"] {
+  color: white;
 }
