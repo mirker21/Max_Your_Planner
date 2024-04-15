@@ -166,7 +166,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Sunday')}
                             />
-                            <label htmlFor="Sunday">Sunday</label>
+                            <label className="black-text-label" htmlFor="Sunday">Sunday</label>
                         </div>
 
                         <div>
@@ -178,7 +178,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Monday')}
                             />
-                            <label htmlFor="Monday">Monday</label>
+                            <label className="black-text-label" htmlFor="Monday">Monday</label>
                         </div>
 
                         <div>
@@ -190,7 +190,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Tuesday')}
                             />
-                            <label htmlFor="Tuesday">Tuseday</label>
+                            <label className="black-text-label" htmlFor="Tuesday">Tuseday</label>
                         </div>
 
                         <div>
@@ -202,7 +202,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Wednesday')}
                             />
-                            <label htmlFor="Wednesday">Wednesday</label>
+                            <label className="black-text-label" htmlFor="Wednesday">Wednesday</label>
                         </div>
 
                         <div>
@@ -214,7 +214,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Thursday')}
                             />
-                            <label htmlFor="Thursday">Thursday</label>
+                            <label className="black-text-label" htmlFor="Thursday">Thursday</label>
                         </div>
 
                         <div>
@@ -226,7 +226,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Friday')}
                             />
-                            <label htmlFor="Friday">Friday</label>
+                            <label className="black-text-label" htmlFor="Friday">Friday</label>
                         </div>
 
                         <div>
@@ -238,7 +238,7 @@ export default function FormReminderFrequencyPatternDays({
                                 onChange={handleChangeDay} 
                                 checked={days.includes('Saturday')}
                             />
-                            <label htmlFor="Saturday">Saturday</label>
+                            <label className="black-text-label" htmlFor="Saturday">Saturday</label>
                         </div>
                     </article>
                 </>

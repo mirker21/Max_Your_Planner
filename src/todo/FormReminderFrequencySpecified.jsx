@@ -84,7 +84,6 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
         let newDatesTimes = [...datesTimes];
         let foundIndex = newDatesTimes.findIndex(dateTime => event.target.id.includes(dateTime.id))
         let foundEntry = newDatesTimes[foundIndex];
-        console.log(typeof foundIndex)
 
         if (event.target.className === 'remove-date-button') {
             newDatesTimes.splice(foundIndex, 1);
@@ -92,7 +91,6 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
             setDatesTimes([...newDatesTimes]);
         } else if (event.target.className === 'remove-time-button') {
             let foundTimeIndex = event.target.id.replace(foundEntry.id, '');
-            console.log(foundTimeIndex)
             foundEntry.times = foundEntry.times.splice(foundTimeIndex, 1);
             if (foundEntry.times.length === 0) {
                 newDatesTimes.splice(foundIndex, 1);
@@ -187,7 +185,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                     }
 
                     {
-                        times.length !== 0 && date !== ''
+                        (times.length !== 0 && date !== '') || (date !== '' && allDay === true)
                         &&
                         <button type="button" onClick={handleAddDateTimes}>Add Date and Time</button>
                     }
@@ -231,7 +229,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                                             type="date" 
                                             className="date-input" 
                                             id={dateTime.id + dateTime.date + index} 
-                                            value={dateTime.date} 
+                                            value={dateTime.date}
                                             onChange={handleEditDateTime} 
                                         />
                                     </div>

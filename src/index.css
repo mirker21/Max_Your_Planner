@@ -26,8 +26,24 @@ button[type='submit'] {
   width: 100%;
 }
 
-button[type='button'] {
+button[type='button']:not([aria-label="close"]) {
   margin-top: 20px;
+}
+
+/* .toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 75000;
+} */
+
+.Toastify__toast-body {
+  display: flex;
+  align-items: center;
+}
+
+.Toastify__toast-body div {
+  color: black;
 }
 
 #container {
@@ -47,6 +63,15 @@ button[type='button'] {
   overflow-y: auto;
 }
 
+#notification-permission-alert {
+  height: auto;
+  width: 300px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+}
+
 .dialog-container {
   width: auto;
   background-color:rgba(255, 255, 255, 0.603);
@@ -57,10 +82,29 @@ button[type='button'] {
   overflow-y: auto;
 }
 
+.single-todo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.reminder-frequency-description {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0px;
+}
+
+.todo-header {
+  text-align: center;
+  text-decoration: 1px dashed underline white;
+  text-underline-offset: 3px;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
 #interface {
   position: absolute;
   z-index: 1000;
-  top: 0px;
+  bottom: 20px;
   left: 20px;
   width: auto;
   align-items: flex-start;
@@ -192,9 +236,14 @@ ul {
   padding-left: 0px;
 }
 
+.todo-list {
+  width: 100%;
+}
+
 li {
   margin: 20px 30px;
   margin-top: 0px;
+  color: white
 }
 
 li:last-of-type {
@@ -289,11 +338,13 @@ input[type='checkbox']:checked {
   outline: 1px solid #e9ffee;
 }
 
-input[type='checkbox']:not([id="every-year-checked"]) + label {
-  color: black;
+.black-text-label {
+  color: black !important;
 }
 
-
+input[type='checkbox']:not([id="every-year-checked"]) + label {
+  color: white;
+}
 
 section {
   width: 100%;

@@ -12,15 +12,17 @@ export default function FormCategory({previousCategories, category, setCategory}
             <section>
                 <section className="subsection">
                     <div>
-                        <select id="category-select" name="category-select" onChange={handleChange}>
+                        <select id="category-select" name="category-select" onChange={handleChange} value={category}>
                             {
-                                previousCategories?.map((category, index) => {
-                                    <option key={category} value={category}>{category}</option>
+                                previousCategories?.map(singleCategory => {
+                                    return (
+                                        <option key={singleCategory} value={singleCategory}>{singleCategory}</option>
+                                    )
                                 })
                             }
+                            <option value=''>None</option>
                         </select>
                         
-
                         <label htmlFor="category-select">Choose from Previous Categories</label>
                     </div>
                 </section>

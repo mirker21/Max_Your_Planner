@@ -13,6 +13,7 @@ export default function SearchPanels({
     setCurrentPanel,
     leftPosition,
     rightPosition,
+    topPosition,
 }) {
     const [currentCategorySearchString, setCurrentCategorySearchString] = useState('');
     const [currentSubcategorySearchString, setCurrentSubcategorySearchString] = useState('');
@@ -28,15 +29,15 @@ export default function SearchPanels({
             setCurrentTodoSearchString(event.target.value)
         } else if (event.target.id === 'search-todos-specified-input') {
             if (searchDatesTimes === 'specified') {
-                setSearchIsPattern('specified')
+                setSearchDatesTimes('')
             } else {
-                setSearchIsPattern('')
+                setSearchDatesTimes('specified')
             }
         } else if (event.target.id === 'search-todos-pattern-input') {
             if (searchDatesTimes === 'pattern') {
-                setSearchIsPattern('pattern')
+                setSearchDatesTimes('')
             } else {
-                setSearchIsPattern('')
+                setSearchDatesTimes('pattern')
             }
         }
     }
@@ -54,29 +55,29 @@ export default function SearchPanels({
 
     if (currentCategorySearchString.length > 0) {
         filteredTodos = filteredTodos.filter(todo => {
-            todo.category === currentCategorySearchString;
+            return todo.category.includes(currentCategorySearchString);
         })
     } 
     
     if (currentSubcategorySearchString.length > 0) {
         filteredTodos = filteredTodos.filter(todo => {
-            todo.subcategory === currentSubcategorySearchString;
+            return todo.subcategory.includes(currentSubcategorySearchString);
         })
     } 
     
     if (currentTodoSearchString.length > 0) {
         filteredTodos = filteredTodos.filter(todo => {
-            todo.checklist.some(item => item === currentSubcategorySearchString) === true;
+            return todo.checklist.some(item => item.todo.includes(currentTodoSearchString)) === true;
         })
     }
     
     if (searchDatesTimes === 'specified') {
         filteredTodos = filteredTodos.filter(todo => {
-            todo.reminderFrequency.length > 1;
+            return todo.reminderFrequency[0].hasOwnProperty('date') === true;
         })
     } else if (searchDatesTimes === 'pattern') {
         filteredTodos = filteredTodos.filter(todo => {
-            todo.reminderFrequency.length === 1;
+            return todo.reminderFrequency[0].hasOwnProperty('date') === false;
         })
     }
 
@@ -190,24 +191,22 @@ function SearchPanelRight({
     filteredTodos
 }) {
     return (
-        <section className="subsection">
-            <ul>        
-                {
-                    filteredTodos?.map(todo => {
-                        return (
-                            <SingleTodo
-                                key={todo.id}
-                                todo={todo}
-                                handleDeleteTodo={handleDeleteTodo}
-                                todos={todos}
-                                setTodos={setTodos}
-                                setSelectedTodo={setSelectedTodo}
-                                setCurrentPanel={setCurrentPanel}
-                            />
-                        )
-                    })
-                } 
-            </ul>
-        </section>
+        <ul className="todo-list">        
+            {
+                filteredTodos?.map(todo => {
+                    return (
+                        <SingleTodo
+                            key={todo.id}
+                            todo={todo}
+                            handleDeleteTodo={handleDeleteTodo}
+                            todos={todos}
+                            setTodos={setTodos}
+                            setSelectedTodo={setSelectedTodo}
+                            setCurrentPanel={setCurrentPanel}
+                        />
+                    )
+                })
+            } 
+        </ul>
     )
 }

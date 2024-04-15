@@ -4,16 +4,20 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { Environment, OrbitControls, PerspectiveCamera, Clouds, Cloud, Html } from "@react-three/drei";
 import Scenery from "./components/Scenery";
 import Maxwell from './components/Maxwell_the_beaver_final'
-import FormDisplay from "./components/FormDisplay";
 import FormPanels from "./FormPanels";
 import SearchPanels from "./SearchPanels";
 
-import { FullFormPanel } from "./todo/TodoForm";
-import SearchTodos from "./components/SearchTodos";
+console.log('haha')
 
-export default function ProjectCanvas({todos, setTodos, currentPanel, setCurrentPanel}) {
-    const logRef = useRef(null)
-    const logFocusRef = useRef(null)
+export default function ProjectCanvas({
+    todos,
+    setTodos,
+    currentPanel,
+    setCurrentPanel,
+    deletedTodaysTodos,
+    setDeletedTodaysTodos,
+    todaysTodosFiltered
+}) {
 
     return (
         <Canvas id="three-canvas" linear shadows>
@@ -28,9 +32,17 @@ export default function ProjectCanvas({todos, setTodos, currentPanel, setCurrent
                 {/* <Cloud seed={1} segments={40} bounds={[2, 2, 2]} volume={3} color="white" position={[5, 3, 0]} /> */}
                 {/* <Cloud seed={2} segments={40} bounds={[2, 2, 2]} volume={3} color="white" position={[10, 3, 0]} /> */}
             </Clouds>
-            <Scenery logRef={logRef} />
-            <Content todos={todos} setTodos={setTodos} currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} />
-            <mesh ref={logFocusRef} position={[-1.61, .21, -.51]}>
+            <Scenery />
+            <Content 
+                todos={todos} 
+                setTodos={setTodos} 
+                currentPanel={currentPanel} 
+                setCurrentPanel={setCurrentPanel} 
+                deletedTodaysTodos={deletedTodaysTodos}
+                setDeletedTodaysTodos={setDeletedTodaysTodos}
+                todaysTodosFiltered={todaysTodosFiltered}
+            />
+            <mesh position={[-1.61, .21, -.51]}>
                 <boxGeometry args={[.05, .05, .05]} />
                 <meshBasicMaterial color={0xff0000} />
             </mesh>
@@ -39,25 +51,17 @@ export default function ProjectCanvas({todos, setTodos, currentPanel, setCurrent
     )
 }
 
-function Content({todos, setTodos, currentPanel, setCurrentPanel}) {
+function Content({
+    todos,
+    setTodos,
+    currentPanel,
+    setCurrentPanel,
+    deletedTodaysTodos,
+    setDeletedTodaysTodos,
+    todaysTodosFiltered,
+}) {
     const [selectedTodo, setSelectedTodo] = useState('')
     const [currentAnimation, setCurrentAnimation] = ('')
-
-    function handleSubmitTodoEntry(event) {
-        event.preventDefault();
-        const newTodos = [...todos];
-        const newTodo = {
-            id: generateUUID(),
-            category: category,
-            subcategory: subcategory,
-            reminderFrequency: [...datesTimes],
-            checklist: [...checklist]
-        };
-        newTodos.push(newTodo);
-        setTodos([...newTodos]);
-        console.log('submitted!', newTodos)
-    }
-    // function add item to list
 
     const previousCategories = [...new Set(todos.map(todo => {
         return todo.category;
@@ -69,8 +73,6 @@ function Content({todos, setTodos, currentPanel, setCurrentPanel}) {
 
     const { viewport, size } = useThree()
     console.log('PROJECT CANVAS!')
-    console.log(viewport)
-    console.log(size)
     const isWide = size.width > 2200;
 
     let displayedPanel = '';
@@ -79,9 +81,6 @@ function Content({todos, setTodos, currentPanel, setCurrentPanel}) {
     let rightPosition = [.795, .04, -size.width/100000 -.302];
     let topPosition = [.82, .07, -.261]
     let formScale=[.005, .005, .005]
-
-    console.log(leftPosition)
-    console.log(rightPosition)
 
     if (currentPanel === 'add-new-todo' || currentPanel === 'edit-todo') {
         displayedPanel = (

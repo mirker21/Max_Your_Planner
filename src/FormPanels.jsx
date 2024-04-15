@@ -60,7 +60,9 @@ export default function FormPanels({
         ? 
         false
         : 
-        todos.findIndex(todo => todo.id === selectedTodo).reminderFrequency.length > 1
+        todos[todos.findIndex(todo => todo.id === selectedTodo)].reminderFrequency.length > 1 
+        || 
+        todos[todos.findIndex(todo => todo.id === selectedTodo)].reminderFrequency[0].hasOwnProperty('date') === true
         ?
         false
         :
@@ -71,6 +73,9 @@ export default function FormPanels({
         event.preventDefault();
         const newTodos = [...todos];
         const newTodo = {
+            // the creation date is to show where today's date is
+            // in terms of the reminder frequency pattern equations
+            creationDate: new Date(Date.now()).toString(),
             id: generateUUID(),
             category: category,
             subcategory: subcategory,
@@ -84,21 +89,25 @@ export default function FormPanels({
     }
 
     // Figure out how to edit entries
-    // function handleConfirmEditEntry(event) {
-    //     event.preventDefault();
-    //     const newTodos = [...todos];
-    //     const newTodo = {
-    //         id: generateUUID(),
-    //         category: category,
-    //         subcategory: subcategory,
-    //         reminderFrequency: [...datesTimes],
-    //         checklist: [...checklist]
-    //     };
-    //     newTodos.push(newTodo);
-    //     setTodos([...newTodos]);
-    //     console.log('submitted!', newTodos)
-    //     setSelectedTodo('');
-    // }
+    function handleConfirmEditEntry(event) {
+        event.preventDefault();
+        const newTodos = [...todos];
+        console.log('WHOOOOO!', todos[todos.findIndex(todo => todo.id === selectedTodo)].creationDate)
+        let revisedTodo = {
+            creationDate: todos[todos.findIndex(todo => todo.id === selectedTodo)].creationDate,
+            id: selectedTodo,
+            category: category,
+            subcategory: subcategory,
+            reminderFrequency: [...datesTimes],
+            checklist: [...checklist]
+        };
+        let replaceTodoIndex = newTodos.findIndex(todo => todo.id === selectedTodo);
+        newTodos.splice(replaceTodoIndex, 1, revisedTodo)
+        setTodos([...newTodos]);
+        console.log('submitted!', newTodos)
+        setSelectedTodo('');
+        setCurrentPanel('search-todos')
+    }
 
     let addTodoButtonDisplay = false;
 
@@ -112,9 +121,9 @@ export default function FormPanels({
     let leftPanel = (
         <FormPanelLeft
             previousCategories={previousCategories}
+            previousSubcategories={previousSubcategories}
             category={category}
             setCategory={setCategory}
-            previousSubcategories={previousSubcategories}
             subcategory={subcategory}
             setSubcategory={setSubcategory}
             checklist={checklist}
@@ -167,9 +176,9 @@ export default function FormPanels({
 
 function FormPanelLeft({
     previousCategories,
+    previousSubcategories,
     category,
     setCategory,
-    previousSubcategories,
     subcategory,
     setSubcategory,
     checklist,
