@@ -15,27 +15,110 @@
 
 body {
   width: 100vw;
+  font-family: "Raleway", sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Dosis", sans-serif;
+  /* color:#915318; */
+}
+
+#greet-text {
+  text-align: center;
+  color:#417097;
+  background-color: rgba(255, 255, 255, 0.87);
+  padding: 20px;
+  line-height: 25px;
+  font-size: smaller;
+}
+
+#greet-text h4 {
+  margin: 10px;
+  font-size: larger;
+}
+
+#greet-text span {
+  font-family: "Dosis", sans-serif;
+  font-weight: 700;
+}
+
+#app-title-container {
+  position: absolute;
+  top: 10px;
+  margin-left: 30px;
+  z-index: 10000;
+  width: auto;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#app-title {
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, .5);
+  color: #417097;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 25px 35px;
+  padding-top: 28px;
+  padding-bottom: 22px;
+  width: auto;
+  white-space: nowrap;
+  text-align: center;
 }
 
 input[type='number'] {
   width: 100px;
 }
 
+/* https://huemint.com/illustration-2/#palette=5a91b2-3b3838-b52b29-757b30-b6b9b8-f4f1f2-5085a1-77a6bf */
+/* https://huemint.com/illustration-2/#palette=fdf8e2-244c6d-605549-589dc4-e3893c-fbbf00-9ddcd9-ccdec7 */
+/* https://huemint.com/illustration-2/#palette=fffefc-44469a-7879bd-ff659e-f97aa7-e8c25f-d1f0f8-e7afb3 */
+/* https://huemint.com/bootstrap-plus/#palette=286b26-ffffff-050000-232e26-484d37-8781c3-b2ddb1-67bb84-739d79 */
+/* https://huemint.com/illustration-3/#palette=fafbfb-341839-242124-bc5232-f8809c-7dcfd7-81a758-fcc577-68c2d9-c69fba-d3c468 */
+/* https://huemint.com/illustration-3/#palette=fbfdff-050300-002b58-fc0c36-1e8efe-2fffff-e179ee-00d7dc-efe47a-2df79d-ffdd63 */
+/* https://huemint.com/illustration-3/#palette=fefefd-1c1d23-39262e-e14549-3ea2bc-f8cf9b-f1601e-f6c698-ddb43f-81dce0-9e9292 */
+/* https://huemint.com/brand-1/#palette=f4e9d6-172aa4 */
+/* https://huemint.com/brand-1/#palette=fdfdfd-669c35 */
+/* https://huemint.com/brand-2/#palette=eef4fa-3d332f-b24737 */
+/* https://huemint.com/brand-2/#palette=002a46-fffeff-669c35 */
+/* https://huemint.com/brand-2/#palette=154543-40d48e-96d35f */
+/* https://huemint.com/brand-2/#palette=1b1b1b-a2e3a1-96d35f */
+/* https://huemint.com/brand-2/#palette=001e57-a2e3a1-77bb41 */
+/* https://huemint.com/brand-3/#palette=578a99-ffe977-ff8c82-456359 */
+/* https://huemint.com/brand-3/#palette=0a050a-cacac9-54a490-456359 */
+/* https://huemint.com/brand-3/#palette=f6ffff-ffe8df-345895-e6baa5 */
+/* https://huemint.com/brand-3/#palette=f6ffff-032c47-345895-8e8f90 */
+/* https://huemint.com/brand-3/#palette=f6ffff-7bc30e-38571a-b6e57c */
+/* https://huemint.com/brand-3/#palette=fffeff-73a840-706086-236131 */
+/* https://huemint.com/brand-3/#palette=100f33-5bd786-55bc32-7463e1 */
+/* https://huemint.com/brand-3/#palette=06151a-59902d-809a89-0d7137 */
+/* https://huemint.com/brand-3/#palette=f8f6f7-1f2d41-706cb0-1ecd93 */
+/* https://huemint.com/brand-3/#palette=2c3261-84c9b8-a6c5da-23dfc2 */
+/* https://huemint.com/brand-3/#palette=f3eabc-16cea6-ac635e-4cc182 */
+
 button[type='submit'] {
   margin-top: 15px;
   width: 100%;
 }
 
-button[type='button']:not([aria-label="close"]) {
+button[type='button']:not([aria-label="close"]):not([class="remove-time-button"]):not([class="remove-date-button"]):not([class="single-todo-button"]):not([class="add-todo-form-remove-item-name"]) {
   margin-top: 20px;
 }
 
-/* .toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 75000;
-} */
+.toast-container-centered img {
+  margin-left: 10px;
+  filter: drop-shadow(-1px 1px .5px rgba(0, 0, 0, 1));
+}
+
+.toast-container-centered {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deactivated section {
+  background-color: gray;
+}
 
 .Toastify__toast-body {
   display: flex;
@@ -74,7 +157,8 @@ button[type='button']:not([aria-label="close"]) {
 
 .dialog-container {
   width: auto;
-  background-color:rgba(255, 255, 255, 0.603);
+  background-color:rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, .3);
   color: black;
   padding: 5px 25px;
   border-radius: 20px;
@@ -82,20 +166,77 @@ button[type='button']:not([aria-label="close"]) {
   overflow-y: auto;
 }
 
-.single-todo-container {
-  display: flex;
-  flex-direction: column;
+.search-todos-results-container {
+  height: 400px;
 }
 
-.reminder-frequency-description {
+.search-todos-results-todo-list {
+  overflow: hidden;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.search-todos-results-todo-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.search-todos-single-todo-container, .todays-todos-single-todo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 85%;
+  margin-bottom: 15px;
+}
+
+.search-todos-single-todo-container:last-child {
+  margin-bottom: 0px;
+}
+
+/* add todos list to here */
+.search-todos-results-todo-reminder-frequency-section, .search-todos-results-todos-section {
   display: flex;
   flex-direction: column;
   margin-left: 0px;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.reminder-frequency-description-times-list {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.reminder-frequency-description-times-list p, .reminder-frequency-description-date-container p {
+  margin: 0px;
+}
+
+.reminder-frequency-description-times-list ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.reminder-frequency-description-times-list ul li {
+  margin: 0px;
+}
+
+.reminder-frequency-description-date-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .todo-header {
   text-align: center;
-  text-decoration: 1px dashed underline white;
+  text-decoration: 1px dashed underline #417097;
   text-underline-offset: 3px;
   margin-top: 0px;
   margin-bottom: 15px;
@@ -110,10 +251,11 @@ button[type='button']:not([aria-label="close"]) {
   align-items: flex-start;
 }
 
-.interface-button {
+.interface-button, .single-todo-button {
   width: auto;
   height: 42px;
-  background-color: rgba(255, 255, 255, 0.603);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, .5);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -121,27 +263,32 @@ button[type='button']:not([aria-label="close"]) {
   border-radius: 1000px;
   padding: 0px 10px;
   color: #000000;
-}
-
-.interface-button svg {
-  width: 20px;
-  height: 20px;
-  stroke: #000000;
   transition: 200ms;
 }
 
-.interface-button span {
+.interface-button:hover, .single-todo-button:hover {
+  background-color: #d2feff;
+}
+
+.interface-button svg, .single-todo-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: #915318;
+  transition: 200ms;
+}
+
+.interface-button span, .single-todo-button span {
   width: 0px;
   overflow: hidden;
   margin: 0px;
   transition: 200ms;
 }
 
-.interface-button:hover svg {
-  stroke: #00890b;
+.interface-button:hover svg, .single-todo-button:hover svg {
+  stroke: #915318;
 } 
 
-.interface-button:hover span {
+.interface-button:hover span, .single-todo-button:hover span {
   width: auto;
   white-space: nowrap;
   margin: 0px 15px;
@@ -198,8 +345,12 @@ form {
   justify-content: space-between;
   align-items: stretch;
   margin: 20px 0px;
-  background-color: #e9ffee;
+  background-color: #d2feff;
   padding: 20px;
+  /* border: 3px solid #417097; */
+  box-shadow: 0px 0px 5px #417097;
+  border-radius: 10px;
+  scrollbar-color: #d2feff #915318;
 }
 
 form div:first-of-type h2 {
@@ -207,11 +358,11 @@ form div:first-of-type h2 {
 }
 
 h2, h3 {
-  color: black;
+  color: #915318;
 }
 
 label {
-  color: white;
+  color: #417097;
 }
 
 input, select {
@@ -223,7 +374,7 @@ input, select {
 }
 
 input:focus, select:focus {
-  outline: 4px auto #018a08;
+  outline: 4px auto #16b6ce;
 }
 
 .result {
@@ -232,22 +383,21 @@ input:focus, select:focus {
 }
 
 ul {
-  width: 80%;
   padding-left: 0px;
 }
 
-.todo-list {
-  width: 100%;
-}
-
 li {
-  margin: 20px 30px;
+  margin: 20px auto;
   margin-top: 0px;
-  color: white
+  color: #417097;
 }
 
 li:last-of-type {
   margin-bottom: 0px;
+}
+
+.items-added-container {
+  width: 90%;
 }
 
 .list-item {
@@ -258,16 +408,19 @@ li:last-of-type {
   align-items: center;
   justify-content: space-between;
   padding-left: 0px;
-  background-color: #487e56;
+  background-color: #a1ff8c;;
   padding: 15px;
+  border: none;
+  box-shadow: 0px 1px 2px #417097;
   border-radius: 5px;
   box-sizing: border-box;
   margin: 0px;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 
 .list-item button {
-  margin-top: 0px;
+  margin: 0px;
 }
 
 .list-item p {
@@ -280,62 +433,138 @@ li:last-of-type {
   align-items: center;
 }
 
+.result-date-container {
+  background-color: #16b6ce;
+  padding: 20px 20px;
+  padding-top: 25px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
 #reminder-frequency-option-container {
-  width: 50%;
+  width: 60%;
   margin: auto;
   display: flex;
   justify-content: space-between;
 }
 
-.reminder-frequency-option {
-  display: flex; 
+#reminder-frequency-switch-header p {
+  display: inline;
+  color: #915318;
+  text-decoration: none;
+  transition: 300ms;
 }
 
 .reminder-frequency-option label p {
-  margin-left: 20px;
-  color: black;
+  text-decoration: none;
+  transition: 200ms;
+}
+
+#reminder-frequency-switch-header p.underlined-reminder-frequency-option, 
+.reminder-frequency-option label p.underlined-reminder-frequency-option {
+  color:#417097;
+  text-decoration: 1px dashed underline #417097;
+  text-underline-offset: 3px;
+}
+
+.reminder-frequency-option:first-child {
+  margin-right: 20px;
+}
+
+.reminder-frequency-option {
+  display: flex; 
+  align-items: center;
+}
+
+.reminder-frequency-option label p {
+  margin-left: 10px;
+  color: #417097;
+}
+
+.pattern-or-specified-section {
+  height:auto;
+  max-height: 200000px;
+  transition: max-height 300ms;
+}
+
+.pattern-or-specified-section[class="pattern"] {
+  height:auto;
+}
+
+.pattern-times-list {
+  width: 230px;
+  border: 1px solid #16b6ce;
+  padding: 15px;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.pattern-times-list li button {
+  margin: 0px;
+}
+
+.remove-time-button {
+  margin: 0px;
+}
+
+#pattern-times-list li {
+  display: flex;
+  align-items: center;
 }
 
 input[type='checkbox'] {
   padding: 5px;
+  width: 25px;
+  height: 25px;
+  border-radius: 200px;
 }
 
 input[type='checkbox']:not(:checked) {
-  accent-color: #487e56;
-  background-color: #487e56;
+  accent-color: #a1ff8c;;
+  background-color: #a1ff8c;;
 }
 
 #month-each-year-checked + label {
-  color: white;
+  color: #417097;
 }
 
 #day-of-week-each-month-checked + label {
-  color: white;
+  color: #417097;
 }
 
 #pattern-all-day-checked + label {
-  color: white;
+  color: #417097;
 }
 
 #confirm-pattern-button {
-  background-color: #89d29c;
+  border: 1px solid #914218;
+  background-color: #a1ff8c;
+  color: #915318;
+  transition: 50ms;
+}
+
+#confirm-pattern-button:hover {
+  background-color: #213547;
+  border-color: #213547;
+  color: #d2feff;
 }
 
 span {
-  color: black;
+  color: #16b6ce;
 }
 
 div {
-  color: white;
+  color: #417097;
 }
 
 form p {
-  color: white;
+  color: #417097;
 }
 
 input[type='checkbox']:checked {
-  accent-color: #018a08;
-  outline: 1px solid #e9ffee;
+  accent-color: #16b6ce;
+  outline: 1px solid #d2feff;
 }
 
 .black-text-label {
@@ -343,7 +572,7 @@ input[type='checkbox']:checked {
 }
 
 input[type='checkbox']:not([id="every-year-checked"]) + label {
-  color: white;
+  color: #417097;
 }
 
 section {
@@ -351,7 +580,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid #018a08;
+  border: 2px solid #16b6ce;
   border-radius: 5px;
   box-sizing: border-box;
   padding: 20px 20px;
@@ -359,8 +588,30 @@ section {
 }
 
 .subsection {
-  background-color: #487e56;
+  /* border: 1px solid #4cc182; */
   border: none;
+  background-color: #a1ff8c;
+  box-shadow: 0px 1px 2px #417097;
+}
+
+.subsection:last-child {
+  margin-bottom: 0px;
+}
+
+.search-todos-results-todos-container, .search-todos-results-date-time-container {
+  border: none;
+  background-color: white;
+  padding: 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 2px #417097;
+}
+
+.search-todos-results-date-time-container p {
+  margin: 5px;
+}
+
+.search-todos-results-todos-container li {
+  margin: 0px;
 }
 
 #specific-date-time-container {
@@ -375,7 +626,7 @@ section div {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 section div:last-child {
@@ -410,16 +661,16 @@ select {
 
 h3 {
   text-align: center;
-  margin: 5px 0px;
+  margin: 15px 0px;
   margin-bottom: 25px;
-  text-decoration: 1px dashed underline white;
+  text-decoration: 1px dashed underline #417097;
   text-underline-offset: 4px;
 }
 
 hr {
   width: 100%;
   margin: 25px 0px;
-  border: 1px solid #00890b;
+  border: 1px solid #16b6ce;
 }
 
 .item-name {
@@ -437,7 +688,8 @@ hr {
 #pattern-reminder {
   width: 75%;
   height: auto;
-  background-color: #89d29c;
+  /* border: 2px solid #417097; */
+  background-color: white;
   color: black;
   border-radius: 20px;;
   display: flex;
@@ -446,7 +698,7 @@ hr {
   margin: auto;
   margin-bottom: 10px;
   padding: 10px 0px;
-  border: 1px solid white;
+  /* border: 1px solid white; */
 }
 
 #pattern-reminder h4 {
@@ -454,26 +706,36 @@ hr {
   margin-bottom: 13px;
   width: 100%;
   text-align: center;
+  color: #915318;
+}
+
+.pattern-dates-times-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow: auto;
+  padding: 15px 5px;
 }
 
 .single-date-times-container {
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: column;
   border: 1px solid white;
+  background-color: white;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
+  box-shadow: 0px 0px 5px #417097;
 }
 
 .single-date-times-container div:first-of-type {
-  width: 90%;
+  width: 85%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 10px;
   border-bottom: 1px solid white;
-  padding: 10px 0px;
-  padding-bottom: 20px;
 }
 
 .single-date-times-container div:first-of-type button {
@@ -483,6 +745,8 @@ hr {
 label {
   width: 85%;
   text-align: right;
+  color: #417097;
+  font-weight:500;
 }
 
 li {
@@ -493,6 +757,7 @@ span {
   font-size: 10pt;
   text-align: center;
   margin-bottom: 10px;
+  color: #417097;
 }
 
 @media (prefers-color-scheme: light) {
@@ -506,5 +771,5 @@ span {
 }
 
 label[for="every-year-checked"] {
-  color: white;
+  color: #417097;
 }

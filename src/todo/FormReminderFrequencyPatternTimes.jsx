@@ -1,11 +1,13 @@
+import { useState } from "react";
+
 export default function FormReminderFrequencyPatternTimes({
-    time,
-    setTime,
     times,
     setTimes,
     allDay,
     setAllDay
 }) {
+    const [time, setTime] = useState('');
+
     function handleChangeTime(event) {
         if (event.target.id === 'pattern-specific-time-input') {
             if (event.target.value === '') {
@@ -40,6 +42,9 @@ export default function FormReminderFrequencyPatternTimes({
         newTimes = newTimes.filter((time, index) => {
             return time + index !== event.target.parentNode.id;
         })
+        if (newTimes.length === 0) {
+            setAllDay(true)
+        }
         setTimes([...newTimes])
     }
 
@@ -89,7 +94,7 @@ export default function FormReminderFrequencyPatternTimes({
 
                     <h3>Set Times Each Day</h3>
 
-                    <li>
+                    <ul className="pattern-times-list">
                         {
                             times.map((time, index) => {
                                 let meridian = 'AM';
@@ -109,14 +114,14 @@ export default function FormReminderFrequencyPatternTimes({
                                 let displayedTime = hour + ':' + minute + ' ' + meridian;
 
                                 return (    
-                                    <ul className="list-item" key={time + index} id={time + index}>
+                                    <li className="list-item" key={time + index} id={time + index}>
                                         <button type="button" onClick={removeTime}>×</button>
                                         <p>{displayedTime}</p>
-                                    </ul>
+                                    </li>
                                 )
                             })
                         }
-                    </li>
+                    </ul>
                 </div>
             }
         </>

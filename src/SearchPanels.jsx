@@ -1,6 +1,5 @@
 import { Html } from "@react-three/drei";
 import { useState } from "react";
-import Todo from "./Todo";
 import SingleTodo from "./components/SingleTodo";
 
 export default function SearchPanels({
@@ -10,6 +9,7 @@ export default function SearchPanels({
     todos,
     setTodos,
     setSelectedTodo,
+    currentPanel,
     setCurrentPanel,
     leftPosition,
     rightPosition,
@@ -41,8 +41,6 @@ export default function SearchPanels({
             }
         }
     }
-
-    console.log('SEARCH TODOS!')
 
     function handleDeleteTodo(id) {
         let newTodos = [...todos];
@@ -103,6 +101,7 @@ export default function SearchPanels({
                             todos={todos}
                             setTodos={setTodos}
                             setSelectedTodo={setSelectedTodo}
+                            currentPanel={currentPanel}
                             setCurrentPanel={setCurrentPanel}
                             filteredTodos={filteredTodos}
                         />
@@ -126,6 +125,7 @@ export default function SearchPanels({
                         todos={todos}
                         setTodos={setTodos}
                         setSelectedTodo={setSelectedTodo}
+                        currentPanel={currentPanel}
                         setCurrentPanel={setCurrentPanel}
                         filteredTodos={filteredTodos}
                     />
@@ -144,6 +144,7 @@ function SearchPanelLeft({
 }) {
     return (
         <>
+            <h3>Search Todos</h3>
             <section className="subsection">
                 <div>
                     <input type="text" id="search-todos-category-input" onChange={handleChange} value={currentCategorySearchString} />
@@ -190,23 +191,38 @@ function SearchPanelRight({
     setCurrentPanel,
     filteredTodos
 }) {
+    // limit height of results
+    //limit height of todos? yes in times, dates, todos
     return (
-        <ul className="todo-list">        
+        <>
             {
-                filteredTodos?.map(todo => {
-                    return (
-                        <SingleTodo
-                            key={todo.id}
-                            todo={todo}
-                            handleDeleteTodo={handleDeleteTodo}
-                            todos={todos}
-                            setTodos={setTodos}
-                            setSelectedTodo={setSelectedTodo}
-                            setCurrentPanel={setCurrentPanel}
-                        />
-                    )
-                })
-            } 
-        </ul>
+                filteredTodos.length > 0
+                ?
+                <section className="search-todos-results-container">
+                    <h3>Results</h3>
+                    <ul className="search-todos-results-todo-list">        
+                        {
+                            filteredTodos?.map(todo => {
+                                return (
+                                    <SingleTodo
+                                        key={todo.id}
+                                        todo={todo}
+                                        handleDeleteTodo={handleDeleteTodo}
+                                        todos={todos}
+                                        setTodos={setTodos}
+                                        setSelectedTodo={setSelectedTodo}
+                                        setCurrentPanel={setCurrentPanel}
+                                    />
+                                )
+                            })
+                        } 
+                    </ul>
+                </section>
+                :
+                <section>
+                    <h3>No Results</h3>
+                </section>
+            }
+        </>
     )
 }

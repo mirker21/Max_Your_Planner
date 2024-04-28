@@ -24,6 +24,7 @@ export default function FormPanels({
     leftPosition,
     rightPosition,
     topPosition,
+    setCurrentAnimation
 }) {
     const [category, setCategory] = useState(
         currentPanel === 'add-new-todo' 
@@ -85,6 +86,7 @@ export default function FormPanels({
         newTodos.push(newTodo);
         setTodos([...newTodos]);
         setCurrentPanel('')
+        setCurrentAnimation('Idle')
         console.log('submitted!', newTodos)
     }
 
@@ -107,6 +109,7 @@ export default function FormPanels({
         console.log('submitted!', newTodos)
         setSelectedTodo('');
         setCurrentPanel('search-todos')
+        setCurrentAnimation('Idle')
     }
 
     let addTodoButtonDisplay = false;
@@ -141,6 +144,7 @@ export default function FormPanels({
             setDatesTimes={setDatesTimes}
             currentYear={currentYear}
             datesTimes={datesTimes}
+            selectedTodo={selectedTodo}
             selectedTodoInfo={selectedTodoInfo}
             addTodoButtonDisplay={addTodoButtonDisplay}
         />
@@ -188,7 +192,7 @@ function FormPanelLeft({
     selectedTodoInfo
 }) {
     return (
-        <div className="left-panel">
+        <>
             <FormCategory 
                 previousCategories={previousCategories}
                 category={category} 
@@ -210,7 +214,7 @@ function FormPanelLeft({
                 setTodo={setTodo}
                 selectedTodoInfo={selectedTodoInfo}
             />
-        </div>
+        </>
     )
 }
 
@@ -221,10 +225,11 @@ function FormPanelRight({
     currentYear,
     datesTimes,
     selectedTodoInfo,
-    addTodoButtonDisplay
+    addTodoButtonDisplay,
+    selectedTodo,
 }) {
     return (
-        <div className="right-panel">
+        <>
             <div>
                 <FormReminderFrequencySwitch 
                     isDatePattern={isDatePattern} 
@@ -232,13 +237,16 @@ function FormPanelRight({
                     setDatesTimes={setDatesTimes}
                     selectedTodoInfo={selectedTodoInfo}
                 />
+            </div>
 
+            <div className={isDatePattern === true ? "pattern-or-specified-section pattern" : "pattern-or-specified-section"}>
                 {
                     isDatePattern === true
                     ?
                     <FormReminderFrequencyPattern
                         currentYear={currentYear}
                         setDatesTimes={setDatesTimes}
+                        selectedTodo={selectedTodo}
                         selectedTodoInfo={selectedTodoInfo}
                     />
                     :
@@ -255,6 +263,6 @@ function FormPanelRight({
                 &&
                 <button type="submit">Add Entry To Collection</button>
             }
-        </div>   
+        </>   
     )
 }

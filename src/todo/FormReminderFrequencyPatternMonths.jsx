@@ -6,6 +6,7 @@ export default function FormReminderFrequencyPatternMonths({
     isEveryMonthOfYear,
     setIsEveryMonthOfYear,
 }) {
+    
     function handleChangeMonth(event) {
         let newMonths = [...months];
         if (newMonths.includes(event.target.value)) {
@@ -61,207 +62,204 @@ export default function FormReminderFrequencyPatternMonths({
 
     return (
         <>
-            {
-                <>
-                    <hr />
+            <hr />
 
-                    <h3>Months Per Year</h3>
+            <h3>Months Per Year</h3>
 
-                    <span>* If nothing is selected in the month section, the default will be every month. *</span>
+            <span>* If nothing is selected in the month section, the default will be every month. *</span>
 
-                    <section className="subsection">
-                        <label 
-                            id="month-equation-label"
-                        >
-                            <p>
-                            Every {' '}
-                            <input 
-                                type="number" 
-                                id="month-equation-first-num" 
-                                min="1"  
-                                onChange={handleChangeMonthPattern} 
-                                value={monthEquation.first}
-                            /> 
-                            <i> n </i> 
-                            + {' '}
-                            <input 
-                                type="number" 
-                                id="month-equation-second-num" 
-                                min="0" 
-                                onChange={handleChangeMonthPattern} 
-                                value={monthEquation.second}
-                            /> 
-                            {' '} months
-                            </p>
-                        </label>
-                        <p>ie. </p>
-                    </section>
+            <section className="subsection">
+                <label 
+                    id="month-equation-label"
+                >
+                    <p>
+                    Every {' '}
+                    <input 
+                        type="number" 
+                        id="month-equation-first-num" 
+                        min="1"  
+                        onChange={handleChangeMonthPattern} 
+                        value={monthEquation.first}
+                    /> 
+                    <i> n </i> 
+                    + {' '}
+                    <input 
+                        type="number" 
+                        id="month-equation-second-num" 
+                        min="0" 
+                        onChange={handleChangeMonthPattern} 
+                        value={monthEquation.second}
+                    /> 
+                    {' '} months
+                    </p>
+                </label>
+                <p>ie. </p>
+            </section>
 
-                    <section className="subsection">
-                        <div>
-                            <input 
-                                type="checkbox" name="month-each-year-checked" 
-                                id="month-each-year-checked" 
-                                onChange={handleChangeMonthPattern} 
-                                checked={isEveryMonthOfYear}
-                            />
-                            <label 
-                                htmlFor="month-each-year-checked"
-                            >
-                                Every {' '}
-                                {months.length > 0 ? months.join(', ') : 'month'} 
-                                {' '} of each year
-                            </label>
-                        </div>
-                    </section>
+            <section className="subsection">
+                <div>
+                    <input 
+                        type="checkbox" name="month-each-year-checked" 
+                        id="month-each-year-checked" 
+                        onChange={handleChangeMonthPattern} 
+                        checked={isEveryMonthOfYear}
+                    />
+                    <label 
+                        htmlFor="month-each-year-checked"
+                    >
+                        Every {' '}
+                        {months.length > 0 ? months.join(', ') : 'month'} 
+                        {' '} of each year
+                    </label>
+                </div>
+            </section>
 
-                    <article>
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="January" 
-                                onChange={handleChangeMonth} 
-                                value="January" 
-                                checked={months.includes('January')} 
-                                />
-                            <label className="black-text-label" htmlFor="January">January</label>   
-                        </div>
-                        
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="February" 
-                                onChange={handleChangeMonth} 
-                                value="February" 
-                                checked={months.includes('February')} 
-                                />
-                            <label className="black-text-label" htmlFor="February">February</label>   
-                        </div>
+            <article>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="January" 
+                        onChange={handleChangeMonth} 
+                        value="January" 
+                        checked={months.includes('January')} 
+                        />
+                    <label className="black-text-label" htmlFor="January">January</label>   
+                </div>
+                
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="February" 
+                        onChange={handleChangeMonth} 
+                        value="February" 
+                        checked={months.includes('February')} 
+                        />
+                    <label className="black-text-label" htmlFor="February">February</label>   
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="March" 
-                                onChange={handleChangeMonth} 
-                                value="March" 
-                                checked={months.includes('March')} 
-                                />
-                            <label className="black-text-label" htmlFor="March">March</label>   
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="March" 
+                        onChange={handleChangeMonth} 
+                        value="March" 
+                        checked={months.includes('March')} 
+                        />
+                    <label className="black-text-label" htmlFor="March">March</label>   
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="April" 
-                                onChange={handleChangeMonth} 
-                                value="April" 
-                                checked={months.includes('April')} 
-                                />
-                            <label className="black-text-label" htmlFor="April">April</label>   
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="April" 
+                        onChange={handleChangeMonth} 
+                        value="April" 
+                        checked={months.includes('April')} 
+                        />
+                    <label className="black-text-label" htmlFor="April">April</label>   
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="May" 
-                                onChange={handleChangeMonth} 
-                                value="May" 
-                                checked={months.includes('May')} 
-                                />
-                            <label className="black-text-label" htmlFor="May">May</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="May" 
+                        onChange={handleChangeMonth} 
+                        value="May" 
+                        checked={months.includes('May')} 
+                        />
+                    <label className="black-text-label" htmlFor="May">May</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="June" 
-                                onChange={handleChangeMonth} 
-                                value="June" 
-                                checked={months.includes('June')} 
-                                />
-                            <label className="black-text-label" htmlFor="June">June</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="June" 
+                        onChange={handleChangeMonth} 
+                        value="June" 
+                        checked={months.includes('June')} 
+                        />
+                    <label className="black-text-label" htmlFor="June">June</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="July" 
-                                onChange={handleChangeMonth} 
-                                value="July" 
-                                checked={months.includes('July')} 
-                                />
-                            <label className="black-text-label" htmlFor="July">July</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="July" 
+                        onChange={handleChangeMonth} 
+                        value="July" 
+                        checked={months.includes('July')} 
+                        />
+                    <label className="black-text-label" htmlFor="July">July</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="August" 
-                                onChange={handleChangeMonth} 
-                                value="August" 
-                                checked={months.includes('August')} 
-                                />
-                            <label className="black-text-label" htmlFor="August">August</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="August" 
+                        onChange={handleChangeMonth} 
+                        value="August" 
+                        checked={months.includes('August')} 
+                        />
+                    <label className="black-text-label" htmlFor="August">August</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="September" 
-                                onChange={handleChangeMonth} 
-                                value="September" 
-                                checked={months.includes('September')} 
-                                />
-                            <label className="black-text-label" htmlFor="September">September</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="September" 
+                        onChange={handleChangeMonth} 
+                        value="September" 
+                        checked={months.includes('September')} 
+                        />
+                    <label className="black-text-label" htmlFor="September">September</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="October" 
-                                onChange={handleChangeMonth} 
-                                value="October" 
-                                checked={months.includes('October')} 
-                                />
-                            <label className="black-text-label" htmlFor="October">October</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="October" 
+                        onChange={handleChangeMonth} 
+                        value="October" 
+                        checked={months.includes('October')} 
+                        />
+                    <label className="black-text-label" htmlFor="October">October</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="November" 
-                                onChange={handleChangeMonth} 
-                                value="November" 
-                                checked={months.includes('November')} 
-                                />
-                            <label className="black-text-label" htmlFor="November">November</label>  
-                        </div>
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="November" 
+                        onChange={handleChangeMonth} 
+                        value="November" 
+                        checked={months.includes('November')} 
+                        />
+                    <label className="black-text-label" htmlFor="November">November</label>  
+                </div>
 
-                        <div>
-                            <input
-                                type="checkbox" 
-                                name="month-each-year-select" 
-                                id="December" 
-                                onChange={handleChangeMonth} 
-                                value="December" 
-                                checked={months.includes('December')} 
-                                />
-                            <label className="black-text-label" htmlFor="December">December</label>  
-                        </div>
-                    </article>                
-                </>
-            }
+                <div>
+                    <input
+                        type="checkbox" 
+                        name="month-each-year-select" 
+                        id="December" 
+                        onChange={handleChangeMonth} 
+                        value="December" 
+                        checked={months.includes('December')} 
+                        />
+                    <label className="black-text-label" htmlFor="December">December</label>  
+                </div>
+            </article>                
         </>
+
     )
 }

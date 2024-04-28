@@ -4,45 +4,133 @@ import FormReminderFrequencyPatternDays from "./FormReminderFrequencyPatternDays
 import FormReminderFrequencyPatternMonths from "./FormReminderFrequencyPatternMonths";
 import FormReminderFrequencyPatternYears from "./FormReminderFrequencyPatternYears";
 
-export default function FormReminderFrequencyPattern({currentYear, setDatesTimes}) {
-    const [days, setDays] = useState([]);
+export default function FormReminderFrequencyPattern({currentYear, setDatesTimes, selectedTodo, selectedTodoInfo}) {
+    const [days, setDays] = useState(
+        selectedTodo === ''
+        ?
+        []
+        :
+        [...selectedTodoInfo.reminderFrequency[0].day.days]
+    );
     const [dayEquation, setDayEquation] = useState(
+        selectedTodo === ''
+        ?
         {
             first: '',
             second: ''
         }
+        :
+        {
+            first: selectedTodoInfo.reminderFrequency[0].day.dayEquation.first,
+            second: selectedTodoInfo.reminderFrequency[0].day.dayEquation.second
+        }
     )
-    const [isEveryDayOfWeekEachMonth, setIsEveryDayOfWeekEachMonth] = useState(true)
-    const [everyNthDayOfWeekEachMonth, setEveryNthDayOfWeekEachMonth] = useState('')
+    const [isEveryDayOfWeekEachMonth, setIsEveryDayOfWeekEachMonth] = useState(
+        selectedTodo === ''
+        ?
+        true
+        :
+        selectedTodoInfo.reminderFrequency[0].day.isEveryDayOfWeekEachMonth
+    )
+    const [everyNthDayOfWeekEachMonth, setEveryNthDayOfWeekEachMonth] = useState(
+        selectedTodo === ''
+        ?
+        ''
+        :
+        selectedTodoInfo.reminderFrequency[0].day.everyNthDayOfWeekEachMonth
+    )
 
-    const [months, setMonths] = useState([]);
+    const [months, setMonths] = useState(
+        selectedTodo === ''
+        ?
+        []
+        :
+        [...selectedTodoInfo.reminderFrequency[0].month.months]
+    );
     const [monthEquation, setMonthEquation] = useState(
+        selectedTodo === ''
+        ?
         {
             first: '',
             second: ''
         }
+        :
+        {
+            first: selectedTodoInfo.reminderFrequency[0].month.monthEquation.first,
+            second: selectedTodoInfo.reminderFrequency[0].month.monthEquation.second
+        }
     )
-    const [isEveryMonthOfYear, setIsEveryMonthOfYear] = useState(true)
+    const [isEveryMonthOfYear, setIsEveryMonthOfYear] = useState(
+        selectedTodo === ''
+        ?
+        true
+        :
+        selectedTodoInfo.reminderFrequency[0].month.isEveryMonthOfYear
+    )
 
-    const [year, setYear] = useState('');
-    const [years, setYears] = useState([]);
+    const [years, setYears] = useState(
+        selectedTodo === ''
+        ?
+        []
+        :
+        [...selectedTodoInfo.reminderFrequency[0].year.years]
+    );
     const [yearEquation, setYearEquation] = useState(
+        selectedTodo === ''
+        ?
         {
             first: '',
             second: ''
+        }
+        :
+        {
+            first: selectedTodoInfo.reminderFrequency[0].year.yearEquation.first,
+            second: selectedTodoInfo.reminderFrequency[0].year.yearEquation.second
         }
     );
-    const [isEveryYear, setIsEveryYear] = useState(true);
+    const [isEveryYear, setIsEveryYear] = useState(
+        selectedTodo === ''
+        ?
+        true
+        :
+        selectedTodoInfo.reminderFrequency[0].year.isEveryYear
+    );
     const [yearRange, setYearRange] = useState(
+        selectedTodo === ''
+        ?
         {
             start: '',
             end: ''
         }
+        :
+        {
+            start: selectedTodoInfo.reminderFrequency[0].year.yearRange.start,
+            end: selectedTodoInfo.reminderFrequency[0].year.yearRange.end
+        }
     );
 
-    const [time, setTime] = useState('');
-    const [times, setTimes] = useState([]);
-    const [allDay, setAllDay] = useState(true);
+    const [times, setTimes] = useState(
+        selectedTodo === ''
+        ?
+        []
+        :
+        selectedTodoInfo.reminderFrequency[0].times === 'All-Day'
+        ?
+        []
+        :
+        [...selectedTodoInfo.reminderFrequency[0].times]
+    );
+    const [allDay, setAllDay] = useState(
+        selectedTodo === ''
+        ?
+        true
+        :
+        selectedTodoInfo.reminderFrequency[0].times === 'All-Day'
+        ?
+        true
+        :
+        false
+    );
 
     function handleConfirmPattern() {
         setDatesTimes([
@@ -232,8 +320,6 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
     return (
         <section>
             <FormReminderFrequencyPatternTimes 
-                time={time}
-                setTime={setTime}
                 times={times}
                 setTimes={setTimes}
                 allDay={allDay}
@@ -262,8 +348,6 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
             />
             
             <FormReminderFrequencyPatternYears
-                year={year}
-                setYear={setYear}
                 years={years}
                 setYears={setYears}
                 yearEquation={yearEquation}

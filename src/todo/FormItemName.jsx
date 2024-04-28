@@ -23,7 +23,6 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
         newChecklist = newChecklist.filter(todo => {
             return todo.id !== event.target.id;
         })
-        console.log(newChecklist)
         setChecklist([...newChecklist])
     }
 
@@ -59,7 +58,7 @@ export default function FormItemName({todo, setTodo, checklist, setChecklist}) {
                             {
                                 checklist.map(todo => (
                                     <li className="list-item" key={todo.todo + todo.id} id={todo.todo + todo.id}>
-                                        <button type="button" onClick={removeTodo} id={todo.id}>×</button>
+                                        <button type="button" className="add-todo-form-remove-item-name" onClick={removeTodo} id={todo.id}>×</button>
                                         <p className="item-name">{todo.todo}</p>
                                     </li>
                                 ))

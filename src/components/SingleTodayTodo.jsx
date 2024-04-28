@@ -1,15 +1,13 @@
 import { useState } from "react";
 
-export default function SingleTodo({
+export default function SingleTodayTodo({
     todo,
-    handleDeleteTodo,
-    todos,
-    setTodos,
-    setSelectedTodo,
-    currentPanel,
-    setCurrentPanel
+    deactivatedTodaysTodos,
+    handleDeactivateTodaysTodo,
 }) {
-    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [isDeactivateModalVisible, setIsDeactivateModalVisible] = useState(false);
+
+    console.log(deactivatedTodaysTodos)
 
     function convertNumSuffix(num) {
         let numberSuffix = '';
@@ -50,49 +48,47 @@ export default function SingleTodo({
     }
 
     return (
-        <li className="search-todos-single-todo-container" id={todo.todo + todo.id}>
+        <li className={"todays-todos-single-todo-container" + `${deactivatedTodaysTodos.includes(todo.id) ? ' deactivated' : ''}`} id={todo.id}>
             <section className="list-item"> 
-                <button type="button" className="single-todo-button" onClick={() => (setCurrentPanel('edit-todo'), setSelectedTodo(todo.id))}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                    </svg>
+                <button type="button" className="single-todo-button" onClick={() => setIsDeactivateModalVisible(!isDeactivateModalVisible)}>
+                    {
+                        deactivatedTodaysTodos.includes(todo.id)
+                        ?
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.143 17.082a24.248 24.248 0 0 0 3.844.148m-3.844-.148a23.856 23.856 0 0 1-5.455-1.31 8.964 8.964 0 0 0 2.3-5.542m3.155 6.852a3 3 0 0 0 5.667 1.97m1.965-2.277L21 21m-4.225-4.225a23.81 23.81 0 0 0 3.536-1.003A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6.53 6.53m10.245 10.245L6.53 6.53M3 3l3.53 3.53" />
+                        </svg>
+                        :
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                    }
 
-                    <span className="button-text">Edit Todo</span>
-                </button>
-
-
-                <button type="button" className="single-todo-button" onClick={() => setIsDeleteModalVisible(!isDeleteModalVisible)}>
-                    <span className="button-text">Delete Todo</span>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
+                    <span className="button-text">{deactivatedTodaysTodos.includes(todo.id) ? 'Activate' : 'Deactivate'} Notification for Today</span>
                 </button>
 
                 {
-                    isDeleteModalVisible === true
+                    isDeactivateModalVisible === true
                     ?
-                    <section className="subsection search-todos-results-todo-buttons-section">
-                        <button type="button" onClick={() => handleDeleteTodo(todo.id)}>Yes</button>
-                        <button type="button" onClick={() => setIsDeleteModalVisible(!isDeleteModalVisible)}>No</button>
+                    <section className="subsection">
+                        <button type="button" onClick={() => (handleDeactivateTodaysTodo(todo.id), setIsDeactivateModalVisible(!isDeactivateModalVisible))}>Yes</button>
+                        <button type="button" onClick={() => setIsDeactivateModalVisible(!isDeactivateModalVisible)}>No</button>
                     </section>
                     :
                     <></>
-                    
                 }
             </section>
 
-            <section className="subsection search-todos-results-todo-category-subcategory-section">
+            <section className="subsection">
                 <p>Category: {todo.category}</p>
                 <p>Subcategory: {todo.subcategory}</p>
             </section>
             
-            <section className="subsection search-todos-results-todos-section">
+            <section className="subsection">
                 <h4 className="todo-header">Todos:</h4>
                 <ul className="search-todos-results-todos-container">
                     {
                         todo.checklist.map((item, index) => {
-                            return <li key={todo.id + index}>- {item.todo}</li>
+                            return <li className="reminder-frequency-description" key={todo.id + index}>- {item.todo}</li>
                         })
                     }
                 </ul>
@@ -102,57 +98,53 @@ export default function SingleTodo({
                 todo.reminderFrequency.length > 1 || todo.reminderFrequency[0].hasOwnProperty('date') === true
                 ?
                 <section className="subsection search-todos-results-todo-reminder-frequency-section">
-                    <h4 className="todo-header">Date{todo.reminderFrequency[0].hasOwnProperty('date') === true ? 's' : ''} and Times:</h4>
-                    {
-                        todo.reminderFrequency.map((dateTime, dateIndex) => {
-                            let dateString = String(new Date(dateTime.date).toUTCString()).replace(',', '').split(' ')
-                            let dayWord = dateString[0];
-                            let dayNum = dateString[1];
-                            let month = dateString[2];
-                            let year = dateString[3];
+                    <h4 className="todo-header">Date and Time:</h4>
 
-                            let displayedDate = dayWord + ', ' + month + ' ' + dayNum + ', ' + year;
-                            return (
-                                <section className="search-todos-results-date-time-container" key={dateTime + dateIndex}>
-                                    <div className="reminder-frequency-description-date-container">
-                                        <p>Date:</p><p>{displayedDate}</p>
-                                    </div>
+                    <section className="search-todos-results-date-time-container">
+                        {
+                            todo.reminderFrequency.map((dateTime, dateIndex) => {
+                                let dateString = String(new Date(dateTime.date).toUTCString()).replace(',', '').split(' ')
+                                let dayWord = dateString[0];
+                                let dayNum = dateString[1];
+                                let month = dateString[2];
+                                let year = dateString[3];
 
-                                    <div className="reminder-frequency-description-times-list">
-                                        <p>Time{dateTime.times.length > 1 ? 's' : ''}:</p>
-                                        <ul>
-                                            {
-                                                dateTime.times.map((time, timeIndex) => {
-                                                    let meridian = 'AM';
-                                                    let [hour, minute] = time.split(':');
+                                let displayedDate = dayWord + ', ' + month + ' ' + dayNum + ', ' + year;
+                                return (
+                                    <section className="subsection" key={dateTime + dateIndex}>
+                                        <p>Date: {displayedDate}</p>
+                                        {
+                                            dateTime.times.map((time, timeIndex) => {
+                                                let meridian = 'AM';
+                                                let [hour, minute] = time.split(':');
 
-                                                    if (hour <= 11) {
-                                                        if (hour[0] === '0') {
-                                                            hour = hour.slice(1,);
-                                                        }
-                                                    } else {
-                                                        if (hour > 12) {
-                                                            hour = hour - 12;
-                                                        }
-                                                        meridian = 'PM';
+                                                if (hour <= 11) {
+                                                    if (hour[0] === '0') {
+                                                        hour = hour.slice(1,);
                                                     }
+                                                } else {
+                                                    if (hour > 12) {
+                                                        hour = hour - 12;
+                                                    }
+                                                    meridian = 'PM';
+                                                }
 
-                                                    let displayedTime = hour + ':' + minute + ' ' + meridian;
-                                                    return <li key={time + timeIndex}>{displayedTime}</li>
-                                                })
-                                            }
-                                        </ul>
-                                    </div>
-                                </section>
-                            )
-                        })
-                    }
+                                                let displayedTime = hour + ':' + minute + ' ' + meridian;
+                                                return <p key={time + timeIndex}>Time: {displayedTime}</p>
+                                            })
+                                        }
+                                    </section>
+                                )
+                            })
+                        }
+                    </section>
                 </section>
                 :
                 <section className="subsection">
                     <h4 className="todo-header">Date and Time Pattern:</h4>
                     
                     <section className="search-todos-results-date-time-container">
+
                         {
                             todo.reminderFrequency[0].times === "All-Day"
                             ?
@@ -200,7 +192,6 @@ export default function SingleTodo({
                             :
                             <></>
                         }
-
                         {
                             todo.reminderFrequency[0].hasOwnProperty('date') === false && todo.reminderFrequency[0].day.everyNthDayOfWeekEachMonth.length > 0
                             ?

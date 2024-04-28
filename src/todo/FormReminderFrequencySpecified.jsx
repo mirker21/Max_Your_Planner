@@ -21,6 +21,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                 setAllDay(!allDay);
             } else {
                 setTime('')
+                setTimes([])
                 setAllDay(!allDay);
             }
         }
@@ -87,7 +88,6 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
 
         if (event.target.className === 'remove-date-button') {
             newDatesTimes.splice(foundIndex, 1);
-            console.log(newDatesTimes)
             setDatesTimes([...newDatesTimes]);
         } else if (event.target.className === 'remove-time-button') {
             let foundTimeIndex = event.target.id.replace(foundEntry.id, '');
@@ -100,6 +100,8 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
             setDatesTimes([...newDatesTimes]);
         }
     }
+
+    console.log(date, times, allDay)
 
     return (
         <section>
@@ -123,7 +125,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                         </div>
 
                         {
-                            time !== '' && (times.length === 0 || !times?.every(oneTime => oneTime === time))
+                            time !== '' && (times.length === 0 || !times?.some(oneTime => oneTime === time))
                             &&
                             <button type="button" onClick={handleAddTime}>Add Time</button>
                         }
@@ -144,7 +146,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
 
                             <h3>Times for {date}</h3>
 
-                            <li>
+                            <ul className="pattern-times-list">
                                 {
                                     times.map((time, index) => {
                                         let meridian = 'AM';
@@ -164,14 +166,14 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                                         let displayedTime = hour + ':' + minute + ' ' + meridian;
 
                                         return (    
-                                            <ul className="list-item" key={time + index} id={time + index}>
-                                                <button type="button" onClick={removeTime}>×</button>
+                                            <li className="list-item" key={time + index} id={time + index}>
+                                                <button type="button" className="remove-time-button" onClick={removeTime}>×</button>
                                                 <p>{displayedTime}</p>
-                                            </ul>
+                                            </li>
                                         )
                                     })
                                 }
-                            </li>
+                            </ul>
                         </div>
                     }
 
@@ -185,7 +187,7 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                     }
 
                     {
-                        (times.length !== 0 && date !== '') || (date !== '' && allDay === true)
+                        ((times.length > 0 && date !== '') || (date !== '' && allDay === true))
                         &&
                         <button type="button" onClick={handleAddDateTimes}>Add Date and Time</button>
                     }
@@ -202,93 +204,95 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
 
                     <h3>All Dates And Times</h3>
 
-                    {
-                        datesTimes.map((dateTime, index) => {
-                            let timeId = '';
-                            if (dateTime.times === 'All-Day') {
-                                timeId = 'All-Day';
-                            }
+                    <div className="pattern-dates-times-list">
+                        {
+                            datesTimes.map((dateTime, index) => {
+                                let timeId = '';
+                                if (dateTime.times === 'All-Day') {
+                                    timeId = 'All-Day';
+                                }
 
-                            return (
-                                <div 
-                                    key={dateTime.id + 'main'} 
-                                    className="result single-date-times-container" 
-                                    id={dateTime.id  + 'main'}
-                                >
-                                    <div className="result-date-container">
-                                        <button 
-                                            type="button" 
-                                            className="remove-date-button" 
-                                            id={dateTime.id + dateTime.date} 
-                                            onClick={removeDateTime}
-                                        >
-                                            ×
-                                        </button>
-
-                                        <input 
-                                            type="date" 
-                                            className="date-input" 
-                                            id={dateTime.id + dateTime.date + index} 
-                                            value={dateTime.date}
-                                            onChange={handleEditDateTime} 
-                                        />
-                                    </div>
-                                
-                                    <li>
-                                        {
-                                            dateTime.times === 'All-Day'
-                                            ?
-                                            <ul 
-                                                className="list-item" 
-                                                key={dateTime.id + timeId} 
-                                                id={dateTime.id + timeId}
+                                return (
+                                    <div 
+                                        key={dateTime.id + 'main'} 
+                                        className="result single-date-times-container" 
+                                        id={dateTime.id  + 'main'}
+                                    >
+                                        <div className="result-date-container">
+                                            <button 
+                                                type="button" 
+                                                className="remove-date-button" 
+                                                id={dateTime.id + dateTime.date} 
+                                                onClick={removeDateTime}
                                             >
-                                                <button 
-                                                    type="button" 
-                                                    className="remove-time-button" 
-                                                    id={dateTime.id + timeId} 
-                                                    onClick={removeDateTime}
+                                                ×
+                                            </button>
+
+                                            <input 
+                                                type="date" 
+                                                className="date-input" 
+                                                id={dateTime.id + dateTime.date + index} 
+                                                value={dateTime.date}
+                                                onChange={handleEditDateTime} 
+                                            />
+                                        </div>
+                                    
+                                        <ul className="pattern-times-list">
+                                            {
+                                                dateTime.times === 'All-Day'
+                                                ?
+                                                <li 
+                                                    className="list-item" 
+                                                    key={dateTime.id + timeId} 
+                                                    id={dateTime.id + timeId}
                                                 >
-                                                    ×
-                                                </button>
-
-                                                <p>{dateTime.times}</p>
-                                            </ul>
-                                            :
-                                            dateTime.times?.map((time, timeIndex) => {
-                                                timeId = time;
-
-                                                return (
-                                                    <ul 
-                                                        className="list-item" 
-                                                        key={dateTime.id + timeId} 
-                                                        id={dateTime.id + timeId}
+                                                    <button 
+                                                        type="button" 
+                                                        className="remove-time-button" 
+                                                        id={dateTime.id + timeId} 
+                                                        onClick={removeDateTime}
                                                     >
-                                                        <button 
-                                                            type="button" 
-                                                            className="remove-time-button" 
-                                                            id={dateTime.id + timeId} 
-                                                            onClick={removeDateTime}
-                                                        >
-                                                            ×
-                                                        </button>
+                                                        ×
+                                                    </button>
 
-                                                        <input 
-                                                            className="time-input" 
-                                                            type="time" 
-                                                            id={dateTime.id + timeIndex} 
-                                                            value={time} 
-                                                            onChange={handleEditDateTime} 
-                                                        />
-                                                    </ul>
-                                                )
-                                            })
-                                        }
-                                    </li>
-                                </div>
-                            )
-                        })
-                    }
+                                                    <p>{dateTime.times}</p>
+                                                </li>
+                                                :
+                                                dateTime.times?.map((time, timeIndex) => {
+                                                    timeId = time;
+
+                                                    return (
+                                                        <li 
+                                                            className="list-item" 
+                                                            key={dateTime.id + timeId} 
+                                                            id={dateTime.id + timeId}
+                                                        >
+                                                            <button 
+                                                                type="button" 
+                                                                className="remove-time-button" 
+                                                                id={dateTime.id + timeId} 
+                                                                onClick={removeDateTime}
+                                                            >
+                                                                ×
+                                                            </button>
+
+                                                            <input 
+                                                                className="time-input" 
+                                                                type="time" 
+                                                                id={dateTime.id + timeIndex} 
+                                                                value={time} 
+                                                                onChange={handleEditDateTime} 
+                                                            />
+                                                        </li>
+                                                    )
+                                                })
+                                            }
+                                        </ul>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             }
         </section>

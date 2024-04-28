@@ -1,6 +1,6 @@
+import { useState } from "react";
+
 export default function FormReminderFrequencyPatternYears({
-    year,
-    setYear,
     years,
     setYears,
     yearEquation,
@@ -11,6 +11,8 @@ export default function FormReminderFrequencyPatternYears({
     setYearRange,
     currentYear
 }) {
+    const [year, setYear] = useState('');
+
     function handleChangeYear(event) {
         setIsEveryYear(true)
         setYear(event.target.value);
@@ -129,128 +131,124 @@ export default function FormReminderFrequencyPatternYears({
 
     return (
         <>
-            {
-                <>
-                    <hr />
+            <hr />
 
-                    <h3>Specific Years</h3>
+            <h3>Specific Years</h3>
 
-                    <span>* If nothing is selected in the year section, the default will be every year. *</span>
+            <span>* If nothing is selected in the year section, the default will be every year. *</span>
 
-                    <section className="subsection">
-                        <label 
-                            id="year-equation-label"
-                        >
-                            <p>
-                            Every {' '}
-                            <input 
-                                type="number" 
-                                id="year-equation-first-num"
-                                min="1"
-                                onChange={handleChangeYearPattern}
-                                value={yearEquation.first}
-                            /> 
-                            <i> n </i> 
-                            + {' '}
-                            <input 
-                                type="number" 
-                                id="year-equation-second-num"
-                                min="0"
-                                onChange={handleChangeYearPattern}
-                                value={yearEquation.second}
-                            /> 
-                            {' '} years
-                            </p>
-                        </label>
-                        <p>ie. </p>
-                    </section>
+            <section className="subsection">
+                <label 
+                    id="year-equation-label"
+                >
+                    <p>
+                    Every {' '}
+                    <input 
+                        type="number" 
+                        id="year-equation-first-num"
+                        min="1"
+                        onChange={handleChangeYearPattern}
+                        value={yearEquation.first}
+                    /> 
+                    <i> n </i> 
+                    + {' '}
+                    <input 
+                        type="number" 
+                        id="year-equation-second-num"
+                        min="0"
+                        onChange={handleChangeYearPattern}
+                        value={yearEquation.second}
+                    /> 
+                    {' '} years
+                    </p>
+                </label>
+                <p>ie. </p>
+            </section>
 
-                    <section className="subsection">
-                        <div>
-                            <input 
-                                type="checkbox" name="every-year-checked" 
-                                id="every-year-checked" 
-                                onChange={handleChangeYearPattern} 
-                                checked={isEveryYear === true}
-                            />
-                            <label 
-                                htmlFor="every-year-checked"
-                            >
-                                Every Year
-                            </label>
-                        </div>
-                    </section>
-                        
-                    <section className="subsection">
-                        <div>
-                            <input 
-                                type="number" 
-                                name="select-years" 
-                                id="select-years" 
-                                min={currentYear} 
-                                step="1"
-                                onChange={handleChangeYear}
-                                value={year}
-                            />
-                            <label htmlFor="select-years">Year</label>
-                        </div>
+            <section className="subsection">
+                <div>
+                    <input 
+                        type="checkbox" name="every-year-checked" 
+                        id="every-year-checked" 
+                        onChange={handleChangeYearPattern} 
+                        checked={isEveryYear === true}
+                    />
+                    <label 
+                        htmlFor="every-year-checked"
+                    >
+                        Every Year
+                    </label>
+                </div>
+            </section>
+                
+            <section className="subsection">
+                <div>
+                    <input 
+                        type="number" 
+                        name="select-years" 
+                        id="select-years" 
+                        min={currentYear} 
+                        step="1"
+                        onChange={handleChangeYear}
+                        value={year}
+                    />
+                    <label htmlFor="select-years">Year</label>
+                </div>
 
-                        {
-                            year.length >= 4 && !years.includes(year)
-                            &&
-                            <button type="button" onClick={handleAddYear}>Add Year</button>
-                        }
+                {
+                    year.length >= 4 && !years.includes(year)
+                    &&
+                    <button type="button" onClick={handleAddYear}>Add Year</button>
+                }
 
-                        {
-                            years.length > 0
-                            &&
-                            <div className="result">
-                                <hr />
+                {
+                    years.length > 0
+                    &&
+                    <div className="result">
+                        <hr />
 
-                                <h3>Years</h3>
+                        <h3>Years</h3>
 
-                                <li>
-                                    {
-                                        years.map((year, index) => {
-                                            return (    
-                                                <ul className="list-item" key={year + index} id={year + index}>
-                                                    <button type="button" id={year} onClick={removeYear}>×</button>
-                                                    <p>{year}</p>
-                                                </ul>
-                                            )
-                                        })
-                                    }
-                                </li>
-                            </div>
-                        }  
-                    </section>
+                        <li>
+                            {
+                                years.map((year, index) => {
+                                    return (    
+                                        <ul className="list-item" key={year + index} id={year + index}>
+                                            <button type="button" id={year} onClick={removeYear}>×</button>
+                                            <p>{year}</p>
+                                        </ul>
+                                    )
+                                })
+                            }
+                        </li>
+                    </div>
+                }  
+            </section>
 
-                    <section className="subsection">                
-                        <div>
-                            <input 
-                                type="number" 
-                                name="select-years-range-start" 
-                                id="select-years-range-start" 
-                                min={currentYear} 
-                                step="1"
-                                onChange={handleChangeYearPattern}
-                                value={yearRange.start}
-                            /> 
-                                -
-                            <input 
-                                type="number" 
-                                name="select-years-range-end" 
-                                id="select-years-range-end" 
-                                min={currentYear + 1} 
-                                step="1"
-                                onChange={handleChangeYearPattern}
-                                value={yearRange.end}
-                            />
-                            <label>Range</label>  
-                        </div>
-                    </section>                
-                </>
-            }
+            <section className="subsection">                
+                <div>
+                    <input 
+                        type="number" 
+                        name="select-years-range-start" 
+                        id="select-years-range-start" 
+                        min={currentYear} 
+                        step="1"
+                        onChange={handleChangeYearPattern}
+                        value={yearRange.start}
+                    /> 
+                        -
+                    <input 
+                        type="number" 
+                        name="select-years-range-end" 
+                        id="select-years-range-end" 
+                        min={currentYear + 1} 
+                        step="1"
+                        onChange={handleChangeYearPattern}
+                        value={yearRange.end}
+                    />
+                    <label>Range</label>  
+                </div>
+            </section>                
         </>
     )
 }
