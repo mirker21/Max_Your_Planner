@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import ProjectCanvas from "./ProjectCanvas";
-import Notifications from "./components/Notifications";
+import Notifications from "./Notifications";
 
 // This component was created to reduce the 
 // clutter in Todo.jsx by moving all of these 

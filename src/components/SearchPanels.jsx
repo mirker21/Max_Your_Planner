@@ -1,6 +1,8 @@
 import { Html } from "@react-three/drei";
-import { useState } from "react";
-import SingleTodo from "./components/SingleTodo";
+import { useRef, useState } from "react";
+import SingleTodo from "./single_todo/SingleSearchTodo";
+import { useFrame } from "@react-three/fiber";
+import { lerp } from "three/src/math/MathUtils";
 
 export default function SearchPanels({
     width,
@@ -14,6 +16,7 @@ export default function SearchPanels({
     leftPosition,
     rightPosition,
     topPosition,
+    setCurrentAnimation,
 }) {
     const [currentCategorySearchString, setCurrentCategorySearchString] = useState('');
     const [currentSubcategorySearchString, setCurrentSubcategorySearchString] = useState('');
@@ -79,56 +82,64 @@ export default function SearchPanels({
         })
     }
 
+    let leftPanel = (
+        <SearchPanelLeft
+            handleChange={handleChange}
+            currentCategorySearchString={currentCategorySearchString}
+            currentSubcategorySearchString={currentSubcategorySearchString}
+            currentTodoSearchString={currentTodoSearchString}
+            searchDatesTimes={searchDatesTimes}
+        />
+    )
+
+    let rightPanel = (
+        <SearchPanelRight
+            handleDeleteTodo={handleDeleteTodo}
+            todos={todos}
+            setTodos={setTodos}
+            setSelectedTodo={setSelectedTodo}
+            currentPanel={currentPanel}
+            setCurrentPanel={setCurrentPanel}
+            filteredTodos={filteredTodos}
+            setCurrentAnimation={setCurrentAnimation}
+        />
+    )
+    
+    const fullPanelRef = useRef(null);
+    const rightPanelRef = useRef(null);
+    const leftPanelRef = useRef(null);
+
+    useFrame((delta) => {
+        if (fullPanelRef.current !== null) {
+            fullPanelRef.current.style.opacity = lerp(fullPanelRef.current.style.opacity, currentPanel === "search-todos" ? 1 : 0, 0.1);
+        } else if (leftPanelRef.current !== null && rightPanelRef.current !== null) {
+            leftPanelRef.current.style.opacity = lerp(leftPanelRef.current.style.opacity, currentPanel === "search-todos" ? 1 : 0, 0.1);
+            rightPanelRef.current.style.opacity = lerp(rightPanelRef.current.style.opacity, currentPanel === "search-todos" ? 1 : 0, 0.1);
+        }
+    })
+
     if (isWide === true) {
         return (
             <>
-                <Html scale={scale} className="dialog-container" position={leftPosition} transform sprite>
+                <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
                     <form>
-                        <SearchPanelLeft
-                            handleChange={handleChange}
-                            currentCategorySearchString={currentCategorySearchString}
-                            currentSubcategorySearchString={currentSubcategorySearchString}
-                            currentTodoSearchString={currentTodoSearchString}
-                            searchDatesTimes={searchDatesTimes}
-                        />
+                        {leftPanel}
                     </form>
                 </Html>
 
-                <Html scale={scale} className="dialog-container" position={rightPosition} transform sprite>
+                <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
                     <form>
-                        <SearchPanelRight
-                            handleDeleteTodo={handleDeleteTodo}
-                            todos={todos}
-                            setTodos={setTodos}
-                            setSelectedTodo={setSelectedTodo}
-                            currentPanel={currentPanel}
-                            setCurrentPanel={setCurrentPanel}
-                            filteredTodos={filteredTodos}
-                        />
+                        {rightPanel}
                     </form>
                 </Html>
             </>
         )
     } else {
         return (
-            <Html scale={scale} className="dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
+            <Html ref={fullPanelRef} scale={scale} className="dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
                 <form>            
-                    <SearchPanelLeft
-                        handleChange={handleChange}
-                        currentCategorySearchString={currentCategorySearchString}
-                        currentSubcategorySearchString={currentSubcategorySearchString}
-                        currentTodoSearchString={currentTodoSearchString}
-                        searchDatesTimes={searchDatesTimes}
-                    />
-                    <SearchPanelRight
-                        handleDeleteTodo={handleDeleteTodo}
-                        todos={todos}
-                        setTodos={setTodos}
-                        setSelectedTodo={setSelectedTodo}
-                        currentPanel={currentPanel}
-                        setCurrentPanel={setCurrentPanel}
-                        filteredTodos={filteredTodos}
-                    />
+                    {leftPanel}
+                    {rightPanel}
                 </form>
             </Html>
         )
@@ -189,7 +200,8 @@ function SearchPanelRight({
     setTodos,
     setSelectedTodo,
     setCurrentPanel,
-    filteredTodos
+    filteredTodos,
+    setCurrentAnimation
 }) {
     // limit height of results
     //limit height of todos? yes in times, dates, todos
@@ -212,6 +224,7 @@ function SearchPanelRight({
                                         setTodos={setTodos}
                                         setSelectedTodo={setSelectedTodo}
                                         setCurrentPanel={setCurrentPanel}
+                                        setCurrentAnimation={setCurrentAnimation}
                                     />
                                 )
                             })

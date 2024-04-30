@@ -101,8 +101,6 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
         }
     }
 
-    console.log(date, times, allDay)
-
     return (
         <section>
             <h3>Date And Time</h3>

@@ -1,13 +1,15 @@
 import { Suspense, useState } from "react";
 import * as THREE from 'three';
 import { Canvas, useThree } from "@react-three/fiber"
-import { OrbitControls, PerspectiveCamera, Clouds, Cloud, Html } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera, Clouds, Cloud } from "@react-three/drei";
 import { DepthOfField, EffectComposer, HueSaturation } from "@react-three/postprocessing";
-import Scenery from "./components/Scenery";
-import Maxwell from './components/Maxwell'
-import FormPanels from "./FormPanels";
+import Scenery from "../3d_components/Scenery";
+import Maxwell from '../3d_components/Maxwell'
+import GreetPanel from "./GreetPanel";
+import FormPanels from "./todo_form/FormPanels";
 import SearchPanels from "./SearchPanels";
-import TodaysChecklist from "./components/TodaysChecklist";
+import TodaysChecklist from "./TodaysChecklist";
+import Loading from "./Loading";
 
 export default function ProjectCanvas({
     todos,
@@ -22,7 +24,7 @@ export default function ProjectCanvas({
 }) {
 
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loading />}>
             <Canvas id="three-canvas" linear>
                 <PerspectiveCamera makeDefault fov={60} near={.01} far={1000} position={[.9, .03, -.299]} rotation={[.02, 2, -.02]} />
                 {/* <OrbitControls /> */}
@@ -81,7 +83,6 @@ function Content({
     }))]
 
     const { size, camera } = useThree()
-    console.log(size.height)
 
     const isWide = size.width > 2200;
     const isViewNarrow = size.width < 900;
@@ -103,7 +104,7 @@ function Content({
     let rightPosition = [.795, .04, -size.width/100000 -.302];
     let topPositionYValue = isViewNarrow ? .105 : .0565;
     let topPosition = [.82, topPositionYValue, -.261]
-    let formScale=isViewNarrow ? [.009, .009, .009] : [.004, .004, .004]
+    let formScale = isViewNarrow ? [.009, .009, .009] : [.004, .004, .004]
 
     if (currentPanel === 'add-new-todo' || currentPanel === 'edit-todo') {
         displayedPanel = (
@@ -139,27 +140,31 @@ function Content({
                 leftPosition={leftPosition}
                 rightPosition={rightPosition}
                 topPosition={topPosition}
+                setCurrentAnimation={setCurrentAnimation}
             />
         )
     } else if (currentPanel === 'todays-todos') {
         displayedPanel = (
-            <Html scale={isViewNarrow ? [.009, .009, .009] : [.004, .004, .004]} className="dialog-container" position={isWide === true ? rightPosition : topPosition} transform sprite>
-                <TodaysChecklist 
-                    todaysTodosFiltered={todaysTodosFiltered}
-                    deactivatedTodaysTodos={deactivatedTodaysTodos}
-                    setDeactivatedTodaysTodos={setDeactivatedTodaysTodos}
-                />
-            </Html>
+            <TodaysChecklist 
+                todaysTodosFiltered={todaysTodosFiltered}
+                deactivatedTodaysTodos={deactivatedTodaysTodos}
+                setDeactivatedTodaysTodos={setDeactivatedTodaysTodos}
+                isViewNarrow={isViewNarrow}
+                isWide={isWide}
+                rightPosition={rightPosition}
+                topPosition={topPosition}
+                currentPanel={currentPanel}
+            />
         )
     }
     
     if (displayedPanel === '') {
         displayedPanel = (
-            <Html scale={[.007, .007, .007]} className="dialog-container" position={topPosition} transform sprite>
-                <p id="greet-text">
-                    <h4>Hello!</h4> I am a beaver and my name is <span>Maxwell</span>! <br/> I can help plan your routines and tasks, <br /> and organize them into categories, <br /> complete with specified reminder times!
-                </p>
-            </Html>
+            <GreetPanel 
+                topPosition={topPosition}
+                currentPanel={currentPanel}
+                isViewNarrow={isViewNarrow}
+            />
         )
     }
 

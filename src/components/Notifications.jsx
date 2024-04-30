@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { toast, Slide } from 'react-toastify'
-import SingleToast from "./SingleToast";
+import SingleToast, { Msg } from "./SingleToast";
 import 'react-toastify/dist/ReactToastify.css';
+import { useNotificationCenter } from "react-toastify/addons/use-notification-center"
 
 export default function Notifications({
     todaysTodosFiltered, 
@@ -9,7 +10,9 @@ export default function Notifications({
     setCurrentAnimation
 }) {
 
-    function calculateToastDelay(time, creationDate) {
+    const { notifications, remove } = useNotificationCenter()
+
+    function calculateToastDelay(time) {
         // get today's planned date and time
         const todaysPlannedTime = new Date(Date.now()).toString().split(' ').slice(0, 4).join(' ') + ' ' + time + ':00'
         const todaysPlannedTimeAsNum = new Date(todaysPlannedTime).getTime();
@@ -36,6 +39,7 @@ export default function Notifications({
             let toastArray = [];
 
             todaysTodosFiltered.map(todo => {
+                console.log(todo.category)
                 if (!deactivatedTodaysTodos.includes(todo.id)) {
                     let times = []; 
     
@@ -59,12 +63,6 @@ export default function Notifications({
                     }
     
                     let checklist = [...todo.checklist.map(item => item.todo)]
-                    let checklistStr = 
-                    checklist.length > 1 
-                    ? 
-                    checklist.join(', ') 
-                    : 
-                    checklist.join('');
     
                     if (times.length > 0) {
                         let allDayCount = 0;
@@ -75,9 +73,10 @@ export default function Notifications({
                         // if the time is set to All-Day.
                         
                         times.map(time => {
+                            console.log(time)
                             if (time === 'All-Day') {
                                 toastArray.push({
-                                    content: checklistStr + ' ' + time,
+                                    content: checklist,
                                     role: "alert",
                                     toastId: todo.id + ' ' + time + ' ' + allDayCount,
                                     position: "bottom-right",
@@ -85,17 +84,21 @@ export default function Notifications({
                                     hideProgressBar: false,
                                     closeOnClick: true,
                                     pauseOnHover: true,
-                                    draggable: true,
+                                    draggable: false,
                                     progress: undefined,
                                     theme: "light",
                                     transition: Slide,
+                                    delay: 0,
+                                    category: todo.category,
+                                    subcategory: todo.subcategory,
+                                    time: time,
                                 });
                                 allDayCount++;
                             } else {
-                                let delay = calculateToastDelay(time, todo.creationDate)
+                                let delay = calculateToastDelay(time)
                                 if (delay > 0) {
                                     toastArray.push({
-                                        content: checklistStr + ' ' + time,
+                                        content: checklist,
                                         role: "alert",
                                         toastId: todo.id + ' ' + time,
                                         position: "bottom-right",
@@ -103,11 +106,14 @@ export default function Notifications({
                                         hideProgressBar: false,
                                         closeOnClick: true,
                                         pauseOnHover: true,
-                                        draggable: true,
+                                        draggable: false,
                                         progress: undefined,
                                         theme: "light",
                                         transition: Slide,
-                                        delay: delay
+                                        delay: delay,
+                                        category: todo.category,
+                                        subcategory: todo.subcategory,
+                                        time: time,
                                     });
                                 }
                             }
@@ -129,17 +135,92 @@ export default function Notifications({
     // if a notification's activation status has changed.
 
     const toastArr = useMemo(() => {
-        toast.dismiss()
+        // I need the delay from createdToasts so 
+        // I can update when the toast is rendered
+        let createdToasts = createTodaysToasts(todaysTodosFiltered)
+
+        notifications.map(notif => {
+            if (createdToasts.findIndex(toast => notif.content.props.time === toast.time) !== -1) {
+                let updatedToastInfo = createdToasts[createdToasts.findIndex(toast => notif.content.props.time === toast.time)];
+                // compare notifcations and createdToasts
+                let newToastId = updatedToastInfo.toastId;
+                let newCategory = updatedToastInfo.category;
+                let newSubcategory = updatedToastInfo.subcategory; 
+                let newMsg = updatedToastInfo.content;
+                let newTime = updatedToastInfo.time;
+    
+                let newToastProps = {
+                    role: updatedToastInfo.role,
+                    id: updatedToastInfo.toastId,
+                    position: updatedToastInfo.position,
+                    autoClose: updatedToastInfo.autoClose,
+                    hideProgressBar: updatedToastInfo.hideProgressBar,
+                    closeOnClick: updatedToastInfo.closeOnClick,
+                    pauseOnHover: updatedToastInfo.pauseOnHover,
+                    draggable: updatedToastInfo.draggable,
+                    progress: updatedToastInfo.progress,
+                    theme: updatedToastInfo.theme,
+                    transition: updatedToastInfo.transition,
+                }
+    
+                toast.update(notif.id, {
+                    toastId: newToastId,
+                    render: <SingleToast delay={updatedToastInfo.delay} time={newTime} msg={newMsg} category={newCategory} subcategory={newSubcategory} setCurrentAnimation={setCurrentAnimation} toastProps={createdToasts[0]} />
+                })
+            }
+        })
+
+        // toast.dismiss()
         return createTodaysToasts(todaysTodosFiltered);
-    }, [todaysTodosFiltered, deactivatedTodaysTodos])
+    }, [todaysTodosFiltered, deactivatedTodaysTodos])       
+    
+    notifications.map(notif => {
+        let notificationIsStillInCreatedToasts = toastArr.some(createdToast => {
+            console.log(createdToast.toastId === notif.id)
+            return createdToast.toastId === notif.id
+        })
+
+        if (notificationIsStillInCreatedToasts === false) {
+            toast.dismiss(notif.id)
+            remove(notif.id)
+        }
+
+        if (deactivatedTodaysTodos.some(deactivatedId => (notif.id.split(' ')[0] === deactivatedId)) === true) {
+            toast.dismiss(notif.id)
+            remove(notif.id)
+        }
+    })
+
+    console.log(notifications)
+
+    // Single Notification
+    // {
+    //     content: checklistStr,
+    //     role: "alert",
+    //     toastId: todo.id + ' ' + time + ' ' + allDayCount,
+    //     position: "bottom-right",
+    //     autoClose: false,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "light",
+    //     transition: Slide,
+    //     category: todo.category,
+    //     subcategory: todo.subcategory,
+    //     time: time,
+    // }
+    
+    console.log(toastArr)
 
     return (
         <div>
             {
                 toastArr?.map(toast => {
-                    let delay = 0;
-                    let time = toast.content.split(' ')[1];
-                    let msg = toast.content.split(' ')[0];
+                    let delay = toast.delay;
+                    let time = toast.time;
+                    let msg = toast.content;
 
                     let toastProps = {
                         role: "alert",
@@ -154,13 +235,6 @@ export default function Notifications({
                         theme: "light",
                         transition: Slide,
                     }
-                    
-                    // If the delay calculated is greater than 0,
-                    // include it. Otherwise, it will happen instantly.
-
-                    if (toast.hasOwnProperty('delay')) {
-                        delay = toast.delay;
-                    }
 
                     return (
                         <SingleToast 
@@ -169,7 +243,10 @@ export default function Notifications({
                             time={time}
                             msg={msg}
                             toastProps={toastProps}
+                            category={toast.category}
+                            subcategory={toast.subcategory}
                             setCurrentAnimation={setCurrentAnimation}
+                            deactivatedTodaysTodos={deactivatedTodaysTodos}
                         />
                     )
                 })
