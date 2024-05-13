@@ -3,12 +3,13 @@ import * as THREE from 'three';
 import { Canvas, useThree } from "@react-three/fiber"
 import { OrbitControls, PerspectiveCamera, Clouds, Cloud } from "@react-three/drei";
 import { DepthOfField, EffectComposer, HueSaturation } from "@react-three/postprocessing";
+import { A11yAnnouncer } from "@react-three/a11y";
 import Scenery from "../3d_components/Scenery";
 import Maxwell from '../3d_components/Maxwell'
 import GreetPanel from "./GreetPanel";
 import FormPanels from "./todo_form/FormPanels";
 import SearchPanels from "./SearchPanels";
-import TodaysChecklist from "./TodaysChecklist";
+import TodaysChecklistPanel from "./TodaysChecklistPanel";
 import Loading from "./Loading";
 
 export default function ProjectCanvas({
@@ -57,6 +58,7 @@ export default function ProjectCanvas({
                     <HueSaturation saturation={-0.15} />
                 </EffectComposer>
             </Canvas>
+            <A11yAnnouncer />
         </Suspense>
     )
 }
@@ -85,14 +87,15 @@ function Content({
     const { size, camera } = useThree()
 
     const isWide = size.width > 2200;
-    const isViewNarrow = size.width < 900;
+    const isViewNarrow = size.width < 1024;
 
     if (isViewNarrow === false) {
         camera.position.set(.9, .03, -.299)
         camera.rotation.set(.02, 2, -.02)
     } else {
-        camera.position.set(1, .09, -.3435)
-        camera.rotation.set(.02, 2, -.02)
+        camera.position.set(1.007, .07, -.3434)
+        camera.rotation.set(-.1, 2, .1)
+        camera.fov = 60;
     }
 
     let displayedPanel = '';
@@ -100,11 +103,11 @@ function Content({
     let zoomedOut = [.9, .03, -.299];
     let normalZoom = [.9, .03, -.299];
 
-    let leftPosition = [.85, .04, size.width/100000 - .22];
-    let rightPosition = [.795, .04, -size.width/100000 -.302];
-    let topPositionYValue = isViewNarrow ? .105 : .0565;
-    let topPosition = [.82, topPositionYValue, -.261]
-    let formScale = isViewNarrow ? [.009, .009, .009] : [.004, .004, .004]
+    let leftPosition = [.85, .04, size.width/100000 - .23];
+    let rightPosition = [.8, .04, -size.width/100000 -.292];
+    let topPositionYValue = isViewNarrow ? .111 : .0565;
+    let topPosition = [.82, topPositionYValue, -.2582]
+    let formScale = isViewNarrow ? [.0095, .0095, .0095] : [.004, .004, .004]
 
     if (currentPanel === 'add-new-todo' || currentPanel === 'edit-todo') {
         displayedPanel = (
@@ -145,7 +148,7 @@ function Content({
         )
     } else if (currentPanel === 'todays-todos') {
         displayedPanel = (
-            <TodaysChecklist 
+            <TodaysChecklistPanel 
                 todaysTodosFiltered={todaysTodosFiltered}
                 deactivatedTodaysTodos={deactivatedTodaysTodos}
                 setDeactivatedTodaysTodos={setDeactivatedTodaysTodos}
@@ -154,17 +157,27 @@ function Content({
                 rightPosition={rightPosition}
                 topPosition={topPosition}
                 currentPanel={currentPanel}
+                setCurrentPanel={setCurrentPanel}
+                setCurrentAnimation={setCurrentAnimation}
             />
         )
     }
     
-    if (displayedPanel === '') {
+    if (currentPanel === 'Greet') {
         displayedPanel = (
             <GreetPanel 
+                isViewNarrow={isViewNarrow}
                 topPosition={topPosition}
                 currentPanel={currentPanel}
-                isViewNarrow={isViewNarrow}
+                setCurrentPanel={setCurrentPanel}
+                setCurrentAnimation={setCurrentAnimation}
             />
+        )
+    }
+
+    if (currentPanel === '') {
+        displayedPanel = (
+            <></>
         )
     }
 

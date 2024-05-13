@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TodoSpecifiedReminderFrequencyDisplay from "./TodoSpecifiedReminderFrequencyDisplay";
 import TodoPatternReminderFrequencyDisplay from "./TodoPatternReminderFrequencyDisplay";
-import SearchTodoDeleteTodoButton from "./SearchTodoDeleteTodoButton";
+import SearchTodoEditDeleteTodoButton from "./SearchTodoEditDeleteTodoButton";
 
 export default function SingleTodo({
     todo,
@@ -10,7 +10,8 @@ export default function SingleTodo({
     setTodos,
     setSelectedTodo,
     currentPanel,
-    setCurrentPanel
+    setCurrentPanel,
+    setCurrentAnimation,
 }) {
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -54,13 +55,14 @@ export default function SingleTodo({
 
     return (
         <li className="search-todos-single-todo-container" id={todo.todo + todo.id}>
-            <SearchTodoDeleteTodoButton
+            <SearchTodoEditDeleteTodoButton
                 todoId={todo.id}
                 setSelectedTodo={setSelectedTodo}
                 setCurrentPanel={setCurrentPanel}
                 handleDeleteTodo={handleDeleteTodo}
                 isDeleteModalVisible={isDeleteModalVisible}
                 setIsDeleteModalVisible={setIsDeleteModalVisible}
+                setCurrentAnimation={setCurrentAnimation}
             />
 
             <section className="subsection search-todos-results-todo-category-subcategory-section">

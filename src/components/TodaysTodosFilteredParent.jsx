@@ -20,11 +20,12 @@ export default function TodaysTodosFilteredParent({
 
     // checkSpecifiedDate is to determine if the date specified is actually today
     function checkSpecifiedDate(todo) {
-        const todaysDate = new Date(new Date(Date.now()).toLocaleDateString()).toISOString().split('T')[0];
-        todo.reminderFrequency.map(dateTime => {
-            const todoDate = new Date(new Date(dateTime.date).toUTCString()).toISOString().split('T')[0];
+        const todaysDate = new Date(Date.now()).toISOString().slice(0, 9);
+        let result = todo.reminderFrequency.some(dateTime => {
+            const todoDate = new Date(dateTime.date).toISOString().slice(0, 9);
             return todoDate === todaysDate;
         })
+        return result;
     }
 
     // checkPatternDay is to determine if today's day falls in alignment with the day pattern given for the todo
@@ -199,10 +200,13 @@ export default function TodaysTodosFilteredParent({
     // checkTodoDate determines if the reminder frequency is specified or is a pattern, 
     // then will determine if today's date aligns with that reminder frequency by returning true or false
     function checkTodoDate(todo) {
+        let result;
         if (todo.reminderFrequency[0].hasOwnProperty('date') === true) {
-            return checkSpecifiedDate(todo);
+            result = checkSpecifiedDate(todo)
+            return result;
         } else if (todo.reminderFrequency[0].hasOwnProperty('date') === false) {
-            return checkPatternDate(todo);
+            result = checkPatternDate(todo);
+            return result;
         }
     }
     
@@ -210,6 +214,7 @@ export default function TodaysTodosFilteredParent({
     // checkTodoDate returns true or false for that particular todo.
     function getTodaysTodos(todos) {
         let todaysTodos = [...todos].filter(todo => {
+            let thingy = checkTodoDate(todo)
             return checkTodoDate(todo);
         })
         return todaysTodos;

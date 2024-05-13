@@ -100,12 +100,8 @@ export default function FormReminderFrequencyPatternYears({
                     second: ''
                 }
             )
-            if (event.target.value >= newYearRange.end) {
-                newYearRange.start = event.target.value;
-                newYearRange.end = `${parseInt(event.target.value) + 1}`;
-            } else {
-                newYearRange.start = event.target.value;
-            }
+            newYearRange.start = event.target.value;
+            newYearRange.end = `${parseInt(event.target.value) + 1}`;
             setYearRange(newYearRange);
         } else if (event.target.id === 'select-years-range-end') {
             let newYearRange = {...yearRange};
@@ -122,10 +118,17 @@ export default function FormReminderFrequencyPatternYears({
                     second: ''
                 }
             )
-            if (event.target.value > newYearRange.start || event.target.value === '') {
-                newYearRange.end = event.target.value;
-            }
+
+            newYearRange.end = event.target.value;
             setYearRange(newYearRange);
+        }
+    }
+
+    function handleBlur(event) {
+        let newYearRange = {...yearRange};
+        if (parseInt(event.target.value) <= newYearRange.start) {
+            newYearRange.end = `${parseInt(newYearRange.start) + 1}`; 
+            setYearRange(newYearRange)
         }
     }
 
@@ -225,8 +228,8 @@ export default function FormReminderFrequencyPatternYears({
                 }  
             </section>
 
-            <section className="subsection">                
-                <div>
+            <section className="subsection" id="select-years-range">                
+                <div id="select-years-range-container">
                     <input 
                         type="number" 
                         name="select-years-range-start" 
@@ -241,13 +244,14 @@ export default function FormReminderFrequencyPatternYears({
                         type="number" 
                         name="select-years-range-end" 
                         id="select-years-range-end" 
-                        min={currentYear + 1} 
+                        min={`${parseInt(yearRange.start) + 1}`} 
                         step="1"
                         onChange={handleChangeYearPattern}
+                        onBlur={handleBlur}
                         value={yearRange.end}
                     />
-                    <label>Range</label>  
                 </div>
+                <label>Range</label>  
             </section>                
         </>
     )

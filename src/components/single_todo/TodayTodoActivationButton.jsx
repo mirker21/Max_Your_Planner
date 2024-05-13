@@ -1,7 +1,7 @@
-export default function TodayTodoActivationButton({todoId, deactivatedTodaysTodos, handleDeactivateTodaysTodo, isDeactivateModalVisible, setIsDeactivateModalVisible}) {
+export default function TodayTodoActivationButton({todoId, index, deactivatedTodaysTodos, handleDeactivateTodaysTodo, isDeactivateModalVisible, setIsDeactivateModalVisible}) {
     return (
-        <section className={`list-item single-today-todo-deactivate-container ${isDeactivateModalVisible === true ? 'vertical': ''}`}>
-            <button type="button" className="single-todo-button" onClick={() => setIsDeactivateModalVisible(!isDeactivateModalVisible)} disabled={isDeactivateModalVisible === true}>
+        <section role="group" aria-label={(deactivatedTodaysTodos.includes(todoId) ? 'A' : 'Dea') + "ctivate Today's To-Do Number " + (parseInt(index) + 1)} className={`list-item single-today-todo-deactivate-container ${isDeactivateModalVisible === true ? 'vertical': ''}`}>
+            <button aria-label="Open Activation/Deactivation Modal?" type="button" className="single-todo-button" onClick={() => setIsDeactivateModalVisible(!isDeactivateModalVisible)} disabled={isDeactivateModalVisible === true}>
                 {
                     deactivatedTodaysTodos.includes(todoId)
                     ?
@@ -20,8 +20,8 @@ export default function TodayTodoActivationButton({todoId, deactivatedTodaysTodo
             {
                 isDeactivateModalVisible === true
                 ?
-                <section className="deactivate-today-todo-modal">
-                    <p>Deactivate Today's Todo?</p>
+                <section aria-label={"Activation/Deactivation Modal Open. " + (deactivatedTodaysTodos.includes(todoId) ? 'A' : 'Dea') + "ctivate Today's To-Do Number " + (parseInt(index) + 1) + "?"} className="deactivate-today-todo-modal">
+                    <p aria-hidden="true">{deactivatedTodaysTodos.includes(todoId) ? 'A' : 'Dea'}ctivate Today's Todo?</p>
                     <button type="button" className="yes-button" onClick={() => (handleDeactivateTodaysTodo(todoId), setIsDeactivateModalVisible(!isDeactivateModalVisible))}>Yes</button>
                     <button type="button" className="no-button" onClick={() => setIsDeactivateModalVisible(!isDeactivateModalVisible)}>No</button>
                 </section>

@@ -5,12 +5,11 @@ import TodoPatternReminderFrequencyDisplay from "./TodoPatternReminderFrequencyD
 
 export default function SingleTodayTodo({
     todo,
+    index,
     deactivatedTodaysTodos,
     handleDeactivateTodaysTodo,
 }) {
     const [isDeactivateModalVisible, setIsDeactivateModalVisible] = useState(false);
-
-    console.log(deactivatedTodaysTodos)
 
     function convertNumSuffix(num) {
         let numberSuffix = '';
@@ -51,26 +50,27 @@ export default function SingleTodayTodo({
     }
 
     return (
-        <li className={"todays-todos-single-todo-container" + `${deactivatedTodaysTodos.includes(todo.id) ? ' deactivated' : ''}`} id={todo.id}>
+        <li aria-label={"Today's To-Do Number " + (parseInt(index) + 1)} className={"todays-todos-single-todo-container" + `${deactivatedTodaysTodos.includes(todo.id) ? ' deactivated' : ''}`} id={todo.id}>
             <TodayTodoActivationButton 
                 todoId={todo.id}
+                index={index}
                 deactivatedTodaysTodos={deactivatedTodaysTodos}
                 handleDeactivateTodaysTodo={handleDeactivateTodaysTodo}
                 isDeactivateModalVisible={isDeactivateModalVisible}
                 setIsDeactivateModalVisible={setIsDeactivateModalVisible}
             />
 
-            <section className="subsection">
+            <section className="subsection" role="group" aria-label="Category and Sub Category">
                 <p>Category: {todo.category}</p>
                 <p>Subcategory: {todo.subcategory}</p>
             </section>
             
             <section className="subsection">
-                <h4 className="todo-header">Todos:</h4>
-                <ul className="search-todos-results-todos-container">
+                <h4 className="todo-header" aria-hidden="true">Todos:</h4>
+                <ul className="search-todos-results-todos-container" role="list" aria-label="Today's To-Do List">
                     {
                         todo.checklist.map((item, index) => {
-                            return <li className="reminder-frequency-description" key={todo.id + index}>- {item.todo}</li>
+                            return <li aria-label={'List Item Number ' + (parseInt(index) + 1) + ': ' + item.todo} className="reminder-frequency-description" key={todo.id + index}>- {item.todo}</li>
                         })
                     }
                 </ul>

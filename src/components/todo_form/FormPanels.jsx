@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Html } from "@react-three/drei";
 import { generateUUID, lerp } from "three/src/math/MathUtils";
 import { useFrame } from "@react-three/fiber";
+import { A11y } from "@react-three/a11y";
 
 import FormCategory from "./FormCategory";
 import FormSubcategory from "./FormSubcategory";
@@ -9,6 +10,7 @@ import FormItemName from "./FormItemName";
 import FormReminderFrequencyPattern from "./FormReminderFrequencyPattern";
 import FormReminderFrequencySpecified from "./FormReminderFrequencySpecified";
 import FormReminderFrequencySwitch from "./FormReminderFrequencySwitch";
+import ClosePanelButton from "../ClosePanelButton";
 
 export default function FormPanels({
     width,
@@ -42,6 +44,9 @@ export default function FormPanels({
         todos[todos.findIndex(todo => todo.id === selectedTodo)].subcategory
     );
     const [todo, setTodo] = useState('')
+    // datesTimes is an array of objects, which each 
+    // contain an id, date, and array of times for that date.
+    // This state is needed for specified reminder frequencies.
     const [datesTimes, setDatesTimes] = useState(
         currentPanel === 'add-new-todo' 
         ? 
@@ -58,16 +63,10 @@ export default function FormPanels({
         [...todos[todos.findIndex(todo => todo.id === selectedTodo)].checklist]
     );
     const [isDatePattern, setIsDatePattern] = useState(
-        selectedTodo === ''
+        (selectedTodo === '' || todos[todos.findIndex(todo => todo.id === selectedTodo)].reminderFrequency[0].hasOwnProperty('date') === true)
         ? 
         false
         : 
-        todos[todos.findIndex(todo => todo.id === selectedTodo)].reminderFrequency.length > 1 
-        || 
-        todos[todos.findIndex(todo => todo.id === selectedTodo)].reminderFrequency[0].hasOwnProperty('date') === true
-        ?
-        false
-        :
         true
     );
 
@@ -88,13 +87,11 @@ export default function FormPanels({
         setTodos([...newTodos]);
         setCurrentPanel('')
         setCurrentAnimation('Idle')
-        console.log('submitted!', newTodos)
     }
 
     function handleConfirmEditEntry(event) {
         event.preventDefault();
         const newTodos = [...todos];
-        console.log('WHOOOOO!', todos[todos.findIndex(todo => todo.id === selectedTodo)].creationDate)
         let revisedTodo = {
             creationDate: todos[todos.findIndex(todo => todo.id === selectedTodo)].creationDate,
             id: selectedTodo,
@@ -106,15 +103,14 @@ export default function FormPanels({
         let replaceTodoIndex = newTodos.findIndex(todo => todo.id === selectedTodo);
         newTodos.splice(replaceTodoIndex, 1, revisedTodo)
         setTodos([...newTodos]);
-        console.log('submitted!', newTodos)
         setSelectedTodo('');
         setCurrentPanel('search-todos')
-        setCurrentAnimation('Idle')
+        setCurrentAnimation('Searching')
     }
 
     let addTodoButtonDisplay = false;
 
-    if (datesTimes.length > 0 && category !== '' && subcategory !== '') {
+    if (datesTimes.length > 0 && category !== '' && subcategory !== '' && checklist.length > 0) {
         addTodoButtonDisplay = true;
     }
 
@@ -154,6 +150,7 @@ export default function FormPanels({
     const rightPanelRef = useRef(null);
     const leftPanelRef = useRef(null);
 
+    // Huge thanks to Ask-Alice from https://www.reddit.com/r/threejs/comments/lg54ko/fade_animation_when_changing_views_react_three/ for showing a method to change transparency of element.
     useFrame((delta) => {
         if (fullPanelRef.current !== null) {
             fullPanelRef.current.style.opacity = lerp(fullPanelRef.current.style.opacity, currentPanel === "add-new-todo" || currentPanel === "edit-todo"  ? 1 : 0, 0.1);
@@ -166,27 +163,35 @@ export default function FormPanels({
     if (isWide === true) {
         return (
             <>
-                <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
-                    <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
-                        {leftPanel}
-                    </form>
-                </Html>
-
-                <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
-                    <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
-                        {rightPanel}
-                    </form>
-                </Html>
+                <A11y role="content" description="Add/Edit Todo Panel Left, contains inputs for category, subcategory, and to-do list items. The two panels merge into one when the width of the window is smaller.">
+                    <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
+                        <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
+                            {leftPanel}
+                        </form>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                    </Html>
+                </A11y>
+                <A11y role="content" description="Add/Edit Todo Panel Right, contains all the inputs for specified and pattern reminder frequency. The two panels merge into one when the width of the window is smaller.">
+                    <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
+                        <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
+                            {rightPanel}
+                        </form>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                    </Html>
+                </A11y>
             </>
         )
     } else {
         return (
-            <Html ref={fullPanelRef} scale={scale} className="dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
-                <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>            
-                    {leftPanel}
-                    {rightPanel}
-                </form>
-            </Html>
+            <A11y role="content" description="Add/Edit Todo Panel Full, contains all inputs to add or edit a todo. The Full Panel splits into two when the width of the window is larger.">
+                <Html ref={fullPanelRef} scale={scale} className="dialog-container top-dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
+                    <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>            
+                        {leftPanel}
+                        {rightPanel}
+                    </form>
+                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                </Html>
+            </A11y>
         )
     }
 }
@@ -241,6 +246,7 @@ function FormPanelRight({
     addTodoButtonDisplay,
     selectedTodo,
 }) {
+    // useEffect in formreminderFrequencySwitch?
     return (
         <>
             <div>
@@ -257,13 +263,16 @@ function FormPanelRight({
                     isDatePattern === true
                     ?
                     <FormReminderFrequencyPattern
+                        isDatePattern={isDatePattern}
                         currentYear={currentYear}
                         setDatesTimes={setDatesTimes}
                         selectedTodo={selectedTodo}
                         selectedTodoInfo={selectedTodoInfo}
+                        // if selectedTodoInfo is blank put something else
                     />
                     :
                     <FormReminderFrequencySpecified
+                        isDatePattern={isDatePattern}
                         datesTimes={datesTimes}
                         setDatesTimes={setDatesTimes}
                         selectedTodoInfo={selectedTodoInfo}

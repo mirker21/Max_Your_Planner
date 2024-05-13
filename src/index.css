@@ -12,18 +12,45 @@
 }
 
 body {
+  position: fixed;
   width: 100vw;
+  height: 100vh;
   font-family: "Raleway", sans-serif;
+  margin: 0;
 }
 
 h1, h2, h3, h4 {
   font-family: "Dosis", sans-serif;
 }
 
-#todo-container {
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+h2, h3 {
+  color: #763A00;
+}
+
+h3 {
+  text-align: center;
+  margin: 15px 0px;
+  margin-bottom: 25px;
+  text-decoration: 1px dashed underline #174F7D;
+  text-underline-offset: 4px;
+}
+
+#todo-app-container {
   width: 100vw;
   height: 100vh;
 }
+
+#todo-app-container main {
+  width: 100%;
+  height: 100%;
+}
+
+/* FOOTER START */
 
 #music-credits {
   width: 80vw;
@@ -33,6 +60,7 @@ h1, h2, h3, h4 {
   left: -10.5vw;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   font-size: xx-small;
@@ -42,12 +70,24 @@ h1, h2, h3, h4 {
   border-radius: 5px;
 }
 
+#music-credits span:first-child {
+  padding-right: 20px;
+  border-right: 1px solid #174F7D;
+}
+
+
 #music-credits span {
   font-size: smaller;
-  border-right: 1px solid #417097;
-  padding-right: 20px;
   text-align: right;
   margin-bottom: 0px;
+  width: 100%;
+  display: inline-block;
+}
+
+#music-credits span:last-child {
+  text-align: left;
+  padding-left: 20px;
+  width: 50%;
 }
 
 #music-credits div {
@@ -57,8 +97,19 @@ h1, h2, h3, h4 {
 #music-credits a {
   font-size: smaller;
   text-align: left;
-  color:#417097;
+  color:#174F7D;
 }
+
+a {
+  font-weight: 400;
+  color: #174F7D;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #16b6ce;
+}
+
+/* FOOTER END */
 
 #loading-header {
   position: relative;
@@ -71,12 +122,13 @@ h1, h2, h3, h4 {
 #app-title-container {
   position: absolute;
   top: 10px;
+  left: 5px;
   margin-left: 30px;
   z-index: 10000;
   width: auto;
   display: flex;
   justify-content: flex-start;
-  font-size: smaller;
+  font-size: .5rem;
   opacity: 1.0;
   animation-duration: 1s;
   animation-name: titleslideandfadein;
@@ -98,7 +150,7 @@ h1, h2, h3, h4 {
 
 #app-title {
   box-shadow: 0px 2px 3px rgba(0, 0, 0, .5);
-  color: #417097;
+  color: #174F7D;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   padding: 25px 35px;
@@ -114,7 +166,7 @@ input[type='number'] {
 }
 
 button[type='submit'] {
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
   margin-top: 15px;
   width: 100%;
 }
@@ -129,48 +181,71 @@ button[type='button']:not(
   [class="single-todo-button"]
 ):not(
   [class="add-todo-form-remove-item-name"]
+):not(
+  [class="close-panel-button"] 
 ) {
   margin-top: 20px;
 }
 
+/* TOASTS START */
+
+.Toastify {
+  text-transform: none;
+  position: relative;
+  top: -55px;
+}
+
 .Toastify__toast {
   background-color: #d2feff;
+  height: fit-content;
+  position: inherit;
+  width: 320px;
+  top: 110px;
+}
+
+.Toastify__toast--stacked:before {
+  transform: none;
 }
 
 .Toastify__toast-body {
   display: flex;
-  align-items: center;
+  height: fit-content;
   width:min-content;
+  margin:none;
 }
 
 .Toastify__toast-body div {
   font-family: "Raleway", sans-serif;
   font-weight: 500;
-  color: #417097;
+  color: #174F7D;
 }
 
 .toast-info-container {
   width: 100%;
-  margin-right: 5px;
   padding: 5px;
   text-align: left;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  overflow-y: auto;
+}
+
+.toast-info-container h4 {
+  margin: 0px;
 }
 
 .toast-info-img-container {
   position: relative;
   width: 100%;
   background-color: #16b6ce;
-  box-shadow: inset -.5px 1px 2px #417097;
+  box-shadow: inset -.5px 1px 2px #174F7D;
   border-radius: 100px;
   width: 55px;
   height: 55px;
   display: flex;
   margin: 15px 0px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .toast-info-img-container img {
@@ -185,7 +260,7 @@ button[type='button']:not(
 
 .toast-info-category-subcategory-time {
   margin-left: 15px;
-  width: 100%;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -200,13 +275,13 @@ button[type='button']:not(
 
 .toast-todo-list {
   margin-right: 0px;
-  scrollbar-color: #d2feff #915318;
+  scrollbar-color: #d2feff #763A00;
   max-height: 200px;
   overflow: auto;
   width: 230px;
   padding: 10px;
   background-color: white;
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
   border-radius: 5px;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -216,11 +291,23 @@ button[type='button']:not(
   padding-left: 5px;
 }
 
+.Toastify__toast--stacked[data-collapsed=false] {
+  overflow-y: auto;
+}
+
+.toast-info-container, .toast-todo-list li {
+  font-size: 1.2rem;
+}
+
+/* TOASTS END */
+
 #three-canvas {
   position: relative;
   width: 200px;
   height: 1000px;
 }
+
+/* PANELS START */
 
 .main-panel, .left-panel, .right-panel {
   max-height: 300px;
@@ -229,7 +316,11 @@ button[type='button']:not(
 }
 
 .dialog-container {
-  width: auto;
+  position: relative;
+  left: calc((100% - 87%) / 2);
+  min-width: 320px;
+  height: 400px;
+  width: 500px;
   background-color:rgba(255, 255, 255, 0.8);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, .3);
   color: black;
@@ -243,13 +334,16 @@ button[type='button']:not(
   background-color:rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   padding: 20px;
+  height: fit-content;
 }
+
+/* PANELS END */
 
 #greet-text {
   text-align: center;
-  color:#417097;
+  color:#174F7D;
   background-color: rgba(255, 255, 255, 0.87);
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
   padding: 20px;
   border-radius: 5px;
   line-height: 25px;
@@ -292,7 +386,7 @@ button[type='button']:not(
   flex-direction: column;
   align-items: center;
   background-color: white;
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
   border-radius: 10px;
   padding: 20px;
   width: 85%;
@@ -325,7 +419,7 @@ button[type='button']:not(
 
 .deactivated section,
 .deactivated section ul {
-  background-color: #417097;
+  background-color: #174F7D;
 }
 
 .deactivated section ul {
@@ -353,6 +447,11 @@ button[type='button']:not(
   background-color: white;
 }
 
+.search-todos-single-todo-buttons-container.vertical {
+  width: min-content;
+  padding: 0px 3px;
+}
+
 .vertical {
   display: flex;
   flex-direction: column;
@@ -377,7 +476,7 @@ button[type='button']:not(
 }
 
 .vertical button:hover svg {
-  stroke: #417097;
+  stroke: #174F7D;
 }
 
 .search-todos-results-todo-reminder-frequency-section, .search-todos-results-todos-section {
@@ -416,11 +515,13 @@ button[type='button']:not(
 
 .todo-header {
   text-align: center;
-  text-decoration: 1px dashed underline #417097;
+  text-decoration: 1px dashed underline #174F7D;
   text-underline-offset: 3px;
   margin-top: 0px;
   margin-bottom: 15px;
 }
+
+/* INTERFACE AND BUTTONS START */
 
 #interface {
   position: absolute;
@@ -448,8 +549,8 @@ button[type='button']:not(
   }
 }
 
-.interface-button, .single-todo-button {
-  width: auto;
+.interface-button, .single-todo-button, .close-panel-button {
+  width: 42px;
   height: 42px;
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, .5);
@@ -463,6 +564,20 @@ button[type='button']:not(
   transition: 200ms;
 }
 
+.close-panel-button {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  top: -35px;
+  left: 25px;
+  margin-top: 0px;
+  background-color: #ffffff;
+}
+
+.close-panel-button:hover svg {
+  stroke: #bb0000
+}
+
 .interface-button:hover, .single-todo-button:hover {
   background-color: #d2feff;
 }
@@ -470,7 +585,7 @@ button[type='button']:not(
 .interface-button svg, .single-todo-button svg {
   width: 20px;
   height: 20px;
-  stroke: #417097;
+  stroke: #174F7D;
   stroke-width: 1.5px;
   transition: 200ms;
 }
@@ -483,36 +598,13 @@ button[type='button']:not(
 }
 
 .interface-button:hover svg, .single-todo-button:hover svg {
-  stroke: #915318;
+  stroke: #763A00;
 } 
 
 .interface-button:hover span, .single-todo-button:hover span {
   width: auto;
   white-space: nowrap;
   margin: 0px 15px;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  justify-content: center;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
@@ -533,9 +625,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* INTERFACE AND BUTTONS START */
+
 form {
-  width: 400px;
-  height: 300px;
+  width: auto;
+  height: -webkit-fill-available;
   overflow: hidden;
   overflow-y: auto;
   display: flex;
@@ -545,22 +639,18 @@ form {
   margin: 20px 0px;
   background-color: #d2feff;
   padding: 20px;
-  /* border: 3px solid #417097; */
-  box-shadow: 0px 0px 5px #417097;
+  /* border: 3px solid #174F7D; */
+  box-shadow: 0px 0px 5px #174F7D;
   border-radius: 10px;
-  scrollbar-color: #d2feff #915318;
+  scrollbar-color: #d2feff #763A00;
 }
 
 form div:first-of-type h2 {
   margin-top: 5px;
 }
 
-h2, h3 {
-  color: #915318;
-}
-
 label {
-  color: #417097;
+  color: #174F7D;
 }
 
 input, select {
@@ -568,7 +658,8 @@ input, select {
   accent-color: white;
   color: black;
   border: 1px solid black;
-  padding: 3px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 input:focus, select:focus {
@@ -587,7 +678,7 @@ ul {
 li {
   margin: 20px auto;
   margin-top: 0px;
-  color: #417097;
+  color: #174F7D;
 }
 
 li:last-of-type {
@@ -609,7 +700,7 @@ li:last-of-type {
   background-color: #a1ff8c;;
   padding: 15px;
   border: none;
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
   border-radius: 5px;
   box-sizing: border-box;
   margin: 0px;
@@ -649,9 +740,10 @@ li:last-of-type {
 
 #reminder-frequency-switch-header p {
   display: inline;
-  color: #915318;
+  color: #763A00;
   text-decoration: none;
   transition: 300ms;
+  font-weight: 500;
 }
 
 .reminder-frequency-option label p {
@@ -661,9 +753,17 @@ li:last-of-type {
 
 #reminder-frequency-switch-header p.underlined-reminder-frequency-option, 
 .reminder-frequency-option label p.underlined-reminder-frequency-option {
-  color:#417097;
-  text-decoration: 1px dashed underline #417097;
+  color:#174F7D;
+  text-decoration: 1px dashed underline #174F7D;
   text-underline-offset: 3px;
+}
+
+#reminder-frequency-switch-header p.underlined-reminder-frequency-option {
+  font-weight: 700;
+}
+
+.underlined-reminder-frequency-option {
+  font-weight: 600;
 }
 
 .reminder-frequency-option:first-child {
@@ -677,7 +777,7 @@ li:last-of-type {
 
 .reminder-frequency-option label p {
   margin-left: 10px;
-  color: #417097;
+  color: #174F7D;
 }
 
 .pattern-or-specified-section {
@@ -724,21 +824,33 @@ input[type='checkbox']:not(:checked) {
 }
 
 #month-each-year-checked + label {
-  color: #417097;
+  color: #174F7D;
 }
 
 #day-of-week-each-month-checked + label {
-  color: #417097;
+  color: #174F7D;
 }
 
 #pattern-all-day-checked + label {
-  color: #417097;
+  color: #174F7D;
+}
+
+#select-years-range {
+  display: flex;
+  flex-direction: row;
+}
+
+#select-years-range-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 0px;
 }
 
 #confirm-pattern-button {
-  border: 1px solid #417097;
+  border: 1px solid #174F7D;
   background-color: #a1ff8c;
-  color: #417097;
+  color: #174F7D;
   transition: 50ms;
 }
 
@@ -753,11 +865,11 @@ span {
 }
 
 div {
-  color: #417097;
+  color: #174F7D;
 }
 
 form p {
-  color: #417097;
+  color: #174F7D;
 }
 
 input[type='checkbox']:checked {
@@ -770,7 +882,11 @@ input[type='checkbox']:checked {
 }
 
 input[type='checkbox']:not([id="every-year-checked"]) + label {
-  color: #417097;
+  color: #174F7D;
+}
+
+label[for="every-year-checked"] {
+  color: #174F7D;
 }
 
 section {
@@ -778,7 +894,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid #16b6ce;
+  border: 3px solid #16b6ce;
   border-radius: 5px;
   box-sizing: border-box;
   padding: 20px 20px;
@@ -789,7 +905,7 @@ section {
   /* border: 1px solid #4cc182; */
   border: none;
   background-color: #a1ff8c;
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
 }
 
 .subsection:last-child {
@@ -801,7 +917,7 @@ section {
   background-color: white;
   padding: 20px 20px;
   border-radius: 5px;
-  box-shadow: 0px 1px 2px #417097;
+  box-shadow: 0px 1px 2px #174F7D;
 }
 
 .search-todos-results-date-time-container p {
@@ -857,14 +973,6 @@ select {
   width: 40%;
 }
 
-h3 {
-  text-align: center;
-  margin: 15px 0px;
-  margin-bottom: 25px;
-  text-decoration: 1px dashed underline #417097;
-  text-underline-offset: 4px;
-}
-
 hr {
   width: 100%;
   margin: 25px 0px;
@@ -886,7 +994,6 @@ hr {
 #pattern-reminder {
   width: 75%;
   height: auto;
-  /* border: 2px solid #417097; */
   background-color: white;
   color: black;
   border-radius: 20px;;
@@ -896,8 +1003,7 @@ hr {
   margin: auto;
   margin-bottom: 10px;
   padding: 10px 25px;
-  box-shadow: 0px 1px 2px #417097;
-  /* border: 1px solid white; */
+  box-shadow: 0px 1px 2px #174F7D;
 }
 
 #pattern-reminder h4 {
@@ -905,7 +1011,7 @@ hr {
   margin-bottom: 13px;
   width: 100%;
   text-align: center;
-  color: #417097;
+  color: #174F7D;
 }
 
 .pattern-dates-times-list {
@@ -925,7 +1031,7 @@ hr {
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
-  box-shadow: 0px 0px 5px #417097;
+  box-shadow: 0px 0px 5px #174F7D;
 }
 
 .single-date-times-container div:first-of-type {
@@ -944,7 +1050,7 @@ hr {
 label {
   width: 85%;
   text-align: right;
-  color: #417097;
+  color: #174F7D;
   font-weight:500;
 }
 
@@ -956,19 +1062,1154 @@ span {
   font-size: 10pt;
   text-align: center;
   margin-bottom: 10px;
-  color: #417097;
+  color: #174F7D;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+
+/* PREVENT BUTTONS FROM EXPANDING ON DEVICES WITHOUT HOVER */
+
+@media (hover: none) {
+  button:hover .button-text {
+    width: 0px;
+    margin: 0px;
   }
 }
 
-label[for="every-year-checked"] {
-  color: #417097;
+@media (hover: hover) {
+  #interface button:hover {
+    width: auto;
+  }
+
+  #interface button:hover svg {
+    margin-left: 5px;
+  }
+}
+
+/* PORTRAIT GENERALIZED DIMENSIONS AND POSITIONS FOR DIALOG CONTAINERS AND BUTTONS */
+
+@media (orientation: portrait) {
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 5vw;
+    width: 270px;
+    font-size: .9rem;
+    padding: 15px;
+  }
+
+  form {
+    margin: 0px;
+  }
+
+  .close-panel-button {
+    width: 40px;
+    height: 40px;
+    left: 5px;
+    top: -15px;
+    padding: 7px;
+  }
+
+  .close-panel-button svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .dialog-container {
+    height: 350px;
+    width: fit-content;
+    margin: 0px calc((100% - 70%) / 40);
+    padding: 20px
+  }
+}
+
+/* LANDSCAPE GENERALIZED DIMENSIONS AND POSITIONS FOR DIALOG CONTAINERS AND BUTTONS */
+
+@media (orientation: landscape) {
+  .dialog-container {
+    height: 30vh;
+    padding: 20px;
+    min-width: 400px;
+    width: 20vw;
+    left: calc((100% - 90%) / 2);
+  }
+
+  form {
+    margin: 0px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 370px;
+    width: 370px;
+  }
+
+  #greet-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 35px;
+  }
+
+  .close-panel-button {
+    left: 0px;
+    top: -15px;
+  }
+
+  #app-title-container {
+    top: -5px;
+    left: 0px;
+    margin-left: 25px;
+  }
+
+  #app-title {
+    padding: 15px;
+    padding-bottom: 13px;
+    font-size: 2.25rem;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.25rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  input {
+    width: 50%;
+  }
+
+  #interface button {
+    width: 50px;
+    height: 50px;
+  }
+
+  #interface button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  #reminder-frequency-option-container {
+    flex-direction: column;
+    margin-left: 100px;
+  }
+
+  .reminder-frequency-option label p {
+    text-align: left;
+    margin: 5px;
+  }
+
+  .Toastify__toast {
+    right: 20px;
+    top: 20px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.15rem;
+  }  
+  
+  .top-dialog-container .close-panel-button {
+    left: -5px;
+  }
+}
+
+/* PORTRAIT ADJUSTMENTS */
+
+@media (max-width: 1024px) and (orientation: portrait) {
+  #app-title {
+    font-size: 2.65rem;
+    padding: 15px;
+  }
+
+  .dialog-container {
+    max-width: 480px;
+    height: 20vh;
+    top: 50px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    max-width: 300px;
+    width: 300px;
+  }
+
+  #interface button {
+    width: 65px;
+    height: 65px;
+  }
+
+  #interface button svg {
+    width: 35px;
+    height: 35px;
+  }
+
+  .close-panel-button {
+    width: 50px;
+    height: 50px;
+    left: 15px;
+    top: 35px;
+  }
+
+  .Toastify__toast {
+    width: 350px;
+    right: 30px;
+    font-size: 1.45rem;
+  }
+
+  .Toastify__close-button {
+    padding: 5px;
+  }
+
+  .Toastify__close-button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 912px) and (orientation: portrait) {
+  .dialog-container {
+    min-width: 500px;
+    width: 500px;
+    height: 400px;
+    top: 20px;
+    left: calc((100% - 99.9%) / 2);
+    padding: 20px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 330px;
+    width: 330px;
+    font-size: 1.15rem;
+  }
+
+  .close-panel-button {
+    width: 45px;
+    height: 45px;
+    left: -15px;
+    top: 0px;
+  }
+
+  #interface {
+    height: auto;
+  }
+
+  #interface button {
+    width: 55px;
+    height: 55px;
+    padding: 0px;
+    margin-top: 15px;
+  }
+
+  #interface button svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  h2, h3, h4, h2 p {
+    font-size: 1.5rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1.2rem;
+  }
+
+  input {
+    width: 50%;
+  }
+
+  .Toastify__toast {
+    width: 320px;
+    top: 20px;
+    right: 20px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  #app-title-container {
+    width: 100%;
+    justify-content: flex-start;
+    top: 5px;
+    margin-left: 15px;
+  }
+
+  #app-title {
+    padding: 20px;
+    padding-bottom: 18px;
+    font-size: 1.5rem;
+  }
+
+  #interface {
+    left: 15px;
+    bottom: 15px;
+  }
+
+  #interface button {
+    width: 45px;
+    height: 45px;
+    margin-top: 15px;
+    padding: 10px;
+  }
+  
+  #interface button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.5rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1.3rem;
+  }
+
+  .toast-todo-list {
+    width: 150px;
+    margin-top: 5px;
+  }
+
+  .toast-todo-list li {
+    font-size: 1.1rem;
+  }
+
+  .Toastify__toast {
+    width: 250px;
+    height: 280px;
+    overflow-y: auto;
+    font-size: 1.15rem;
+    top: 20px;
+    right: 20px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 540px) and (orientation: portrait) {
+  #reminder-frequency-option-container {
+    margin: 0px 20%;
+    flex-direction: row;
+  }
+
+  .reminder-frequency-option label p {
+    margin: 5px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 430px) and (orientation: portrait) {
+  #app-title-container {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0px;
+    top: 5px;
+  }
+
+  #app-title {
+    padding: 15px;
+    padding-bottom: 13px;
+    font-size: 1.75rem;
+  }
+
+  .dialog-container {
+    top: -25px;
+    left: calc(-.9% / 2);
+    width: 360px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    width: 270px;
+    font-size: 1rem;
+    top: -5px;
+    padding: 15px;
+  }
+
+  .close-panel-button {
+    width: 50px;
+    height: 50px;
+    top: -45px;
+    left: -15px;
+    padding: 8px;
+  }
+
+  .greet-dialog-container .close-panel-button {
+    top: -20px;
+  }
+
+  form {
+    width: auto;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.5rem;
+  }
+
+  #interface {
+    bottom: 95px;
+    left: 20px;
+  }
+
+  #interface button {
+    width: 45px;
+    height: 45px;
+    padding: 9px;
+    margin-top: 15px;
+  }
+
+  #interface button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    margin: 5px 35px;
+  }
+
+  #music-credits {
+    padding-left: 20px;
+    padding-right: 20px;
+    left: -60px;
+  }
+
+  .Toastify__toast {
+    width: 350px;
+    top: -720px;
+    left: calc((100% - 84.5%) / 2);
+    border-radius: 5px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.6rem;
+  }
+
+  .subsection div {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }  
+  
+  .subsection div input {
+    width: -webkit-fill-available;
+    margin-top: 15px;
+  }
+
+  .subsection div input[type="checkbox"] {
+    display: inline;
+  }
+
+  .subsection div:has(input[type="checkbox"]) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .subsection div input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 25px;
+  }
+
+  .subsection div label {
+    width: 100%;
+    text-align: center;
+  }
+
+  .subsection div:has(input[type="checkbox"]) label {
+    text-align: right;
+    width: 60%;
+    margin-right: 5px;
+  }
+
+  .subsection div:has(input[id="category-create-checked"]) input,
+  .subsection div:has(input[id="subcategory-create-checked"]) input,
+  .subsection div:has(input[id="search-todos-specified-input"]) input,
+  .subsection div:has(input[id="search-todos-pattern-input"]) input,
+  .subsection div:has(input[id="day-of-week-each-month-checked"]) input,
+  .subsection div:has(input[id="every-year-checked"]) input,
+  .subsection div:has(input[id="specified-all-day-checked"]) input {
+    margin-left: 0px;
+  }
+
+  .subsection:has(div[id="select-years-range-container"]) {
+    align-items: center;
+  }
+
+  .subsection:has(div[id="select-years-range-container"]) input {
+    margin-top: 0px;
+    margin: 5px 0px;
+  }
+
+  .subsection:has(div[id="select-years-range-container"]) label {
+    margin-right: 20px;
+  }
+
+  #select-years-range-container {
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .single-todo-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .single-todo-button svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 390px) and (orientation: portrait) {
+  .dialog-container {
+    top: -40px;
+    height: 370px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+  }
+
+  .close-panel-button {
+    top: -55px;
+  }
+
+  #interface {
+    bottom: 90px;
+  }
+
+  .Toastify__toast {
+    left: calc((100% - 89%) / 2);
+  }
+}
+
+@media (max-width: 375px) and (orientation: portrait) {
+  .dialog-container {
+    width: 470px;
+    height: 320px;
+    padding: 20px;
+    top: -60px;
+  }  
+
+  label, p, span, input, li, button {
+    font-size: 1.4rem;
+  }
+
+  .greet-dialog-container {
+    width: 370px;
+    height: fit-content;
+    font-size: 1.1rem;
+    top: -45px;
+  }
+
+  .greet-dialog-container span {
+    font-size: 1.1rem;
+  }
+
+  .greet-dialog-container .close-panel-button {
+    top: -60px;
+  }
+  
+  form {
+    max-width: 470px;
+    width: auto;
+    margin: 0px;
+  }
+
+  #interface button {
+    width: 38px;
+    height: 38px;
+    margin-top: 10px;
+    padding: 7px;
+  }
+
+  #app-title-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #app-title {
+    padding: 10px;
+    padding-bottom: 8px;
+    font-size: 1.5rem;
+    margin-left: 0px;
+  }
+
+  button[type='button']:not(
+     [aria-label="close"] 
+  ):not(
+     [class="remove-time-button"] 
+  ):not(
+     [class="remove-date-button"] ):not( [class="single-todo-button"] 
+  ):not(
+     [class="add-todo-form-remove-item-name"] 
+  ):not(
+    [class="close-panel-button"] 
+  ) {
+    margin-top: 20px;
+  }  
+  
+  .close-panel-button {
+    width: 50px;
+    height: 50px;
+    left: -15px;
+    top: -75px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.75rem;
+  }
+
+  #reminder-frequency-option-container {
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reminder-frequency-option label p {
+    margin: 10px;
+  }
+
+  #music-credits {
+    font-size: .65rem;
+  }  
+  
+  .Toastify__toast {
+    left: calc((100% - 88.25%) / 2);
+    width: 330px;
+    height: 240px;
+    top: -580px;
+  }
+}
+
+@media (max-width: 360px) and (orientation: portrait) {
+  .dialog-container {
+    top: -10px;
+    left: calc(-.4% / 2);
+    width: 400px;
+  }
+
+  .greet-dialog-container {
+    width: 280px;
+    height: fit-content;
+    font-size: 1rem;
+  }
+
+  .close-panel-button {
+    top: -25px;
+  }
+
+  #interface {
+    bottom: 90px;
+  }
+
+  #interface button {
+    padding: 7px;
+  }
+
+  .Toastify__toast {
+    top: -590px;
+    width: 320px;
+    left: calc((100% - 88%) / 2);
+  }
+}
+
+@media (max-width: 344px) and (orientation: portrait) {
+  .dialog-container {
+    min-width: 310px;
+    width: 310px;
+    top: 25px;
+  }
+
+  .greet-dialog-container {
+    top: -15px;
+    height: fit-content;
+    min-width: 220px;
+    width: 220px;
+    padding: 15px;
+  }
+
+  .close-panel-button {
+    top: 10px;
+  }
+
+  .greet-dialog-container .close-panel-button {
+    top: -30px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size:  1.5rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  #interface {
+    bottom: 95px;
+  }
+
+  #interface button {
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+  }
+
+  .Toastify__toast {
+    left: calc((100% - 85.5%) / 2);
+    width: 300px;
+    height: 300px;
+    top: -700px;
+  }
+}
+
+/* LANDSCAPE ADJUSTMENTS */
+
+@media (max-height: 1024px) and (orientation: landscape) {
+  .dialog-container {
+    height: 35vh;
+    width: 540px;
+    padding: 25px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+  }
+
+  form {
+    margin: 0px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.7rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    margin: 0px 50px;
+  }
+
+  .close-panel-button {
+    top: -15px;
+    left: 10px;
+  }
+
+  .Toastify__toast {
+    width: 280px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .toast-todo-list {
+    width: 190px;
+    margin-top: 5px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.3rem;
+  }
+
+  .top-dialog-container {
+    width: 35vw;
+  }
+
+  .top-dialog-container #reminder-frequency-option-container {
+    margin: 0px 85px;
+  }
+
+  .top-dialog-container .close-panel-button {
+    left: 10px;
+  }
+}
+
+@media (max-height: 912px) and (orientation: landscape) {
+  .dialog-container {
+    /* max-width: 40vw; */
+    width: 40vw;
+    height: 40vh;
+    left: calc((100% - 89%) / 2)
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+  }
+
+  #app-title-container {
+    top: 10px;
+  }
+
+  #app-title {
+    font-size: 1.85rem;
+  }
+
+  .close-panel-button {
+    width: 55px;
+    height: 55px;
+    left: 0px;
+    top: -20px;
+  }
+
+  .close-panel-button svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 1.7rem;
+  }
+
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    margin: 0px 20%;
+  }
+
+  .Toastify__toast {
+    width: 270px;
+    height: 300px;
+    top: 15px;
+    right: 15px;
+    overflow-y: auto;
+  }
+
+  .toast-todo-list {
+    width: 110px;
+    padding: 15px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.25rem
+  }
+
+  .Toastify__close-button {
+    padding-right: 5px;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .dialog-container {
+    height: 50vh;
+    width: 600px;
+    padding: 25px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 400px;
+    width: 400px;
+    font-size: 1.15rem;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 2.2rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 1.7rem;
+  }  
+  
+  .Toastify__toast {
+    width: 220px;
+  }
+
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    margin: 0px 20%;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-height: 540px) and (orientation: landscape) {
+  #app-title-container {
+    top: 5px;
+    padding-left: 0px;
+  }
+
+  #app-title {
+    font-size: 1.5rem;
+  }
+
+  .dialog-container {
+    height: 60vh;
+    width: 600px;
+    top: 30px;
+    left: calc((100% - 98%) / 2);
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 400px;
+    width: 400px;
+    font-size: 1.15rem;
+  }
+
+  #interface button {
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+  }
+
+  .close-panel-button {
+    width: 60px;
+    height: 60px;
+    top: 0px;
+    left: -25px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 2.45rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 2.1rem;
+  }  
+
+  .top-dialog-container .close-panel-button {
+    left: -15px;
+  }
+}
+
+@media (max-height: 430px) and (orientation: landscape) {
+  .dialog-container {
+    max-width: 700px;
+    width: 700px;
+    height: 110vh;
+    padding: 30px;
+    left: calc((100% - 98%) / 2);
+    top: -25px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 400px;
+    width: 400px;
+    font-size: 1.15rem;
+  }
+
+  .close-panel-button {
+    width: 80px;
+    height: 80px;
+    top: -50px;
+    left: -25px;
+  }
+
+  .close-panel-button svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .close-panel-button svg {
+    stroke-width: 1.75;
+  }
+
+  #app-title-container {
+    top: 0px;
+    margin-left: 15px;
+  }
+
+  #app-title {
+    font-size: 1.25rem;
+  }
+
+  #interface {
+    left: 15px;
+  }
+
+  #interface button {
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    padding: 8px;
+  }
+
+  #interface button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .toast-todo-list {
+    padding: 15px;
+  }
+
+  .single-todo-button {
+    width: 70px;
+    height: 70px;
+    margin: 10px;
+  }
+
+  .single-todo-button svg {
+    width: 40px;
+    height: 40px;
+    stroke-width: 1.75;
+  }
+
+  .search-todos-results-todos-container, .search-todos-results-date-time-container {
+    border-radius: 10px;
+  }
+
+  .toast-todo-list {
+    margin-top: 0px;
+    margin-bottom: 10px;
+    width: 70%;
+    padding: 10px;
+  }
+}
+
+@media (max-height: 414px) and (orientation: landscape) {
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    padding-left: 0px;
+    padding-bottom: 20px;
+  }
+
+  #music-credits {
+    font-size: .55rem;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: .99rem;
+  }
+}
+
+@media (max-height: 390px) and (orientation: landscape) {
+  #reminder-frequency-option-container {
+    flex-direction: row;
+    margin-left: 140px;
+    margin-right: 140px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 2.5rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 2.1rem;
+  }
+
+  .Toastify__toast {
+    top: 35px;
+  }
+
+  .toast-info-container {
+    padding: 0px;
+    padding-left: 5px;
+  }
+
+  .Toastify__close-button {
+    padding-right: 5px;
+  }
+
+  .Toastify__toast-body {
+    padding-top: 0px;
+  }
+}
+
+@media (max-height: 375px) and (orientation: landscape) {
+  #reminder-frequency-option-container {
+    margin-left: 95px;
+    margin-right: 95px;
+  }
+
+  .dialog-container {
+    max-width: 600px;
+    width: 600px;
+    height: 120vh;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 400px;
+    width: 400px;
+    font-size: 1.15rem;
+  }
+
+  #interface button {
+    width: 35px;
+    height: 35px;
+    padding: 7px;
+  }
+
+  .Toastify__toast {
+    width: 170px;
+    height: 285px;
+  }
+
+  .toast-info-container {
+    padding-left: 0px;
+  }
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: .85rem;
+  }
+} 
+
+@media (max-height: 360px) and (orientation: landscape) {
+  #reminder-frequency-option-container {
+    margin-left: 130px;
+    margin-right: 130px;
+  }
+
+  .dialog-container {
+    max-width: 700px;
+    width: 700px;
+  }
+
+  .greet-dialog-container {
+    height: fit-content;
+    min-width: 400px;
+    width: 400px;
+    font-size: 1.15rem;
+  }
+
+  #app-title-container {
+    margin-left: 15px;
+  }
+
+  .close-panel-button {
+    width: 90px;
+    height: 90px;
+  }
+
+  .close-panel-button svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  h2, h3, h4, h2 p {
+    font-size: 2.6rem;
+  }
+
+  label, p, span, input, li, button {
+    font-size: 2.15rem;
+  }
+
+  .Toastify__toast {
+    height: 250px;
+  }  
+
+  .toast-info-container, .toast-todo-list li {
+    font-size: .8rem;
+  }
 }

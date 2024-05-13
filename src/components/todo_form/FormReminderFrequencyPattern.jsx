@@ -4,16 +4,24 @@ import FormReminderFrequencyPatternDays from "./FormReminderFrequencyPatternDays
 import FormReminderFrequencyPatternMonths from "./FormReminderFrequencyPatternMonths";
 import FormReminderFrequencyPatternYears from "./FormReminderFrequencyPatternYears";
 
-export default function FormReminderFrequencyPattern({currentYear, setDatesTimes, selectedTodo, selectedTodoInfo}) {
+export default function FormReminderFrequencyPattern({isDatePattern, currentYear, setDatesTimes, selectedTodo, selectedTodoInfo}) {
     const [days, setDays] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         []
         :
         [...selectedTodoInfo.reminderFrequency[0].day.days]
     );
     const [dayEquation, setDayEquation] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         {
             first: '',
@@ -26,14 +34,22 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
         }
     )
     const [isEveryDayOfWeekEachMonth, setIsEveryDayOfWeekEachMonth] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         true
         :
         selectedTodoInfo.reminderFrequency[0].day.isEveryDayOfWeekEachMonth
     )
     const [everyNthDayOfWeekEachMonth, setEveryNthDayOfWeekEachMonth] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         ''
         :
@@ -41,14 +57,22 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
     )
 
     const [months, setMonths] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         []
         :
         [...selectedTodoInfo.reminderFrequency[0].month.months]
     );
     const [monthEquation, setMonthEquation] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         {
             first: '',
@@ -61,7 +85,11 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
         }
     )
     const [isEveryMonthOfYear, setIsEveryMonthOfYear] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         true
         :
@@ -69,14 +97,22 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
     )
 
     const [years, setYears] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         []
         :
         [...selectedTodoInfo.reminderFrequency[0].year.years]
     );
     const [yearEquation, setYearEquation] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         {
             first: '',
@@ -89,14 +125,22 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
         }
     );
     const [isEveryYear, setIsEveryYear] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         true
         :
         selectedTodoInfo.reminderFrequency[0].year.isEveryYear
     );
     const [yearRange, setYearRange] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         {
             start: '',
@@ -110,7 +154,11 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
     );
 
     const [times, setTimes] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         []
         :
@@ -121,7 +169,11 @@ export default function FormReminderFrequencyPattern({currentYear, setDatesTimes
         [...selectedTodoInfo.reminderFrequency[0].times]
     );
     const [allDay, setAllDay] = useState(
-        selectedTodo === ''
+        (
+            selectedTodo === '' 
+            || 
+            selectedTodoInfo.reminderFrequency[0].hasOwnProperty('date') === true
+        )
         ?
         true
         :

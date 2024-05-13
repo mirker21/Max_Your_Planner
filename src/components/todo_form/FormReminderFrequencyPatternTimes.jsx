@@ -48,6 +48,12 @@ export default function FormReminderFrequencyPatternTimes({
         setTimes([...newTimes])
     }
 
+    let addTimeButtonDisplay = false;
+
+    if (time !== '' && !times.some(singleTime => singleTime === time)) {
+        addTimeButtonDisplay = true
+    }
+
     return (
         <>
             <h3>Times of Day</h3>
@@ -78,7 +84,7 @@ export default function FormReminderFrequencyPatternTimes({
                 </div>
 
                 {
-                    time !== ''
+                    addTimeButtonDisplay
                     &&
                     <button type="button" onClick={handleAddTime}>Add Time</button>
                 }

@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 import SingleTodo from "./single_todo/SingleSearchTodo";
 import { useFrame } from "@react-three/fiber";
 import { lerp } from "three/src/math/MathUtils";
+import { A11y } from "@react-three/a11y";
+import ClosePanelButton from "./ClosePanelButton";
 
 export default function SearchPanels({
     width,
@@ -109,6 +111,7 @@ export default function SearchPanels({
     const rightPanelRef = useRef(null);
     const leftPanelRef = useRef(null);
 
+    // Huge thanks to Ask-Alice from https://www.reddit.com/r/threejs/comments/lg54ko/fade_animation_when_changing_views_react_three/ for showing a method to change transparency of element.
     useFrame((delta) => {
         if (fullPanelRef.current !== null) {
             fullPanelRef.current.style.opacity = lerp(fullPanelRef.current.style.opacity, currentPanel === "search-todos" ? 1 : 0, 0.1);
@@ -121,27 +124,36 @@ export default function SearchPanels({
     if (isWide === true) {
         return (
             <>
-                <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
-                    <form>
-                        {leftPanel}
-                    </form>
-                </Html>
+                <A11y role="content" description="Search Panel Split Left, contains inputs for filtering to-do s. The two panels merge into one when the width of the window is smaller.">
+                    <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
+                        <form>
+                            {leftPanel}
+                        </form>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                    </Html>
+                </A11y>
 
-                <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
-                    <form>
-                        {rightPanel}
-                    </form>
-                </Html>
+                <A11y role="content" description="Search Panel Split Right, contains all the filtered to-do s. The two panels merge into one when the width of the window is smaller.">
+                    <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
+                        <form>
+                            {rightPanel}
+                        </form>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                    </Html>
+                </A11y>
             </>
         )
     } else {
         return (
-            <Html ref={fullPanelRef} scale={scale} className="dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
-                <form>            
-                    {leftPanel}
-                    {rightPanel}
-                </form>
-            </Html>
+            <A11y role="content" description="Search Panel Full, contains both filtering inputs and results. The Full Panel splits into two when the width of the window is larger.">
+                <Html ref={fullPanelRef} scale={scale} className="dialog-container top-dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
+                    <form>            
+                        {leftPanel}
+                        {rightPanel}
+                    </form>
+                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
+                </Html>
+            </A11y>
         )
     }
 }
@@ -155,7 +167,7 @@ function SearchPanelLeft({
 }) {
     return (
         <>
-            <h3>Search Todos</h3>
+            <h3 aria-hidden="true">Search Todos</h3>
             <section className="subsection">
                 <div>
                     <input type="text" id="search-todos-category-input" onChange={handleChange} value={currentCategorySearchString} />

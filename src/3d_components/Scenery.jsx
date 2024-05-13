@@ -6,6 +6,7 @@ Command: npx gltfjsx@6.2.12 scenery.gltf -k -keepmeshes
 import React from 'react'
 import { useGLTF, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
+import Water from './Water'
 
 export default function Scenery(props) {
   const { nodes } = useGLTF('./models/scenery.gltf')
@@ -24,6 +25,7 @@ export default function Scenery(props) {
         <mesh name="Cylinder_1" castShadow receiveShadow geometry={nodes.Cylinder_1.geometry} material={mountainsMaterial} />
         <mesh name="Cylinder_2" castShadow receiveShadow geometry={nodes.Cylinder_2.geometry} material={mountainsMaterial} />
       </group>
+      <Water />
       <mesh name="Landscape002" castShadow receiveShadow geometry={nodes.Landscape002.geometry} material={mountainsMaterial} userData={{ name: 'Landscape.002' }} />
       <mesh name="Landscape003" castShadow receiveShadow geometry={nodes.Landscape003.geometry} material={mountainsMaterial} userData={{ name: 'Landscape.003' }} />
     </group>

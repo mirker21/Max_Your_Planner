@@ -10,7 +10,7 @@ export default function Notifications({
     setCurrentAnimation
 }) {
 
-    const { notifications, remove } = useNotificationCenter()
+    const { notifications, remove, markAsRead } = useNotificationCenter()
 
     function calculateToastDelay(time) {
         // get today's planned date and time
@@ -34,26 +34,50 @@ export default function Notifications({
         // if 0, do not send the notification
     }
 
-    function createTodaysToasts(todaysTodosFiltered) {
-        if (todaysTodosFiltered.length > 0) {
-            let toastArray = [];
+    // createTodaysToasts is to figure out if some of 
+    // todaysTodosFiltered has not happened yet, and if not, 
+    // its delay can be calculated. Returns an array of  
+    // objects containing info for each toast that 
+    // needs to be created, including its calculated delay. 
 
+    function createTodaysToasts(todaysTodosFiltered) {
+        let toastArray = [];
+
+        if (todaysTodosFiltered.length > 0) {
             todaysTodosFiltered.map(todo => {
-                console.log(todo.category)
                 if (!deactivatedTodaysTodos.includes(todo.id)) {
                     let times = []; 
     
+                    // Each time in times array will have its own toast.
+                    // if the reminderFrequency is specified, then map 
+                    // through it
+                    
+                    let toastDate = '';
+
                     if (todo.reminderFrequency[0].hasOwnProperty('date') === true) {
-                        todo.reminderFrequency.map(dateTime => {
-                            if (dateTime.times === 'All-Day') {
-                                times.push('All-Day')
-                            } else {
-                                times.push(...dateTime.times)
-                            }
-                        })
-                        times = [...todo.reminderFrequency.map(dateTime => {
-                            return [...dateTime.times];
-                        })].flat(Infinity)
+                        // Although we know that this todo
+                        // is part of today's todos, if its 
+                        // reminderFrequency is specified, we  
+                        // still need to find the times that 
+                        // have been set up for its date.
+
+                        toastDate = new Date().toISOString().slice(0, 8) + new Date().getDate();
+                        const todaysDay = new Date().toISOString().slice(0, 8) + new Date().getDate();
+                        const todaysDateIndex = todo.reminderFrequency.findIndex(dateTime => {
+                            console.log(dateTime.date, todaysDay, dateTime.date === todaysDay)
+                            return dateTime.date === todaysDay;
+                        });
+
+                        console.log(todaysDay, todaysDateIndex, todo)
+
+                        if (todo.reminderFrequency[todaysDateIndex].times === 'All-Day') {
+                            times.push('All-Day')
+                        } else {
+                            todo.reminderFrequency[todaysDateIndex].times.map(time => {
+                                times.push(time)
+                            })
+                        }
+
                     } else if (todo.reminderFrequency[0].hasOwnProperty('date') === false) {
                         if (todo.reminderFrequency[0].times === 'All-Day') {
                             times = ['All-Day'];
@@ -65,20 +89,19 @@ export default function Notifications({
                     let checklist = [...todo.checklist.map(item => item.todo)]
     
                     if (times.length > 0) {
-                        let allDayCount = 0;
 
                         // If the user gives a specified time for a toast, 
                         // a number will be given for autoClose.
                         // Otherwise, autoClose will be set to false 
                         // if the time is set to All-Day.
                         
+                        let index = 0;
                         times.map(time => {
-                            console.log(time)
                             if (time === 'All-Day') {
                                 toastArray.push({
                                     content: checklist,
                                     role: "alert",
-                                    toastId: todo.id + ' ' + time + ' ' + allDayCount,
+                                    toastId: todo.id + '' + index,
                                     position: "bottom-right",
                                     autoClose: false,
                                     hideProgressBar: false,
@@ -92,15 +115,16 @@ export default function Notifications({
                                     category: todo.category,
                                     subcategory: todo.subcategory,
                                     time: time,
+                                    date: toastDate,
                                 });
-                                allDayCount++;
+                                index++;
                             } else {
                                 let delay = calculateToastDelay(time)
                                 if (delay > 0) {
                                     toastArray.push({
                                         content: checklist,
                                         role: "alert",
-                                        toastId: todo.id + ' ' + time,
+                                        toastId: todo.id + '' + index,
                                         position: "bottom-right",
                                         autoClose: 10000,
                                         hideProgressBar: false,
@@ -114,15 +138,17 @@ export default function Notifications({
                                         category: todo.category,
                                         subcategory: todo.subcategory,
                                         time: time,
+                                        date: toastDate,
                                     });
                                 }
+                                index++;
                             }
                         })
                     }
                 }
             })
-            return toastArray;
         }
+        return toastArray;
     }
     
     // Typically, useMemo is used for optimization, 
@@ -131,52 +157,94 @@ export default function Notifications({
     // of a hook, the toast is dismissed immediately.
     // The value for toastArr is also needed immediately 
     // after createTodaysToasts, so useEffect will 
-    // not be helpful. Dismiss is needed just in case 
-    // if a notification's activation status has changed.
+    // not be helpful.
 
     const toastArr = useMemo(() => {
-        // I need the delay from createdToasts so 
-        // I can update when the toast is rendered
+        // We need the delay from createdToasts so 
+        // we can update when the toast is rendered
         let createdToasts = createTodaysToasts(todaysTodosFiltered)
+        // this if statement only deals with updating edited todos, 
+        // and removing notifications whose todos have been deleted.
+        console.log(notifications)
+        if (createdToasts.length > 0) {
+            notifications.map(notif => {
+                if (createdToasts.findIndex(toast => notif.id === toast.toastId) !== -1) {
+                    let updatedToastInfo = createdToasts[createdToasts.findIndex(toast => {
+                        return notif.id === toast.toastId
+                    })];
+                    // compare notifcations and createdToasts
+                    let newCategory = updatedToastInfo.category;
+                    let newSubcategory = updatedToastInfo.subcategory; 
+                    let newMsg = updatedToastInfo.content;
+                    let newTime = updatedToastInfo.time;
+                    let newDate = updatedToastInfo.date;
+        
+                    let newToastProps = {
+                        role: updatedToastInfo.role,
+                        position: updatedToastInfo.position,
+                        autoClose: updatedToastInfo.autoClose,
+                        hideProgressBar: updatedToastInfo.hideProgressBar,
+                        closeOnClick: updatedToastInfo.closeOnClick,
+                        pauseOnHover: updatedToastInfo.pauseOnHover,
+                        draggable: updatedToastInfo.draggable,
+                        progress: updatedToastInfo.progress,
+                        theme: updatedToastInfo.theme,
+                        transition: updatedToastInfo.transition,
+                    }
 
-        notifications.map(notif => {
-            if (createdToasts.findIndex(toast => notif.content.props.time === toast.time) !== -1) {
-                let updatedToastInfo = createdToasts[createdToasts.findIndex(toast => notif.content.props.time === toast.time)];
-                // compare notifcations and createdToasts
-                let newToastId = updatedToastInfo.toastId;
-                let newCategory = updatedToastInfo.category;
-                let newSubcategory = updatedToastInfo.subcategory; 
-                let newMsg = updatedToastInfo.content;
-                let newTime = updatedToastInfo.time;
-    
-                let newToastProps = {
-                    role: updatedToastInfo.role,
-                    id: updatedToastInfo.toastId,
-                    position: updatedToastInfo.position,
-                    autoClose: updatedToastInfo.autoClose,
-                    hideProgressBar: updatedToastInfo.hideProgressBar,
-                    closeOnClick: updatedToastInfo.closeOnClick,
-                    pauseOnHover: updatedToastInfo.pauseOnHover,
-                    draggable: updatedToastInfo.draggable,
-                    progress: updatedToastInfo.progress,
-                    theme: updatedToastInfo.theme,
-                    transition: updatedToastInfo.transition,
+                    if (updatedToastInfo.delay === 0) {
+                        toast.update(notif.id, {
+                            render: <SingleToast 
+                                delay={updatedToastInfo.delay} 
+                                date={newDate} 
+                                time={newTime} 
+                                msg={newMsg} 
+                                category={newCategory} 
+                                subcategory={newSubcategory} 
+                                setCurrentAnimation={setCurrentAnimation} 
+                                toastProps={newToastProps} 
+                            />,
+                            autoClose: updatedToastInfo.autoClose,
+                            draggable: 'mouse'
+                        })
+                    } else {
+                        // if the delay is greater than 0, 
+                        // we need to dismiss the inaccurate current 
+                        // toast being displayed and simply wait 
+                        // for it to get rendered out as a 
+                        // SingleToast below in the return statement.
+
+                        // Before, the toast was getting rendered 
+                        // twice when the updatedToastInfo.delay === 0
+                        // if statement did not have the 
+                        // toast.update inside of it and the
+                        // update was dealt with outside of 
+                        // any if statements. 
+
+                        // The toast was displayed 
+                        // once as a blank toast
+                        // because of toast.update,
+                        // and then twice at the 
+                        // proper time when the
+                        // toast was being mapped 
+                        // over in toastArr and returned 
+                        // as a SingleToast.
+                        toast.dismiss(notif.id)
+                    }
+
+                    console.log('after', notifications)
+                    // markAsRead set to false brings 
+                    // back the notification that was updated
+                    
                 }
-    
-                toast.update(notif.id, {
-                    toastId: newToastId,
-                    render: <SingleToast delay={updatedToastInfo.delay} time={newTime} msg={newMsg} category={newCategory} subcategory={newSubcategory} setCurrentAnimation={setCurrentAnimation} toastProps={createdToasts[0]} />
-                })
-            }
-        })
-
+            })
+        }
         // toast.dismiss()
-        return createTodaysToasts(todaysTodosFiltered);
+        return createdToasts;
     }, [todaysTodosFiltered, deactivatedTodaysTodos])       
     
     notifications.map(notif => {
         let notificationIsStillInCreatedToasts = toastArr.some(createdToast => {
-            console.log(createdToast.toastId === notif.id)
             return createdToast.toastId === notif.id
         })
 
@@ -191,36 +259,14 @@ export default function Notifications({
         }
     })
 
-    console.log(notifications)
-
-    // Single Notification
-    // {
-    //     content: checklistStr,
-    //     role: "alert",
-    //     toastId: todo.id + ' ' + time + ' ' + allDayCount,
-    //     position: "bottom-right",
-    //     autoClose: false,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "light",
-    //     transition: Slide,
-    //     category: todo.category,
-    //     subcategory: todo.subcategory,
-    //     time: time,
-    // }
-    
-    console.log(toastArr)
-
     return (
-        <div>
+        <>
             {
                 toastArr?.map(toast => {
                     let delay = toast.delay;
                     let time = toast.time;
                     let msg = toast.content;
+                    let date = toast.date;
 
                     let toastProps = {
                         role: "alert",
@@ -240,6 +286,7 @@ export default function Notifications({
                         <SingleToast 
                             key={toast.toastId}
                             delay={delay}
+                            date={date}
                             time={time}
                             msg={msg}
                             toastProps={toastProps}
@@ -251,6 +298,6 @@ export default function Notifications({
                     )
                 })
             }
-        </div>
+        </>
     )
 }
