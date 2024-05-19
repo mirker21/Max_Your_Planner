@@ -1,7 +1,7 @@
 export default function TodoSpecifiedReminderFrequencyDisplay({convertNumSuffix, reminderFrequency}) {
     return (
-        <section className="subsection search-todos-results-todo-reminder-frequency-section" role="group" aria-label="Today's To-Do Reminder Frequency: Specified">
-            <h4 className="todo-header" aria-hidden="true">Date and Time:</h4>
+        <section className="subsection search-todos-results-todo-reminder-frequency-section">
+            <h4 className="todo-header" aria-label="Today's To-Do Reminder Frequency: Specified">Date and Time:</h4>
 
             {
                 reminderFrequency.map((dateTime, dateIndex) => {
@@ -37,14 +37,21 @@ export default function TodoSpecifiedReminderFrequencyDisplay({convertNumSuffix,
                     }
 
                     return (
-                        <section aria-label={'Times set for ' + displayedDate} className="search-todos-results-date-time-container" key={dateTime + dateIndex}>
+                        <section className="search-todos-results-date-time-container" key={dateTime + dateIndex}>
                             <p aria-hidden="true">Date: {displayedDate}</p>
                             {
                                 dateTime.times !== 'All-Day'
                                 ?
-                                <p aria-label={'Times: ' + (timesDisplay.join(', '))} >Time: {timesDisplay.join(', ')}</p>
+                                <ul aria-label={'Times set for ' + displayedDate + ': '}>
+                                    <p aria-hidden="true">Times: </p>
+                                    {
+                                        timesDisplay.map(time => {
+                                            return <li aria-label={time}>{time}</li>
+                                        })
+                                    }
+                                </ul>
                                 :
-                                <p aria-label={'Times: ' + dateTime.times}>Time: {dateTime.times}</p>
+                                <p aria-label={'Times set for ' + displayedDate + ': ' + dateTime.times}>Time: {dateTime.times}</p>
                             }
                         </section>
                     )

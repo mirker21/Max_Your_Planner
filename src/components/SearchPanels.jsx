@@ -1,6 +1,6 @@
 import { Html } from "@react-three/drei";
 import { useRef, useState } from "react";
-import SingleTodo from "./single_todo/SingleSearchTodo";
+import SingleSearchTodo from "./single_todo/SingleSearchTodo";
 import { useFrame } from "@react-three/fiber";
 import { lerp } from "three/src/math/MathUtils";
 import { A11y } from "@react-three/a11y";
@@ -28,7 +28,7 @@ export default function SearchPanels({
     function handleChange(event) {
         if (event.target.id === 'search-todos-category-input') {
             setCurrentCategorySearchString(event.target.value)
-        } else if (event.target.id === 'search-todos-category-input') {
+        } else if (event.target.id === 'search-todos-subcategory-input') {
             setCurrentSubcategorySearchString(event.target.value)
         } else if (event.target.id === 'search-todos-name-input') {
             setCurrentTodoSearchString(event.target.value)
@@ -126,32 +126,32 @@ export default function SearchPanels({
             <>
                 <A11y role="content" description="Search Panel Split Left, contains inputs for filtering to-do s. The two panels merge into one when the width of the window is smaller.">
                     <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                         <form>
                             {leftPanel}
                         </form>
-                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     </Html>
                 </A11y>
 
                 <A11y role="content" description="Search Panel Split Right, contains all the filtered to-do s. The two panels merge into one when the width of the window is smaller.">
                     <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                         <form>
                             {rightPanel}
                         </form>
-                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     </Html>
                 </A11y>
             </>
         )
     } else {
         return (
-            <A11y role="content" description="Search Panel Full, contains both filtering inputs and results. The Full Panel splits into two when the width of the window is larger.">
+            <A11y role="content" description="Search Panel Full, contains both filtering inputs and results. The Full Panel splits into two when the width of the window is larger, the left one containing inputs for filtering to-do s, and the right one containing all the filtered to-do s">
                 <Html ref={fullPanelRef} scale={scale} className="dialog-container top-dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
+                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     <form>            
                         {leftPanel}
                         {rightPanel}
                     </form>
-                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                 </Html>
             </A11y>
         )
@@ -170,36 +170,36 @@ function SearchPanelLeft({
             <h3 aria-hidden="true">Search Todos</h3>
             <section className="subsection">
                 <div>
-                    <input type="text" id="search-todos-category-input" onChange={handleChange} value={currentCategorySearchString} />
-                    <label htmlFor="search-todos-category-input">Search by Category</label>
+                    <input aria-label="Search To-Do s by Category" type="text" id="search-todos-category-input" onChange={handleChange} value={currentCategorySearchString} />
+                    <label aria-hidden="true" htmlFor="search-todos-category-input">Search by Category</label>
                 </div>
             </section>
 
             <section className="subsection">
                 <div>
-                    <input type="text" id="search-todos-subcategory-input" onChange={handleChange} value={currentSubcategorySearchString} />
-                    <label htmlFor="search-todos-subcategory-input">Search by Subcategory</label>
+                    <input aria-label="Search To-Do s by Sub Category" type="text" id="search-todos-subcategory-input" onChange={handleChange} value={currentSubcategorySearchString} />
+                    <label aria-hidden="true" htmlFor="search-todos-subcategory-input">Search by Subcategory</label>
                 </div>
             </section>
 
             <section className="subsection">
                 <div>
-                    <input type="text" id="search-todos-name-input" onChange={handleChange} value={currentTodoSearchString} />
-                    <label htmlFor="search-todos-name-input">Search by Todo Item Name</label>
+                    <input aria-label="Search To-Do s by Item Name" type="text" id="search-todos-name-input" onChange={handleChange} value={currentTodoSearchString} />
+                    <label aria-hidden="true" htmlFor="search-todos-name-input">Search by Todo Item Name</label>
                 </div>
             </section>
 
             <section className="subsection">
                 <div>
-                    <input type="checkbox" id="search-todos-specified-input" onChange={handleChange} checked={searchDatesTimes === 'specified'} />
-                    <label htmlFor="search-todos-specified-input">Specified Only</label>
+                    <input aria-label="Search To-Do s that have Specified Reminder Frequencies" type="checkbox" id="search-todos-specified-input" onChange={handleChange} checked={searchDatesTimes === 'specified'} />
+                    <label aria-hidden="true" htmlFor="search-todos-specified-input">Specified Only</label>
                 </div>
             </section>
 
             <section className="subsection">
                 <div>
-                    <input type="checkbox" id="search-todos-pattern-input" onChange={handleChange} checked={searchDatesTimes === 'pattern'} />
-                    <label htmlFor="search-todos-pattern-input">Patterns Only</label>
+                    <input aria-label="Search To-Do s that have Pattern Reminder Frequencies" type="checkbox" id="search-todos-pattern-input" onChange={handleChange} checked={searchDatesTimes === 'pattern'} />
+                    <label aria-hidden="true" htmlFor="search-todos-pattern-input">Patterns Only</label>
                 </div>
             </section>
         </>
@@ -224,13 +224,14 @@ function SearchPanelRight({
                 ?
                 <section className="search-todos-results-container">
                     <h3>Results</h3>
-                    <ul className="search-todos-results-todo-list">        
+                    <ul aria-label="Filtered To-Do s Results" className="search-todos-results-todo-list">        
                         {
-                            filteredTodos?.map(todo => {
+                            filteredTodos?.map((todo, index) => {
                                 return (
-                                    <SingleTodo
+                                    <SingleSearchTodo
                                         key={todo.id}
                                         todo={todo}
+                                        index={index}
                                         handleDeleteTodo={handleDeleteTodo}
                                         todos={todos}
                                         setTodos={setTodos}
@@ -245,7 +246,7 @@ function SearchPanelRight({
                 </section>
                 :
                 <section>
-                    <h3>No Results</h3>
+                    <h3 aria-label="No Results were found">No Results</h3>
                 </section>
             }
         </>

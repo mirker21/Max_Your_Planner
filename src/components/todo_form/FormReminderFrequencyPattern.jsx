@@ -370,7 +370,7 @@ export default function FormReminderFrequencyPattern({isDatePattern, currentYear
     }
 
     return (
-        <section>
+        <section aria-label="Inside are the Edit Reminder Frequency Pattern Settings, You can customize the times, days, months, years, at which your notification happens.">
             <FormReminderFrequencyPatternTimes 
                 times={times}
                 setTimes={setTimes}
@@ -411,23 +411,41 @@ export default function FormReminderFrequencyPattern({isDatePattern, currentYear
                 currentYear={currentYear}
             />
 
-            <hr />
+            <hr aria-hidden="true" />
 
             <div id="pattern-reminder">
-                <h4>Pattern: {patternDisplay.default === true ? 'Default' : 'Custom'}</h4>
-                <ul>
-                    <li>Times: {patternDisplay.times}</li>
-                    <li>Days: {patternDisplay.days}</li>
-                    <li>Months: {patternDisplay.months}</li>
-                    <li>Years: {patternDisplay.years}</li>
+                <h4 aria-label={'Pattern: ' + (patternDisplay.default === true ? 'Default, no changes made' : 'Custom')}>Pattern: {patternDisplay.default === true ? 'Default' : 'Custom'}</h4>
+                <ul aria-label="Reminder Frequency Pattern Info">
+                    <li aria-label={'Times set to ' + patternDisplay.times}>Times: {patternDisplay.times}</li>
+                    <li aria-label={'Days set to ' + patternDisplay.days}>Days: {patternDisplay.days}</li>
+                    <li aria-label={'Months set to ' + patternDisplay.months}>Months: {patternDisplay.months}</li>
+                    <li aria-label={'Years set to ' + patternDisplay.years}>Years: {patternDisplay.years}</li>
                 </ul>
             </div>
 
-            {
-                timesFilled && daysFilled && monthsFilled && yearsFilled
-                &&
-                <button type="button" id="confirm-pattern-button" onClick={handleConfirmPattern}>Confirm Pattern Updates</button>
-            }
+            <button 
+                aria-disabled={timesFilled === false || daysFilled === false || monthsFilled === false || yearsFilled === false}
+                disabled={timesFilled === false || daysFilled === false || monthsFilled === false || yearsFilled === false}
+                aria-label={
+                    (
+                        timesFilled === false
+                        || daysFilled === false
+                        || monthsFilled === false
+                        || yearsFilled === false ? 'Cannot confirm pattern. ' : ''
+                    )
+                    +
+                    timesFilled === false ? 'Times not filled out properly ' : ''
+                    +
+                    daysFilled === false ? 'Days of week not filled out properly ' : ''
+                    +
+                    monthsFilled === false ? 'Months not filled out properly ' : ''
+                    +
+                    yearsFilled === false ? 'Years not filled out properly' : 'Confirm Pattern'
+                }
+                type="button" id="confirm-pattern-button" onClick={handleConfirmPattern}
+            >
+                Confirm Pattern Updates
+            </button>
         </section>
     )
 }

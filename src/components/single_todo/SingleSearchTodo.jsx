@@ -3,8 +3,9 @@ import TodoSpecifiedReminderFrequencyDisplay from "./TodoSpecifiedReminderFreque
 import TodoPatternReminderFrequencyDisplay from "./TodoPatternReminderFrequencyDisplay";
 import SearchTodoEditDeleteTodoButton from "./SearchTodoEditDeleteTodoButton";
 
-export default function SingleTodo({
+export default function SingleSearchTodo({
     todo,
+    index,
     handleDeleteTodo,
     todos,
     setTodos,
@@ -54,9 +55,10 @@ export default function SingleTodo({
     }
 
     return (
-        <li className="search-todos-single-todo-container" id={todo.todo + todo.id}>
+        <li aria-label={"Filtered To-Do Number " + (parseInt(index) + 1)} className="search-todos-single-todo-container" id={todo.todo + todo.id}>
             <SearchTodoEditDeleteTodoButton
                 todoId={todo.id}
+                index={index}
                 setSelectedTodo={setSelectedTodo}
                 setCurrentPanel={setCurrentPanel}
                 handleDeleteTodo={handleDeleteTodo}
@@ -66,16 +68,16 @@ export default function SingleTodo({
             />
 
             <section className="subsection search-todos-results-todo-category-subcategory-section">
-                <p>Category: {todo.category}</p>
-                <p>Subcategory: {todo.subcategory}</p>
+                <p aria-label={"Category: " + todo.category}>Category: {todo.category}</p>
+                <p aria-label={"Sub Category: " + todo.subcategory}>Subcategory: {todo.subcategory}</p>
             </section>
             
             <section className="subsection search-todos-results-todos-section">
-                <h4 className="todo-header">Todos:</h4>
-                <ul className="search-todos-results-todos-container">
+                <h4 className="todo-header" aria-hidden="true">Todos:</h4>
+                <ul className="search-todos-results-todos-container" aria-label="Filtered To-Do List">
                     {
                         todo.checklist.map((item, index) => {
-                            return <li key={todo.id + index}>- {item.todo}</li>
+                            return <li aria-label={'List Item Number ' + (parseInt(index) + 1) + ': ' + item.todo} key={todo.id + index}>- {item.todo}</li>
                         })
                     }
                 </ul>

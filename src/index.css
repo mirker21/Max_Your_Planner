@@ -162,7 +162,7 @@ a:hover {
 }
 
 input[type='number'] {
-  width: 100px;
+  width: 80px;
 }
 
 button[type='submit'] {
@@ -791,15 +791,30 @@ li:last-of-type {
 }
 
 .pattern-times-list {
-  width: 230px;
+  width: 95%;
   border: 1px solid #16b6ce;
   padding: 15px;
   max-height: 200px;
   overflow: auto;
+  margin: 5px;
+  margin-bottom: 0px;
 }
 
-.pattern-times-list li button {
+.pattern-times-list li input {
+  width: 55%;
+}
+
+.remove-date-button, .pattern-times-list li button {
   margin: 0px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  padding-bottom: 8px;
+}
+
+.remove-date-button {
+  font-size: 1.5rem;
+  line-height: 5px;
 }
 
 .remove-time-button {
@@ -989,6 +1004,13 @@ hr {
 #year-equation-label {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+#year-equation-label i, #year-equation-label span {
+  white-space: nowrap;
+  width: auto;
+  margin: 5px 10px;
 }
 
 #pattern-reminder {
@@ -1056,6 +1078,8 @@ label {
 
 li {
   list-style-type: none;
+  display: flex;
+  align-items: center;
 }
 
 span {
@@ -1065,7 +1089,15 @@ span {
   color: #174F7D;
 }
 
-
+.add-todo-form-remove-item-name,
+.remove-time-button {
+  padding: 10px;
+  padding-bottom: 12px;
+  width: 40px;
+  height: 40px;
+  line-height: 1px;
+  font-size: 1.5rem;
+}
 
 /* PREVENT BUTTONS FROM EXPANDING ON DEVICES WITHOUT HOVER */
 
@@ -1089,6 +1121,13 @@ span {
 /* PORTRAIT GENERALIZED DIMENSIONS AND POSITIONS FOR DIALOG CONTAINERS AND BUTTONS */
 
 @media (orientation: portrait) {
+  .dialog-container {
+    height: 350px;
+    width: 300px;
+    margin: 0px calc((100% - 70%) / 40);
+    padding: 20px
+  }  
+  
   .greet-dialog-container {
     height: fit-content;
     min-width: 5vw;
@@ -1096,14 +1135,14 @@ span {
     font-size: .9rem;
     padding: 15px;
   }
-
+  
   form {
     margin: 0px;
   }
 
   .close-panel-button {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     left: 5px;
     top: -15px;
     padding: 7px;
@@ -1114,11 +1153,24 @@ span {
     height: 30px;
   }
 
-  .dialog-container {
-    height: 350px;
-    width: fit-content;
-    margin: 0px calc((100% - 70%) / 40);
-    padding: 20px
+  input {
+    width: 80px;
+  }
+
+  #select-years-range {
+    align-items: center;
+  }
+
+  #select-years-range span {
+    margin: 0px 5px;
+  }
+
+  #select-years-range input {
+    width: 40px;
+  }
+
+  #reminder-frequency-option-container {
+    margin-left: 15px;
   }
 }
 
@@ -1150,8 +1202,11 @@ span {
   }
 
   .close-panel-button {
+    width: 35px;
+    height: 35px;
     left: 0px;
     top: -15px;
+    padding: 5px;
   }
 
   #app-title-container {
@@ -1209,7 +1264,8 @@ span {
   }  
   
   .top-dialog-container .close-panel-button {
-    left: -5px;
+    left: 10px;
+    top: -10px;
   }
 }
 

@@ -109,9 +109,40 @@ export default function FormPanels({
     }
 
     let addTodoButtonDisplay = false;
+    let ariaAddTodoButtonMessage = '';
 
-    if (datesTimes.length > 0 && category !== '' && subcategory !== '' && checklist.length > 0) {
+    if (
+        datesTimes.length > 0 && category !== '' 
+        && subcategory !== '' 
+        && checklist.length > 0 
+        && (
+            (isDatePattern === false && datesTimes.length === 0) 
+            || 
+            (isDatePattern === true)
+        )) {
         addTodoButtonDisplay = true;
+    } 
+    
+    if (category === '') {
+        ariaAddTodoButtonMessage += ' Category Incomplete.';
+    }
+
+    if (subcategory === '') {
+        ariaAddTodoButtonMessage += ' Sub Category Incomplete.';
+    }
+
+    if (checklist.length === 0) {
+        ariaAddTodoButtonMessage += ' Todo items empty.';
+    } 
+
+    if (isDatePattern === false && datesTimes.length === 0) {
+        ariaAddTodoButtonMessage += ' Specified Reminder Frequency Date and Times empty.';
+    } else if (isDatePattern === true && datesTimes.length === 0) {
+        ariaAddTodoButtonMessage += 'Please Confirm Reminder Frequency Pattern and any changes made to it using the Confirm Pattern button.';
+    } 
+
+    if (ariaAddTodoButtonMessage === '') {
+        ariaAddTodoButtonMessage = 'Add Entry To Collection'
     }
 
     let selectedTodoInfo = '';
@@ -143,6 +174,7 @@ export default function FormPanels({
             selectedTodo={selectedTodo}
             selectedTodoInfo={selectedTodoInfo}
             addTodoButtonDisplay={addTodoButtonDisplay}
+            ariaAddTodoButtonMessage={ariaAddTodoButtonMessage}
         />
     )
 
@@ -163,33 +195,33 @@ export default function FormPanels({
     if (isWide === true) {
         return (
             <>
-                <A11y role="content" description="Add/Edit Todo Panel Left, contains inputs for category, subcategory, and to-do list items. The two panels merge into one when the width of the window is smaller.">
+                <A11y role="content" description="Add/Edit To-Do Panel Left, contains inputs for category, subcategory, and to-do list items. The two panels merge into one when the width of the window is smaller.">
                     <Html ref={leftPanelRef} scale={scale} className="dialog-container" position={leftPosition} transform sprite>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                         <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
                             {leftPanel}
                         </form>
-                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     </Html>
                 </A11y>
-                <A11y role="content" description="Add/Edit Todo Panel Right, contains all the inputs for specified and pattern reminder frequency. The two panels merge into one when the width of the window is smaller.">
+                <A11y role="content" description="Add/Edit To-Do Panel Right, contains all the inputs for specified and pattern reminder frequency. The two panels merge into one when the width of the window is smaller.">
                     <Html ref={rightPanelRef} scale={scale} className="dialog-container" position={rightPosition} transform sprite>
+                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                         <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>
                             {rightPanel}
                         </form>
-                        <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     </Html>
                 </A11y>
             </>
         )
     } else {
         return (
-            <A11y role="content" description="Add/Edit Todo Panel Full, contains all inputs to add or edit a todo. The Full Panel splits into two when the width of the window is larger.">
+            <A11y role="content" description="Add/Edit To-Do Panel Full, contains all inputs to add or edit a todo. The Full Panel splits into two when the width of the window is larger, with the left one containing inputs for category, subcategory, and to-do list items, and the right one containing all the inputs for specified and pattern reminder frequency">
                 <Html ref={fullPanelRef} scale={scale} className="dialog-container top-dialog-container" position={width < 1800 ? topPosition : rightPosition} transform sprite>
+                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                     <form onSubmit={currentPanel === 'add-new-todo' ? handleSubmitTodoEntry : handleConfirmEditEntry}>            
                         {leftPanel}
                         {rightPanel}
                     </form>
-                    <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                 </Html>
             </A11y>
         )
@@ -244,6 +276,7 @@ function FormPanelRight({
     datesTimes,
     selectedTodoInfo,
     addTodoButtonDisplay,
+    ariaAddTodoButtonMessage,
     selectedTodo,
 }) {
     // useEffect in formreminderFrequencySwitch?
@@ -280,11 +313,14 @@ function FormPanelRight({
                 }
             </div>
             
-            {
-                addTodoButtonDisplay === true
-                &&
-                <button type="submit">Add Entry To Collection</button>
-            }
+            <button 
+                aria-label={ariaAddTodoButtonMessage}
+                aria-disabled={addTodoButtonDisplay === false}
+                disabled={addTodoButtonDisplay === false}
+                type="submit"
+            >
+                Add Entry To Collection
+            </button>
         </>   
     )
 }

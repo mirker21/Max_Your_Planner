@@ -5,7 +5,7 @@ export default function FormReminderFrequencySwitch({
 }) {
     return (
         <>
-            <h2 id="reminder-frequency-switch-header">Reminder Frequency 
+            <h2 aria-label={'Reminder Frequency Currently Set To: ' + (isDatePattern ? 'Pattern' : 'Specified')} id="reminder-frequency-switch-header">Reminder Frequency 
             (
             <p className={isDatePattern === false ? "underlined-reminder-frequency-option" : ""}>
                 Specified
@@ -19,21 +19,24 @@ export default function FormReminderFrequencySwitch({
 
             <div id="reminder-frequency-option-container">
                 <div className="reminder-frequency-option">
-                    <input 
-                        type="checkbox" id="specific-date-checked" 
+                    <input
+                        aria-label="Set Reminder Frequency to Specified"
+                        type="checkbox" 
+                        id="specific-date-checked" 
                         onChange={() => (
                             setDatesTimes([]), 
                             setIsDatePattern(!isDatePattern)
                         )} 
                         checked={isDatePattern === false} 
                     />
-                    <label htmlFor="specific-date-checked">
+                    <label aria-hidden="true" htmlFor="specific-date-checked">
                         <p className={isDatePattern === false ? "underlined-reminder-frequency-option" : ""}>Specified</p>
                     </label>
                 </div>
                 
                 <div className="reminder-frequency-option">
                     <input 
+                        aria-label="Set Reminder Frequency to Pattern"
                         type="checkbox" 
                         id="date-pattern-checked" 
                         onChange={() => (
@@ -42,7 +45,7 @@ export default function FormReminderFrequencySwitch({
                         )} 
                         checked={isDatePattern === true} 
                     />
-                    <label htmlFor="date-pattern-checked">
+                    <label aria-hidden="true" htmlFor="date-pattern-checked">
                         <p className={isDatePattern === true ? "underlined-reminder-frequency-option" : ""}>Pattern</p>
                     </label>
                 </div>

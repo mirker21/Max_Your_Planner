@@ -48,46 +48,52 @@ export default function FormReminderFrequencyPatternTimes({
         setTimes([...newTimes])
     }
 
-    let addTimeButtonDisplay = false;
-
-    if (time !== '' && !times.some(singleTime => singleTime === time)) {
-        addTimeButtonDisplay = true
-    }
-
     return (
         <>
-            <h3>Times of Day</h3>
+            <h3 aria-label="Pattern Reminder Frequency: Time Section. You can either add specific times, or have the notification set to All-Day">Times of Day</h3>
 
-            <span>* If nothing is selected in the time section, the default will be all-day. *</span>
+            <span aria-label="Note: If nothing is selected in the time section, the default will be all-day.">* If nothing is selected in the time section, the default will be all-day. *</span>
 
             <section className="subsection">
                 <div>
                     <input 
+                        aria-label="Set time for Pattern Reminder Frequency to All-Day"
                         type="checkbox" 
                         id="pattern-all-day-checked" 
                         onChange={handleChangeTime} 
                         checked={allDay} 
                     />
-                    <label htmlFor="pattern-all-day-checked">All-Day</label>
+                    <label aria-hidden="true" htmlFor="pattern-all-day-checked">All-Day</label>
                 </div>
             </section>
 
             <section className="subsection">
                 <div>
                     <input 
+                        aria-label="Add specific times to this Pattern Reminder Frequency"
                         type="time" 
                         id="pattern-specific-time-input" 
                         onChange={handleChangeTime} 
                         value={time} 
                     />
-                    <label htmlFor="pattern-specific-time-input">Choose Specific Time</label>
+                    <label aria-hidden="true" htmlFor="pattern-specific-time-input">Choose Specific Time</label>
                 </div>
 
-                {
-                    addTimeButtonDisplay
-                    &&
-                    <button type="button" onClick={handleAddTime}>Add Time</button>
-                }
+                <button 
+                    disabled={time === '' && times.some(singleTime => singleTime === time)}
+                    aria-disabled={time === '' && times.some(singleTime => singleTime === time)}
+                    aria-label={
+                        (time !== '' && !times.some(singleTime => singleTime === time)) 
+                        ? 'Add Time' 
+                        : time === '' 
+                        ? 'Cannot add time, time is empty' 
+                        : time + ' was already added'
+                    } 
+                    type="button" 
+                    onClick={handleAddTime}
+                >
+                    Add Time
+                </button>
             </section>
 
             {
@@ -96,11 +102,11 @@ export default function FormReminderFrequencyPatternTimes({
                 &&
 
                 <div className="result">
-                    <hr />
+                    <hr  aria-hidden="true" />
 
-                    <h3>Set Times Each Day</h3>
+                    <h3 aria-hidden="true">Set Times Each Day</h3>
 
-                    <ul className="pattern-times-list">
+                    <ul className="pattern-times-list" aria-label="Scheduled Times for this Notification: ">
                         {
                             times.map((time, index) => {
                                 let meridian = 'AM';
@@ -121,8 +127,8 @@ export default function FormReminderFrequencyPatternTimes({
 
                                 return (    
                                     <li className="list-item" key={time + index} id={time + index}>
-                                        <button type="button" onClick={removeTime}>×</button>
-                                        <p>{displayedTime}</p>
+                                        <button aria-label={'Remove ' + time} type="button" className="remove-time-button" onClick={removeTime}>×</button>
+                                        <p aria-hidden="true">{displayedTime}</p>
                                     </li>
                                 )
                             })

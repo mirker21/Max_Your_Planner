@@ -104,13 +104,13 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
     }
 
     return (
-        <section>
-            <h3>Date And Time</h3>
+        <section aria-label="Inside are the Edit Reminder Frequency Specified Settings. You can add specific dates for your notification, and under those dates add multiple specific times or set the time to All-Day.">
+            <h3 aria-hidden="true">Date And Time</h3>
 
             <section className="subsection">
                 <div id="specific-date-time-container">
-                    <input type='date' id="specified-date-input" onChange={handleChange} value={date} />
-                    <label htmlFor="specified-date-input">Choose Specific Date</label>
+                    <input aria-label={datesTimes?.some(dateTime => dateTime.date === date) ? 'Please choose another date, ' + date + ' has already been added' : date ==='' ? 'Date is empty, please enter date to add times.' : date + ' available for use'} type='date' id="specified-date-input" onChange={handleChange} value={date} />
+                    <label aria-hidden="true" htmlFor="specified-date-input">Choose Specific Date</label>
                 </div>
             </section>
 
@@ -120,21 +120,27 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                 <>
                     <section className="subsection">
                         <div>
-                            <input type="time" id="specified-time-input" onChange={handleChange} value={time} />
-                            <label htmlFor="specified-time-input">Choose Specific Time</label>
+                            <input aria-label={'Add specific times for ' + date} type="time" id="specified-time-input" onChange={handleChange} value={time} />
+                            <label aria-hidden="true" htmlFor="specified-time-input">Choose Specific Time</label>
                         </div>
 
-                        {
-                            time !== '' && (times.length === 0 || !times?.some(oneTime => oneTime === time))
-                            &&
-                            <button type="button" onClick={handleAddTime}>Add Time</button>
-                        }
+                        <button 
+                            aria-disabled={time === '' || (times.length !== 0 && times?.some(oneTime => oneTime === time))}
+                            disabled={time === '' || (times.length !== 0 && times?.some(oneTime => oneTime === time))}
+                            aria-label={
+                                (time !== '' && (times.length !== 0 && !times?.some(oneTime => oneTime === time))) ? 'Add Time' : time === '' ? 'Time Empty' : time + ' has already been added'
+                            }
+                            type="button" 
+                            onClick={handleAddTime}
+                        >
+                            Add Time
+                        </button>
                     </section>
                     
                     <section className="subsection">
                         <div>
-                            <input type="checkbox" id="specified-all-day-checked" onChange={handleChange} checked={allDay} />
-                            <label htmlFor="specified-all-day-checked">All-Day</label>
+                            <input aria-label={'Set time for ' + date + ' to All-Day'} type="checkbox" id="specified-all-day-checked" onChange={handleChange} checked={allDay} />
+                            <label aria-hidden="true" htmlFor="specified-all-day-checked">All-Day</label>
                         </div>
                     </section>
 
@@ -147,17 +153,27 @@ export default function FormReminderFrequencySpecified({datesTimes, setDatesTime
                     {
                         allDay === true
                         &&
-                        <div className="result">
-                            <hr />
-                            <h3>{date} - (All-Day)</h3>
+                        <div className="result current-datetime">
+                            <hr aria-hidden="true" />
+                            <h3 aria-label={date + ' All-Day'}>{date} - (All-Day)</h3>
                         </div>
                     }
 
-                    {
-                        ((times.length > 0 && date !== '') || (date !== '' && allDay === true))
-                        &&
-                        <button type="button" onClick={handleAddDateTimes}>Add Date and Time</button>
-                    }
+                    <button 
+                        aria-disabled={!((times.length > 0 && date !== '') || (date !== '' && allDay === true))}
+                        disabled={!((times.length > 0 && date !== '') || (date !== '' && allDay === true))}
+                        aria-label={
+                            (
+                                ((times.length > 0 && date !== '') || (date !== '' && allDay === true)) 
+                                ? 'Add Date and Time' 
+                                : ((times.length === 0 || allDay === false) ? 'Time for ' + date + ' incomplete' : '')
+                            )
+                        }
+                        type="button" 
+                        onClick={handleAddDateTimes}
+                    >
+                        Add Date and Times
+                    </button>
                     
                 </>
             }

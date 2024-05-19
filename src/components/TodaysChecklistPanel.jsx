@@ -45,7 +45,7 @@ export default function TodaysChecklistPanel({
     })
 
     return (
-        <A11y role="content" description="Today's Checklist Panel">
+        <A11y role="content" description="Today's Checklist Panel, this panel does not split into two if the window's width increases">
             <Html ref={fullPanelRef} scale={isViewNarrow ? [.009, .009, .009] : [.004, .004, .004]} className="dialog-container" position={isWide === true ? rightPosition : topPosition} transform sprite>
                 <form>
                     <h3>Today's Checklist</h3>

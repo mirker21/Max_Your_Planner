@@ -27,8 +27,8 @@ export default function TodoPatternReminderFrequencyDisplay({convertNumSuffix, r
     }
 
     return (
-        <section className="subsection" role="group" aria-label="Today's To-Do Reminder Frequency: Pattern">
-            <h4 className="todo-header" aria-hidden="true">Date and Time Pattern:</h4>
+        <section className="subsection">
+            <h4 className="todo-header" aria-label="Today's To-Do Reminder Frequency: Pattern">Date and Time Pattern:</h4>
             
             <section className="search-todos-results-date-time-container">
 
@@ -123,7 +123,7 @@ export default function TodoPatternReminderFrequencyDisplay({convertNumSuffix, r
                     reminderFrequency[0].month.isEveryMonthOfYear == true
                     ?
                     <p
-                        aria-label={'Month Pattern set to ' + (reminderFrequency[0].month.months.join(', ').length > 0 ? reminderFrequency[0].month.months.join(', ') : 'Month Of Year')}
+                        aria-label={'Month Pattern set to every ' + (reminderFrequency[0].month.months.join(', ').length > 0 ? reminderFrequency[0].month.months.join(', ') : 'Month Of Year')}
                     >Every {reminderFrequency[0].month.months.join(', ').length > 0 ? reminderFrequency[0].month.months.join(', ') : 'Month Of Year'}</p>
                     :
                     <></>

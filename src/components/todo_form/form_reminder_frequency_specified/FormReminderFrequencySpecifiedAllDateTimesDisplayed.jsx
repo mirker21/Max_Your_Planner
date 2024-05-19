@@ -25,15 +25,18 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                     >
                                         <div className="result-date-container">
                                             <button 
+                                                aria-label={'Remove ' + dateTime.date}
                                                 type="button" 
                                                 className="remove-date-button" 
                                                 id={dateTime.id + dateTime.date} 
                                                 onClick={removeDateTime}
-                                            >
+                                            > 
                                                 ×
                                             </button>
 
                                             <input 
+                                                aria-required="true"
+                                                aria-label={'Edit date input ' + 'for ' + dateTime.date}
                                                 type="date" 
                                                 className="date-input" 
                                                 id={dateTime.id + dateTime.date + index} 
@@ -42,7 +45,7 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                             />
                                         </div>
                                     
-                                        <ul className="pattern-times-list">
+                                        <ul className="pattern-times-list" aria-label={'Times for ' + dateTime.date}>
                                             {
                                                 dateTime.times === 'All-Day'
                                                 ?
@@ -52,6 +55,7 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                                     id={dateTime.id + timeId}
                                                 >
                                                     <button 
+                                                        aria-label={'Remove ' + dateTime.times + ' from ' + dateTime.date}
                                                         type="button" 
                                                         className="remove-time-button" 
                                                         id={dateTime.id + timeId} 
@@ -60,7 +64,7 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                                         ×
                                                     </button>
 
-                                                    <p>{dateTime.times}</p>
+                                                    <p aria-hidden="true">{dateTime.times}</p>
                                                 </li>
                                                 :
                                                 dateTime.times?.map((time, timeIndex) => {
@@ -73,6 +77,7 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                                             id={dateTime.id + timeId}
                                                         >
                                                             <button 
+                                                                aria-label={'Remove ' + time + ' from ' + dateTime.date}
                                                                 type="button" 
                                                                 className="remove-time-button" 
                                                                 id={dateTime.id + timeId} 
@@ -82,6 +87,8 @@ export default function FormReminderFrequencySpecifiedAllDateTimesDisplayed({dat
                                                             </button>
 
                                                             <input 
+                                                                aria-required="true"
+                                                                aria-label={'Edit time input ' + time + ' for date ' + dateTime.date}
                                                                 className="time-input" 
                                                                 type="time" 
                                                                 id={dateTime.id + timeIndex} 

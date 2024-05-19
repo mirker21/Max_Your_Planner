@@ -14,20 +14,27 @@ export default function FormReminderFrequencyPatternYears({
     const [year, setYear] = useState('');
 
     function handleChangeYear(event) {
-        setIsEveryYear(true)
-        setYear(event.target.value);
-        setYearEquation(
-            {
-                first: '',
-                second: ''
-            }
-        )
-        setYearRange(
-            {
-                start: '',
-                end: ''
-            }
-        );
+        if (event.target.value === '' && year === '') {
+            setIsEveryYear(true)
+        } else if (event.target.value.match(/\D/) === null) {
+            setIsEveryYear(false)        
+            setYearEquation(
+                {
+                    first: '',
+                    second: ''
+                }
+            )
+            setYearRange(
+                {
+                    start: '',
+                    end: ''
+                }
+            );
+        }
+
+        if ((event.target.value.match(/\D/) === null && event.target.value !== ' ') || event.target.value === '') {
+            setYear(event.target.value);
+        }
     }
 
     function handleAddYear() {
@@ -51,21 +58,29 @@ export default function FormReminderFrequencyPatternYears({
             let newYearEquation = {...yearEquation};
             if (event.target.value === '' && yearEquation.second === '') {
                 setIsEveryYear(true)
-            } else {
+            } else if (event.target.value.match(/\D/) === null) {
                 setIsEveryYear(false)
+                setYears([])
             }
-            setYears([])
-            newYearEquation.first = event.target.value;
+
+            if ((event.target.value.match(/\D/) === null && event.target.value !== ' ') || event.target.value === '') {
+                newYearEquation.first = event.target.value;
+            }
+            
             setYearEquation(newYearEquation);
         } else if (event.target.id === 'year-equation-second-num') {
             let newYearEquation = {...yearEquation};
             if (event.target.value === '' && yearEquation.first === '') {
                 setIsEveryYear(true)
-            } else {
+            } else if (event.target.value.match(/\D/) === null) {
                 setIsEveryYear(false)
+                setYears([])
             }
-            setYears([])
-            newYearEquation.second = event.target.value;
+
+            if ((event.target.value.match(/\D/) === null && event.target.value !== ' ') || event.target.value === '') {
+                newYearEquation.second = event.target.value;
+            }
+            
             setYearEquation(newYearEquation);
         } else if (event.target.id === 'every-year-checked') {
             if (isEveryYear === false) {
@@ -89,94 +104,139 @@ export default function FormReminderFrequencyPatternYears({
             let newYearRange = {...yearRange};
             if (event.target.value === '' && yearRange.end === '') {
                 setIsEveryYear(true)
-            } else {
+            } else if (event.target.value.match(/\D/) === null) {
                 setIsEveryYear(false)
+                setYears([])
+                setYear('');
+                setYearEquation(
+                    {
+                        first: '',
+                        second: ''
+                    }
+                )
             }
-            setYear('');
-            setYears([])
-            setYearEquation(
-                {
-                    first: '',
-                    second: ''
-                }
-            )
-            newYearRange.start = event.target.value;
-            newYearRange.end = `${parseInt(event.target.value) + 1}`;
-            setYearRange(newYearRange);
+
+            if ((event.target.value.match(/\D/) === null && event.target.value !== ' ') || event.target.value === '') {
+                newYearRange.start = event.target.value;
+                newYearRange.end = `${(event.target.value.length === 0 ? '' : parseInt(event.target.value)) + (event.target.value.length === 0 ? '' : parseInt('1'))}`;
+                console.log(newYearRange.start)
+                console.log(newYearRange.end)
+                setYearRange(newYearRange);
+            }
+            
         } else if (event.target.id === 'select-years-range-end') {
             let newYearRange = {...yearRange};
             if (event.target.value === '' && yearRange.start === '') {
                 setIsEveryYear(true)
-            } else {
+            } else if (event.target.value.match(/\D/) === null) {
                 setIsEveryYear(false)
+                setYears([])
+                setYear('');
+                setYearEquation(
+                    {
+                        first: '',
+                        second: ''
+                    }
+                )
             }
-            setYear('');
-            setYears([])
-            setYearEquation(
-                {
-                    first: '',
-                    second: ''
-                }
-            )
 
-            newYearRange.end = event.target.value;
-            setYearRange(newYearRange);
+            if ((event.target.value.match(/\D/) === null && event.target.value !== ' ') || event.target.value === '') {
+                newYearRange.end = event.target.value;
+                setYearRange(newYearRange);
+            }
+
         }
     }
 
     function handleBlur(event) {
-        let newYearRange = {...yearRange};
-        if (parseInt(event.target.value) <= newYearRange.start) {
-            newYearRange.end = `${parseInt(newYearRange.start) + 1}`; 
+        if (event.target.value < yearRange.start) {
+            let newYearRange = {...yearRange};
+            newYearRange.end = parseInt(newYearRange.start) + 1;
             setYearRange(newYearRange)
         }
     }
 
     return (
         <>
-            <hr />
+            <hr aria-hidden="true" />
 
-            <h3>Specific Years</h3>
+            <h3 
+                aria-label={
+                    'Pattern Reminder Frequency: Years Section.'
+                    +
+                    ' Here, you can customize the years pattern for the reminder frequency,'
+                    +
+                    ' by adding a linear equation, or only'
+                    +
+                    ' having this notification happen on specific individual years,'
+                    +
+                    ' or only having this notification happen within a specific range of years'
+                }
+            >
+                Specific Years
+            </h3>
 
-            <span>* If nothing is selected in the year section, the default will be every year. *</span>
+            <span aria-label="Note: If nothing is selected in the year section, the default will be every year.">* If nothing is selected in the year section, the default will be every year. *</span>
 
             <section className="subsection">
                 <label 
                     id="year-equation-label"
                 >
-                    <p>
-                    Every {' '}
+                    <span aria-hidden="true">Every {' '}</span>
                     <input 
-                        type="number" 
+                        aria-label="Year Equation Pattern, First Number input to the equation First Number × n + Second Number"
+                        type="text" 
                         id="year-equation-first-num"
-                        min="1"
+                        minLength={0}
+                        pattern="[0-9]*"
+                        inputMode="numeric"
                         onChange={handleChangeYearPattern}
                         value={yearEquation.first}
                     /> 
-                    <i> n </i> 
-                    + {' '}
+                    <i aria-hidden="true">n +</i> 
                     <input 
-                        type="number" 
+                        aria-label="Year Equation Pattern, Second Number input to the equation First Number × n + Second Number"
+                        type="text" 
                         id="year-equation-second-num"
-                        min="0"
+                        minLength={0}
+                        pattern="[0-9]*"
+                        inputMode="numeric"
                         onChange={handleChangeYearPattern}
                         value={yearEquation.second}
                     /> 
-                    {' '} years
-                    </p>
+                    <span aria-hidden="true">{' '} years</span>
                 </label>
-                <p>ie. </p>
+
+                {   
+                    yearEquation.first !== '' || yearEquation.second !== ''
+                    ?
+                    <p 
+                        aria-label={
+                            'Current Year Equation Set To: ' 
+                            + 
+                            ((yearEquation.first === '1' || yearEquation.first === '') ? '' : yearEquation.first + 'n + ') 
+                            + 
+                            (yearEquation.second === '' ? '0' : yearEquation.second)
+                        }
+                    >
+                        Year Equation: {(yearEquation.first === '1' || yearEquation.first === '') ? '' : yearEquation.first}n + {yearEquation.second === '' ? '0' : yearEquation.second}
+                    </p>
+                    :
+                    <></>
+                }
             </section>
 
             <section className="subsection">
                 <div>
                     <input 
+                        aria-label="Is every year"
                         type="checkbox" name="every-year-checked" 
                         id="every-year-checked" 
                         onChange={handleChangeYearPattern} 
                         checked={isEveryYear === true}
                     />
                     <label 
+                        aria-hidden="true"
                         htmlFor="every-year-checked"
                     >
                         Every Year
@@ -187,43 +247,50 @@ export default function FormReminderFrequencyPatternYears({
             <section className="subsection">
                 <div>
                     <input 
-                        type="number" 
+                        aria-label="Enter new individual year"
+                        type="text" 
                         name="select-years" 
                         id="select-years" 
-                        min={currentYear} 
-                        step="1"
+                        minLength={0}
+                        maxLength={4}
+                        inputMode="numeric"
+                        pattern="[0-9]{0, 4}"
                         onChange={handleChangeYear}
                         value={year}
                     />
-                    <label htmlFor="select-years">Year</label>
+                    <label aria-hidden="true" htmlFor="select-years">Year</label>
                 </div>
 
-                {
-                    year.length >= 4 && !years.includes(year)
-                    &&
-                    <button type="button" onClick={handleAddYear}>Add Year</button>
-                }
+                <button 
+                    aria-disabled={year.length < 4 || years.includes(year)}
+                    disabled={year.length < 4 || years.includes(year)}
+                    aria-label={year.length >= 4 && !years.includes(year) ? 'Add Year' : years.includes(year) ? year + ' was already added' : 'Year is empty'} 
+                    type="button" 
+                    onClick={handleAddYear}
+                >
+                    Add Year
+                </button>
 
                 {
                     years.length > 0
                     &&
                     <div className="result">
-                        <hr />
+                        <hr aria-hidden="true" />
 
-                        <h3>Years</h3>
+                        <h3 aria-hidden="true">Years</h3>
 
-                        <li>
+                        <ul aria-label="Years added">
                             {
                                 years.map((year, index) => {
                                     return (    
-                                        <ul className="list-item" key={year + index} id={year + index}>
+                                        <li aria-label={'Number ' + index + ' ' + year} className="list-item" key={year + index} id={year + index}>
                                             <button type="button" id={year} onClick={removeYear}>×</button>
-                                            <p>{year}</p>
-                                        </ul>
+                                            <p aria-hidden="true">{year}</p>
+                                        </li>
                                     )
                                 })
                             }
-                        </li>
+                        </ul>
                     </div>
                 }  
             </section>
@@ -231,27 +298,35 @@ export default function FormReminderFrequencyPatternYears({
             <section className="subsection" id="select-years-range">                
                 <div id="select-years-range-container">
                     <input 
-                        type="number" 
+                        aria-label="Year Range Pattern, input for range start"
+                        type="text" 
                         name="select-years-range-start" 
                         id="select-years-range-start" 
-                        min={currentYear} 
-                        step="1"
+                        pattern="[0-9]{0, 4}"
+                        minLength={0}                        
+                        maxLength={4}
+                        inputMode="numeric"
                         onChange={handleChangeYearPattern}
                         value={yearRange.start}
                     /> 
-                        -
+                    <span aria-hidden="true">
+                       - 
+                    </span>
                     <input 
-                        type="number" 
+                        aria-label="Year Range Pattern, input for range end, must be at least one year greater than range start"
+                        type="text" 
                         name="select-years-range-end" 
                         id="select-years-range-end" 
-                        min={`${parseInt(yearRange.start) + 1}`} 
-                        step="1"
+                        pattern="[0-9]{0, 4}"
+                        minLength={0}                        
+                        maxLength={4}
+                        inputMode="numeric"
                         onChange={handleChangeYearPattern}
                         onBlur={handleBlur}
                         value={yearRange.end}
                     />
                 </div>
-                <label>Range</label>  
+                <label aria-hidden="true">Range</label>  
             </section>                
         </>
     )

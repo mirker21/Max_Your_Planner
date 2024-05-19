@@ -23,7 +23,7 @@ export default function GreetPanel({
     })
 
     return (
-        <A11y role="content" description="Maxwell's Greeting Panel">
+        <A11y role="content" description="Maxwell's Greeting Panel. Inside this panel and other panels there is a button to close the panel. Hello! I am a beaver and my name is Maxwell! I can help plan your routines and tasks, and organize them into categories, complete with specified reminder times!">
             <Html ref={fullPanelRef} scale={isViewNarrow ? [.013, .013, .013] : [.006, .006, .006]} className="dialog-container greet-dialog-container top-dialog-container" position={topPosition} transform sprite>
                 <ClosePanelButton currentPanel={currentPanel} setCurrentPanel={setCurrentPanel} setCurrentAnimation={setCurrentAnimation} />
                 <div id="greet-text">

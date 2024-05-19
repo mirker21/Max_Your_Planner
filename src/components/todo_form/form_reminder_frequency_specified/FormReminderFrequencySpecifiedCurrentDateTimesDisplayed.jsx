@@ -5,11 +5,11 @@ export default function FormReminderFrequencySpecifiedCurrentDateTimesDisplayed(
                 times.length > 0
                 &&
                 <div className="result">
-                    <hr />
+                    <hr aria-hidden="true" />
 
-                    <h3>Times for {date}</h3>
+                    <h3 aria-hidden="true">Times for {date}</h3>
 
-                    <ul className="pattern-times-list">
+                    <ul className="pattern-times-list" aria-label={'Times added to current date ' + date}>
                         {
                             times.map((time, index) => {
                                 let meridian = 'AM';
@@ -30,8 +30,15 @@ export default function FormReminderFrequencySpecifiedCurrentDateTimesDisplayed(
 
                                 return (    
                                     <li className="list-item" key={time + index} id={time + index}>
-                                        <button type="button" className="remove-time-button" onClick={removeTime}>×</button>
-                                        <p>{displayedTime}</p>
+                                        <button 
+                                            aria-label={'Remove ' + time + ' from ' + date}
+                                            type="button" 
+                                            className="remove-time-button" 
+                                            onClick={removeTime}
+                                        >
+                                            ×
+                                        </button>
+                                        <p aria-hidden="true">{displayedTime}</p>
                                     </li>
                                 )
                             })

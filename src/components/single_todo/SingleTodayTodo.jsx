@@ -60,9 +60,9 @@ export default function SingleTodayTodo({
                 setIsDeactivateModalVisible={setIsDeactivateModalVisible}
             />
 
-            <section className="subsection" role="group" aria-label="Category and Sub Category">
-                <p>Category: {todo.category}</p>
-                <p>Subcategory: {todo.subcategory}</p>
+            <section className="subsection">
+                <p aria-label={"Category: " + todo.category}>Category: {todo.category}</p>
+                <p aria-label={"Sub Category: " + todo.subcategory}>Subcategory: {todo.subcategory}</p>
             </section>
             
             <section className="subsection">
