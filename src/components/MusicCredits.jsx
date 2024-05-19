@@ -2,7 +2,7 @@ export default function MusicCredits() {
     return (
         <>
             <span aria-label="Music Credits Info">
-                "Dewdrop Fantasy" Kevin MacLeod (incompetech.com)
+                "Teddy Bear Waltz" Kevin MacLeod (incompetech.com)
                 Licensed under Creative Commons: By Attribution 4.0 License
                 http://creativecommons.org/licenses/by/4.0/
             </span>

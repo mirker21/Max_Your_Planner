@@ -5,7 +5,7 @@ import TodaysTodosFilteredParent from "./components/TodaysTodosFilteredParent";
 import MusicCredits from "./components/MusicCredits";
 
 const birdsAudio = new Audio('./audio/148909__kvgarlic__creekandchickadee.wav')
-const musicAudio = new Audio('./audio/Dewdrop Fantasy.mp3')
+const musicAudio = new Audio('./audio/Teddy Bear Waltz.mp3')
 
 birdsAudio.loop = true;
 musicAudio.loop = true;
