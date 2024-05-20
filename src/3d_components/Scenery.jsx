@@ -10,7 +10,7 @@ import Water from './Water'
 
 export default function Scenery(props) {
   const { nodes } = useGLTF('./models/scenery.gltf')
-  const mountainsTexture = useTexture('./models/Office_Buddy_Baked_Resized.png')
+  const mountainsTexture = useTexture('./models/Mountains_Texture.png')
   mountainsTexture.flipY = false;
   const mountainsMaterial = new THREE.MeshStandardMaterial({
     map: mountainsTexture,
